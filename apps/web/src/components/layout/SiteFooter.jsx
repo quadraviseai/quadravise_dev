@@ -1,11 +1,7 @@
-import { FacebookFilled, InstagramOutlined, LinkedinOutlined, MailOutlined } from "@ant-design/icons";
-import { Col, Layout, Row, Space, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
 import { useSiteSettings } from "../../hooks/useSiteSettings";
-
-const { Footer } = Layout;
 
 function SiteFooter() {
   const { data } = useSiteSettings();
@@ -22,74 +18,66 @@ function SiteFooter() {
   const showFacebook = settings.showFacebook !== false;
 
   return (
-    <Footer className="site-footer">
+    <footer className="site-footer">
       <div className="section-inner footer-inner">
-        <Row gutter={[48, { xs: 14, md: 32 }]} className="footer-grid">
-          <Col xs={24} md={10} lg={7}>
-            <Typography.Title level={3} className="footer-brand-title">
-              Quadravise
-            </Typography.Title>
-            <Typography.Paragraph className="footer-brand-description">
+        <div className="footer-grid">
+          <div className="footer-brand-block">
+            <h3 className="footer-brand-title">Quadravise</h3>
+            <p className="footer-brand-description">
               Quadravise builds websites, mobile apps, and SaaS platforms for startups and growing businesses.
-            </Typography.Paragraph>
+            </p>
             <div className="footer-socials">
               {showLinkedin ? (
                 <a className="footer-social-link" href={linkedinUrl} target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <LinkedinOutlined />
+                  in
                 </a>
               ) : null}
               {showEmail ? (
                 <a className="footer-social-link" href={`mailto:${email}`} aria-label="Email">
-                  <MailOutlined />
+                  @
                 </a>
               ) : null}
               {showInstagram ? (
                 <a className="footer-social-link" href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram">
-                  <InstagramOutlined />
+                  ig
                 </a>
               ) : null}
               {showFacebook ? (
                 <a className="footer-social-link" href={facebookUrl} target="_blank" rel="noreferrer" aria-label="Facebook">
-                  <FacebookFilled />
+                  f
                 </a>
               ) : null}
             </div>
-          </Col>
+          </div>
 
-          <Col xs={24} sm={8} md={7} lg={5}>
-            <div className="footer-column">
-              <Typography.Text className="footer-heading">Services</Typography.Text>
-              <Space direction="vertical" size={10} className="footer-link-list">
-                <Link to={ROUTES.SERVICES}>Website Development</Link>
-                <Link to={ROUTES.SERVICES}>Mobile App Development</Link>
-                <Link to={ROUTES.SERVICES}>SaaS Development</Link>
-                <Link to={ROUTES.SERVICES}>Startup MVP Development</Link>
-              </Space>
+          <div className="footer-column">
+            <span className="footer-heading">Services</span>
+            <div className="footer-link-list">
+              <Link to={ROUTES.SERVICES}>Website Development</Link>
+              <Link to={ROUTES.SERVICES}>Mobile App Development</Link>
+              <Link to={ROUTES.SERVICES}>SaaS Development</Link>
+              <Link to={ROUTES.SERVICES}>Startup MVP Development</Link>
             </div>
-          </Col>
+          </div>
 
-          <Col xs={24} sm={8} md={7} lg={5}>
-            <div className="footer-column">
-              <Typography.Text className="footer-heading">Products</Typography.Text>
-              <Space direction="vertical" size={10} className="footer-link-list">
-                <Link to={ROUTES.QUADRA_ILEARN}>QuadraiLearn</Link>
-                <Link to={ROUTES.PORTFOLIO}>Portfolio</Link>
-                <Link to={ROUTES.BLOG}>Blog</Link>
-              </Space>
+          <div className="footer-column">
+            <span className="footer-heading">Products</span>
+            <div className="footer-link-list">
+              <Link to={ROUTES.QUADRA_ILEARN}>QuadraiLearn</Link>
+              <Link to={ROUTES.PORTFOLIO}>Portfolio</Link>
+              <Link to={ROUTES.BLOG}>Blog</Link>
             </div>
-          </Col>
+          </div>
 
-          <Col xs={24} sm={8} md={7} lg={5}>
-            <div className="footer-column">
-              <Typography.Text className="footer-heading">Company</Typography.Text>
-              <Space direction="vertical" size={10} className="footer-link-list">
-                <Link to={ROUTES.ABOUT}>About</Link>
-                <Link to={ROUTES.CONTACT}>Contact</Link>
-                <Link to={ROUTES.BLOG}>Blog</Link>
-              </Space>
+          <div className="footer-column">
+            <span className="footer-heading">Company</span>
+            <div className="footer-link-list">
+              <Link to={ROUTES.ABOUT}>About</Link>
+              <Link to={ROUTES.CONTACT}>Contact</Link>
+              <Link to={ROUTES.BLOG}>Blog</Link>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
 
         <div className="footer-divider" />
         <div className="footer-bottom-row">
@@ -97,7 +85,7 @@ function SiteFooter() {
           <span>Built for scalable digital products.</span>
         </div>
       </div>
-    </Footer>
+    </footer>
   );
 }
 

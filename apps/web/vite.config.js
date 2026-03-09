@@ -19,6 +19,11 @@ export default defineConfig({
             '<link rel="preload" as="script" href="$1" crossorigin><script type="module" crossorigin src="$1"></script>'
           );
 
+          updatedHtml = updatedHtml.replace(
+            /\n\s*<link rel="modulepreload" crossorigin href="\/assets\/(?:antd|motion|editor)-[^"]+">/g,
+            ""
+          );
+
           return updatedHtml;
         }
       }

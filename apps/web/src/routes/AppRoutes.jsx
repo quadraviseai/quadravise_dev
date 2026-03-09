@@ -1,5 +1,4 @@
 import { Suspense, lazy } from "react";
-import { Spin } from "antd";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 const MainLayout = lazy(() => import("../layouts/MainLayout"));
@@ -24,7 +23,7 @@ import { ROUTES } from "../constants/routes";
 
 const routeFallback = (
   <div className="route-loading-shell">
-    <Spin size="large" />
+    <div className="route-loading-indicator" aria-label="Loading page" />
   </div>
 );
 

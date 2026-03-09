@@ -1,15 +1,36 @@
+import { Suspense, lazy, startTransition, useEffect, useState } from "react";
+
 import SEOHead from "../components/seo/SEOHead";
 import HeroSection from "../components/home/HeroSection";
-import WhatWeDoSection from "../components/home/WhatWeDoSection";
-import WhyChooseUsSection from "../components/home/WhyChooseUsSection";
-import ProductsSection from "../components/home/ProductsSection";
-import ProcessSection from "../components/home/ProcessSection";
-import PortfolioPreviewSection from "../components/home/PortfolioPreviewSection";
-import TestimonialsSection from "../components/home/TestimonialsSection";
-import FinalCTASection from "../components/home/FinalCTASection";
 import { organizationSchema, pageSeo } from "../constants/seo";
 
+const WhatWeDoSection = lazy(() => import("../components/home/WhatWeDoSection"));
+const WhyChooseUsSection = lazy(() => import("../components/home/WhyChooseUsSection"));
+const ProductsSection = lazy(() => import("../components/home/ProductsSection"));
+const ProcessSection = lazy(() => import("../components/home/ProcessSection"));
+const PortfolioPreviewSection = lazy(() => import("../components/home/PortfolioPreviewSection"));
+const TestimonialsSection = lazy(() => import("../components/home/TestimonialsSection"));
+const FinalCTASection = lazy(() => import("../components/home/FinalCTASection"));
+
 function HomePage() {
+  const [showDeferredSections, setShowDeferredSections] = useState(false);
+
+  useEffect(() => {
+    const run = () => {
+      startTransition(() => {
+        setShowDeferredSections(true);
+      });
+    };
+
+    if ("requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(run, { timeout: 1200 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = window.setTimeout(run, 200);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
   return (
     <>
       <SEOHead
@@ -24,13 +45,17 @@ function HomePage() {
         schema={organizationSchema}
       />
       <HeroSection />
-      <WhatWeDoSection />
-      <WhyChooseUsSection />
-      <ProductsSection />
-      <ProcessSection />
-      <PortfolioPreviewSection />
-      <TestimonialsSection />
-      <FinalCTASection />
+      {showDeferredSections ? (
+        <Suspense fallback={null}>
+          <WhatWeDoSection />
+          <WhyChooseUsSection />
+          <ProductsSection />
+          <ProcessSection />
+          <PortfolioPreviewSection />
+          <TestimonialsSection />
+          <FinalCTASection />
+        </Suspense>
+      ) : null}
     </>
   );
 }

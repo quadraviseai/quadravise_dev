@@ -1,44 +1,30 @@
 import { useEffect, useState } from "react";
-import { Button, Drawer, Layout, Menu, Space } from "antd";
-import {
-  AppstoreOutlined,
-  BookOutlined,
-  HomeOutlined,
-  InfoCircleOutlined,
-  MailOutlined,
-  MenuOutlined,
-  ReadOutlined,
-  RocketOutlined,
-  ToolOutlined
-} from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
 import logo from "../../assets/logos/quadravise_logo.png";
 import { adminService } from "../../services/adminService";
 
-const { Header } = Layout;
-
 const navItems = [
-  { key: ROUTES.HOME, label: <Link to={ROUTES.HOME}>Home</Link> },
-  { key: ROUTES.SERVICES, label: <Link to={ROUTES.SERVICES}>Services</Link> },
-  { key: ROUTES.PRODUCTS, label: <Link to={ROUTES.PRODUCTS}>Products</Link> },
-  { key: ROUTES.QUADRA_ILEARN, label: <Link to={ROUTES.QUADRA_ILEARN}>QuadraiLearn</Link> },
-  { key: ROUTES.PORTFOLIO, label: <Link to={ROUTES.PORTFOLIO}>Portfolio</Link> },
-  { key: ROUTES.BLOG, label: <Link to={ROUTES.BLOG}>Blog</Link> },
-  { key: ROUTES.ABOUT, label: <Link to={ROUTES.ABOUT}>About</Link> },
-  { key: ROUTES.CONTACT, label: <Link to={ROUTES.CONTACT}>Contact</Link> }
+  { key: ROUTES.HOME, label: "Home" },
+  { key: ROUTES.SERVICES, label: "Services" },
+  { key: ROUTES.PRODUCTS, label: "Products" },
+  { key: ROUTES.QUADRA_ILEARN, label: "QuadraiLearn" },
+  { key: ROUTES.PORTFOLIO, label: "Portfolio" },
+  { key: ROUTES.BLOG, label: "Blog" },
+  { key: ROUTES.ABOUT, label: "About" },
+  { key: ROUTES.CONTACT, label: "Contact" }
 ];
 
 const mobileNavItems = [
-  { key: ROUTES.HOME, icon: <HomeOutlined />, label: <Link to={ROUTES.HOME}>Home</Link> },
-  { key: ROUTES.SERVICES, icon: <ToolOutlined />, label: <Link to={ROUTES.SERVICES}>Services</Link> },
-  { key: ROUTES.PRODUCTS, icon: <AppstoreOutlined />, label: <Link to={ROUTES.PRODUCTS}>Products</Link> },
-  { key: ROUTES.QUADRA_ILEARN, icon: <RocketOutlined />, label: <Link to={ROUTES.QUADRA_ILEARN}>QuadraiLearn</Link> },
-  { key: ROUTES.PORTFOLIO, icon: <BookOutlined />, label: <Link to={ROUTES.PORTFOLIO}>Portfolio</Link> },
-  { key: ROUTES.BLOG, icon: <ReadOutlined />, label: <Link to={ROUTES.BLOG}>Blog</Link> },
-  { key: ROUTES.ABOUT, icon: <InfoCircleOutlined />, label: <Link to={ROUTES.ABOUT}>About</Link> },
-  { key: ROUTES.CONTACT, icon: <MailOutlined />, label: <Link to={ROUTES.CONTACT}>Contact</Link> }
+  { key: ROUTES.HOME, label: "Home" },
+  { key: ROUTES.SERVICES, label: "Services" },
+  { key: ROUTES.PRODUCTS, label: "Products" },
+  { key: ROUTES.QUADRA_ILEARN, label: "QuadraiLearn" },
+  { key: ROUTES.PORTFOLIO, label: "Portfolio" },
+  { key: ROUTES.BLOG, label: "Blog" },
+  { key: ROUTES.ABOUT, label: "About" },
+  { key: ROUTES.CONTACT, label: "Contact" }
 ];
 
 const adminNavItems = [
@@ -63,7 +49,7 @@ function SiteHeader({ isAdmin = false }) {
   }, []);
 
   return (
-    <Header className={`site-header ${isScrolled ? "is-scrolled" : ""}`}>
+    <header className={`site-header ${isScrolled ? "is-scrolled" : ""}`}>
       <div className="site-header-inner">
         <div>
           <Link to={isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME} className="site-logo-link" aria-label="Quadravise Home">
@@ -73,8 +59,9 @@ function SiteHeader({ isAdmin = false }) {
             </span>
           </Link>
         </div>
-        {isAdmin ? (
-          <div className="desktop-nav">
+
+        <div className="desktop-nav">
+          {isAdmin ? (
             <nav className="admin-header-nav" aria-label="Admin sections">
               {adminNavItems.map((item) => (
                 <Link
@@ -86,15 +73,25 @@ function SiteHeader({ isAdmin = false }) {
                 </Link>
               ))}
             </nav>
-          </div>
-        ) : (
-          <div className="desktop-nav">
-            <Menu mode="horizontal" selectedKeys={[location.pathname]} items={navItems} className="site-menu" />
-          </div>
-        )}
-        <Space className="site-header-actions" size={12}>
+          ) : (
+            <nav className="site-nav-list" aria-label="Primary navigation">
+              {navItems.map((item) => (
+                <Link
+                  key={item.key}
+                  to={item.key}
+                  className={`site-nav-link ${location.pathname === item.key ? "is-active" : ""}`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          )}
+        </div>
+
+        <div className="site-header-actions">
           {isAdmin ? (
-            <Button
+            <button
+              type="button"
               className="hero-btn hero-btn-secondary admin-header-logout-btn"
               onClick={async () => {
                 await adminService.logout();
@@ -102,29 +99,47 @@ function SiteHeader({ isAdmin = false }) {
               }}
             >
               Logout
-            </Button>
+            </button>
           ) : (
             <>
-              <Button type="primary" className="header-cta">
-                <Link to={ROUTES.CONTACT}>Book Free Consultation</Link>
-              </Button>
-              <Button
+              <Link to={ROUTES.CONTACT} className="hero-btn header-cta header-cta-link">
+                Book Free Consultation
+              </Link>
+              <button
+                type="button"
                 className="mobile-nav-trigger"
-                icon={<MenuOutlined />}
                 aria-label="Open navigation menu"
                 aria-expanded={open}
                 onClick={() => setOpen((currentOpen) => !currentOpen)}
-              />
+              >
+                <span className="mobile-nav-trigger-bars" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+              </button>
             </>
           )}
-        </Space>
+        </div>
       </div>
-      {!isAdmin ? (
-        <Drawer title="Menu" open={open} onClose={() => setOpen(false)}>
-          <Menu mode="inline" selectedKeys={[location.pathname]} items={mobileNavItems} onClick={() => setOpen(false)} />
-        </Drawer>
+
+      {!isAdmin && open ? (
+        <div className="site-mobile-panel" role="dialog" aria-label="Menu">
+          <div className="site-mobile-panel-inner">
+            {mobileNavItems.map((item) => (
+              <Link
+                key={item.key}
+                to={item.key}
+                className={`site-mobile-link ${location.pathname === item.key ? "is-active" : ""}`}
+                onClick={() => setOpen(false)}
+              >
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
       ) : null}
-    </Header>
+    </header>
   );
 }
 
