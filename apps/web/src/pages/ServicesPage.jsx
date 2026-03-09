@@ -18,6 +18,7 @@ function ServicesPage() {
       <SEOHead
         title={pageSeo.services.title}
         description={pageSeo.services.description}
+        keywords="software development services, web development services, mobile app development services, custom software development"
         canonical={pageSeo.services.canonical}
       />
       <ServicesHeroSection />

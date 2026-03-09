@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import SectionHeader from "../components/common/SectionHeader";
 import SEOHead from "../components/seo/SEOHead";
 import { ROUTES } from "../constants/routes";
+import { pageSeo } from "../constants/seo";
 import { useSiteSettings } from "../hooks/useSiteSettings";
 
 const productFeatures = [
@@ -76,8 +77,10 @@ function ProductsPage() {
   return (
     <>
       <SEOHead
-        title="Quadravise | Products"
-        description="Explore products built by Quadravise, including QuadraiLearn and scalable product concepts for startups and growing businesses."
+        title={pageSeo.products.title}
+        description={pageSeo.products.description}
+        keywords="software products, AI learning platform, SaaS products, startup software solutions"
+        canonical={pageSeo.products.canonical}
       />
 
       <section className="section products-page-hero-section">

@@ -8,6 +8,7 @@ import ErrorState from "../components/common/ErrorState";
 import PortfolioCard from "../components/portfolio/PortfolioCard";
 import SEOHead from "../components/seo/SEOHead";
 import { ROUTES } from "../constants/routes";
+import { pageSeo } from "../constants/seo";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useSiteSettings } from "../hooks/useSiteSettings";
 
@@ -19,7 +20,12 @@ function PortfolioPage() {
 
   return (
     <>
-      <SEOHead title="Quadravise | Portfolio" />
+      <SEOHead
+        title={pageSeo.portfolio.title}
+        description={pageSeo.portfolio.description}
+        keywords="software development portfolio, web app portfolio, mobile app portfolio, SaaS case studies"
+        canonical={pageSeo.portfolio.canonical}
+      />
       <section className="section portfolio-page-hero-section">
         <div className="section-inner">
           <Row gutter={[32, 32]} align="middle" className="page-hero-layout">

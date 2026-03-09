@@ -17,6 +17,7 @@ function BlogDetailPage() {
       <SEOHead
         title={blog?.metaTitle || (blog ? `Quadravise | ${blog.title}` : "Quadravise | Blog Detail")}
         description={blog?.metaDescription || blog?.excerpt}
+        keywords="software development blog, quadravise blog, web development insights"
         canonical={canonical}
         ogTitle={blog?.ogTitle || blog?.metaTitle || blog?.title}
         ogDescription={blog?.ogDescription || blog?.metaDescription || blog?.excerpt}

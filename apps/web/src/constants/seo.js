@@ -1,31 +1,73 @@
 const siteUrl = import.meta.env.VITE_SITE_URL || "https://quadravise.com";
+const defaultOgImage = `${siteUrl}/logo.png`;
 
 export const seoDefaults = {
-  title: "Quadravise | Home",
+  title: "Quadravise | Software Development Company",
   description:
-    "Quadravise helps startups and businesses build websites, mobile apps, and scalable SaaS products.",
+    "Quadravise is a software development company providing web development, mobile app development, and custom software solutions.",
   keywords:
-    "website development company,mobile app development company,saas development company,startup mvp development",
-  canonical: siteUrl
+    "software development company, web development company, mobile app development, custom software development, quadravise",
+  canonical: `${siteUrl}/`,
+  ogImage: defaultOgImage,
+  twitterCard: "summary_large_image"
 };
 
 export const pageSeo = {
   home: {
-    title: "Quadravise | Home",
+    title: "Quadravise | Software Development Company",
     description:
-      "Quadravise helps startups and businesses build powerful websites, mobile applications, and SaaS products with scalable modern architecture.",
+      "Quadravise is a software development company providing web development, mobile app development, and custom software solutions for startups and businesses.",
     canonical: `${siteUrl}/`
   },
   services: {
-    title: "Quadravise | Services",
+    title: "Quadravise | Software Development Services",
     description:
-      "Explore website, mobile app, custom software, SaaS, and startup MVP development services.",
+      "Explore Quadravise services across web development, mobile app development, SaaS engineering, and custom software delivery.",
     canonical: `${siteUrl}/services`
   },
-  blog: {
-    title: "Quadravise | Blog",
+  products: {
+    title: "Quadravise | Software Products",
     description:
-      "Read practical guides on SaaS, startup technology, website development, mobile apps, and AI.",
+      "Explore Quadravise products, AI-powered platforms, and scalable software solutions built for startups and growing businesses.",
+    canonical: `${siteUrl}/products`
+  },
+  quadraILearn: {
+    title: "QuadraiLearn | AI Learning Platform",
+    description:
+      "Discover QuadraiLearn, the AI-powered learning platform from Quadravise built for structured education and measurable progress.",
+    canonical: `${siteUrl}/products/quadra-ilearn`
+  },
+  portfolio: {
+    title: "Quadravise | Software Development Portfolio",
+    description:
+      "View the Quadravise portfolio featuring web apps, SaaS products, mobile experiences, and custom software delivery outcomes.",
+    canonical: `${siteUrl}/portfolio`
+  },
+  blog: {
+    title: "Quadravise | Software Development Blog",
+    description:
+      "Read Quadravise insights on software development, SaaS, mobile apps, web engineering, AI, and product strategy.",
     canonical: `${siteUrl}/blog`
+  },
+  about: {
+    title: "About Quadravise | Software Company",
+    description:
+      "Learn about Quadravise, our product mindset, engineering approach, and how we help businesses build scalable software.",
+    canonical: `${siteUrl}/about`
+  },
+  contact: {
+    title: "Contact Quadravise | Start Your Project",
+    description:
+      "Contact Quadravise to discuss web development, mobile app development, SaaS platforms, and custom software projects.",
+    canonical: `${siteUrl}/contact`
   }
+};
+
+export const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Quadravise",
+  url: siteUrl,
+  logo: `${siteUrl}/logo.png`,
+  sameAs: ["https://www.linkedin.com/company/quadravise"]
 };

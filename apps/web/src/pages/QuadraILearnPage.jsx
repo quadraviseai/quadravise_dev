@@ -3,11 +3,17 @@ import ProductHeroSection from "../components/quadrailearn/ProductHeroSection";
 import ProductFeaturesSection from "../components/quadrailearn/ProductFeaturesSection";
 import ProductBenefitsSection from "../components/quadrailearn/ProductBenefitsSection";
 import ProductCTASection from "../components/quadrailearn/ProductCTASection";
+import { pageSeo } from "../constants/seo";
 
 function QuadraILearnPage() {
   return (
     <>
-      <SEOHead title="Quadravise | QuadraiLearn" />
+      <SEOHead
+        title={pageSeo.quadraILearn.title}
+        description={pageSeo.quadraILearn.description}
+        keywords="QuadraiLearn, AI learning platform, edtech software, digital learning platform"
+        canonical={pageSeo.quadraILearn.canonical}
+      />
       <ProductHeroSection />
       <ProductFeaturesSection />
       <ProductBenefitsSection />

@@ -32,7 +32,12 @@ function BlogPage() {
 
   return (
     <>
-      <SEOHead title={pageSeo.blog.title} description={pageSeo.blog.description} canonical={pageSeo.blog.canonical} />
+      <SEOHead
+        title={pageSeo.blog.title}
+        description={pageSeo.blog.description}
+        keywords="software development blog, SaaS blog, mobile app development insights, web development articles"
+        canonical={pageSeo.blog.canonical}
+      />
       <section className="section blog-page-hero-section">
         <div className="section-inner">
           <Row gutter={[32, 32]} align="middle" className="page-hero-layout">

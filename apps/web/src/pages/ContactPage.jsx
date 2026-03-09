@@ -3,11 +3,17 @@ import { Col, Row, Typography } from "antd";
 import SEOHead from "../components/seo/SEOHead";
 import ContactFormSection from "../components/contact/ContactFormSection";
 import ContactInfoSection from "../components/contact/ContactInfoSection";
+import { pageSeo } from "../constants/seo";
 
 function ContactPage() {
   return (
     <>
-      <SEOHead title="Quadravise | Contact" />
+      <SEOHead
+        title={pageSeo.contact.title}
+        description={pageSeo.contact.description}
+        keywords="contact quadravise, software project consultation, web development company contact"
+        canonical={pageSeo.contact.canonical}
+      />
       <section className="section contact-hero-section">
         <div className="section-inner">
           <Row gutter={[32, 24]} align="middle">

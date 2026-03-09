@@ -7,24 +7,21 @@ import ProcessSection from "../components/home/ProcessSection";
 import PortfolioPreviewSection from "../components/home/PortfolioPreviewSection";
 import TestimonialsSection from "../components/home/TestimonialsSection";
 import FinalCTASection from "../components/home/FinalCTASection";
-import { pageSeo } from "../constants/seo";
+import { organizationSchema, pageSeo } from "../constants/seo";
 
 function HomePage() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Quadravise",
-    url: pageSeo.home.canonical,
-    sameAs: ["https://www.linkedin.com/company/quadravise"]
-  };
-
   return (
     <>
       <SEOHead
         title={pageSeo.home.title}
         description={pageSeo.home.description}
+        keywords="software development company, web development company, mobile app development, custom software development, quadravise"
         canonical={pageSeo.home.canonical}
-        schema={schema}
+        ogTitle="Quadravise Software Development Company"
+        ogDescription="Build scalable software products with Quadravise. Web development, mobile app development and custom software solutions."
+        twitterTitle="Quadravise Software Development Company"
+        twitterDescription="Web development, mobile apps and custom software development."
+        schema={organizationSchema}
       />
       <HeroSection />
       <WhatWeDoSection />

@@ -33,6 +33,7 @@ function ServiceDetailPage() {
       <SEOHead
         title={`Quadravise | ${service.title}`}
         description={service.description}
+        keywords="software development service, web development service, mobile app development, custom software service"
         canonical={`${import.meta.env.VITE_SITE_URL || "https://quadravise.com"}/services/${service.slug}`}
       />
 
