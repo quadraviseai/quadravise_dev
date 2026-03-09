@@ -1,0 +1,12 @@
+.section {
+  padding: 96px 10px;
+}
+
+.section-inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+.section-muted {
+  background: #ffffff;
+}

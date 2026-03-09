@@ -1,0 +1,19 @@
+export const ROUTES = {
+  HOME: "/",
+  SERVICES: "/services",
+  PRODUCTS: "/products",
+  QUADRA_ILEARN: "/products/quadra-ilearn",
+  PORTFOLIO: "/portfolio",
+  BLOG: "/blog",
+  BLOG_PREVIEW: "/blog/preview",
+  ABOUT: "/about",
+  CONTACT: "/contact",
+  ADMIN_LOGIN: "/admin/login",
+  ADMIN_RESET_PASSWORD: "/admin/reset-password",
+  ADMIN_DASHBOARD: "/admin/dashboard",
+  ADMIN_BLOGS: "/admin/blogs",
+  ADMIN_PORTFOLIO: "/admin/portfolio",
+  ADMIN_USERS: "/admin/users",
+  ADMIN_LEADS: "/admin/leads",
+  ADMIN_SETTINGS: "/admin/settings"
+};

@@ -1,0 +1,22 @@
+export const blogModelFields = [
+  "id",
+  "title",
+  "slug",
+  "excerpt",
+  "content",
+  "tags",
+  "readingTime",
+  "coverImage",
+  "thumbnailImage",
+  "metaTitle",
+  "metaDescription",
+  "canonicalUrl",
+  "ogTitle",
+  "ogDescription",
+  "ogImage",
+  "category",
+  "author",
+  "publishedAt",
+  "status",
+  "isFeatured"
+];

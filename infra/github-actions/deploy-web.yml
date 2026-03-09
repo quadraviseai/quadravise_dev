@@ -1,0 +1,8 @@
+name: deploy-web
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Define web deploy steps"

@@ -1,0 +1,2 @@
+ALTER TABLE portfolio_projects
+ADD COLUMN IF NOT EXISTS timeline VARCHAR(120);
