@@ -47,7 +47,28 @@ function estimateReadTime(content = "") {
 }
 
 function normalizeEditorContent(value = "") {
-  const normalizedValue = typeof value === "string" ? value : "";
+  if (typeof value !== "string") return "";
+
+  let normalizedValue = value.replace(/\r\n/g, "\n").trim();
+
+  const emptyBlockPattern =
+    /<(p|h1|h2|h3|h4|h5|h6|blockquote|pre|li)(?:\s[^>]*)?>\s*(?:<br\s*\/?>|&nbsp;|\u00a0|\s)*<\/\1>/gi;
+
+  do {
+    const previous = normalizedValue;
+    normalizedValue = normalizedValue.replace(emptyBlockPattern, "");
+    if (previous === normalizedValue) break;
+  } while (true);
+
+  normalizedValue = normalizedValue
+    .replace(/<p>\s*<\/p>/gi, "")
+    .replace(/<(h[1-6]|p|li)>\s+/gi, "<$1>")
+    .replace(/\s+<\/(h[1-6]|p|li)>/gi, "</$1>")
+    .replace(/<ul>(?:\s|&nbsp;|\u00a0)*<\/ul>/gi, "")
+    .replace(/<ol>(?:\s|&nbsp;|\u00a0)*<\/ol>/gi, "")
+    .replace(/(?:<p><br><\/p>\s*){2,}/gi, "<p><br></p>")
+    .trim();
+
   return normalizedValue === "<p><br></p>" ? "" : normalizedValue;
 }
 
@@ -1360,7 +1381,12 @@ function AdminDashboardPage({ section = "dashboard" }) {
                                         { label: "HTML Source", value: "html" }
                                       ]}
                                     />
-                                    <Form.Item name="content" label="Content" rules={[{ required: true }]}>
+                                    <Form.Item
+                                      name="content"
+                                      label="Content"
+                                      rules={[{ required: true }]}
+                                      getValueFromEvent={(value) => normalizeEditorContent(value)}
+                                    >
                                       {blogEditorMode === "html" ? (
                                         <Input.TextArea
                                           rows={18}
