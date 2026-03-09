@@ -2,7 +2,28 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "prioritize-entry-assets",
+      transformIndexHtml: {
+        order: "post",
+        handler(html) {
+          let updatedHtml = html.replace(
+            /<link rel="stylesheet" crossorigin href="([^"]+)">/g,
+            '<link rel="preload" as="style" href="$1" crossorigin><link rel="stylesheet" crossorigin href="$1" fetchpriority="high">'
+          );
+
+          updatedHtml = updatedHtml.replace(
+            /<script type="module" crossorigin src="([^"]+)"><\/script>/,
+            '<link rel="preload" as="script" href="$1" crossorigin><script type="module" crossorigin src="$1"></script>'
+          );
+
+          return updatedHtml;
+        }
+      }
+    }
+  ],
   build: {
     rollupOptions: {
       output: {
