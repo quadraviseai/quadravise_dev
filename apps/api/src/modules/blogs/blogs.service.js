@@ -2,6 +2,42 @@ import { slugify } from "../../utils/slugify.js";
 
 import { blogsRepository } from "./blogs.repository.js";
 
+function trimText(value, maxLength, fallback = "") {
+  if (value == null) return fallback;
+  const normalizedValue = String(value).trim();
+  if (!normalizedValue) return fallback;
+  return normalizedValue.slice(0, maxLength);
+}
+
+function trimOptionalText(value, maxLength) {
+  return trimText(value, maxLength, "");
+}
+
+function normalizeTags(tags) {
+  if (!Array.isArray(tags)) return [];
+  return tags
+    .map((tag) => trimText(tag, 60, ""))
+    .filter(Boolean);
+}
+
+function normalizeBlogPayload(payload) {
+  return {
+    ...payload,
+    title: trimText(payload.title, 180, "Untitled Blog"),
+    slug: trimOptionalText(payload.slug, 220),
+    excerpt: trimText(payload.excerpt, 10000, ""),
+    content: typeof payload.content === "string" ? payload.content : "",
+    category: trimText(payload.category, 100, "General"),
+    tags: normalizeTags(payload.tags),
+    author: trimText(payload.author, 120, "Quadravise Team"),
+    readingTime: trimOptionalText(payload.readingTime, 40),
+    metaTitle: trimOptionalText(payload.metaTitle, 60),
+    metaDescription: trimOptionalText(payload.metaDescription, 160),
+    ogTitle: trimOptionalText(payload.ogTitle, 120),
+    ogDescription: trimOptionalText(payload.ogDescription, 220)
+  };
+}
+
 export const blogsService = {
   async getBlogs() {
     return blogsRepository.findAll();
@@ -48,26 +84,30 @@ export const blogsService = {
     return blogsRepository.findCategories();
   },
   async createBlog(payload) {
-    const slug = slugify(payload.slug || payload.title);
+    const normalizedPayload = normalizeBlogPayload(payload);
+    const slug = slugify(normalizedPayload.slug || normalizedPayload.title).slice(0, 220);
     const created = await blogsRepository.create({
-      ...payload,
+      ...normalizedPayload,
       slug,
-      importSource: payload.importSource || "manual",
-      imageStatus: payload.imageStatus || (payload.coverImage || payload.featuredImage ? "uploaded" : "missing")
+      importSource: normalizedPayload.importSource || "manual",
+      imageStatus:
+        normalizedPayload.imageStatus || (normalizedPayload.coverImage || normalizedPayload.featuredImage ? "uploaded" : "missing")
     });
     if (!created) return null;
-    await blogsRepository.replaceSocialPublications(created.id, payload.distribution);
+    await blogsRepository.replaceSocialPublications(created.id, normalizedPayload.distribution);
     return this.getBlogAdminById(created.id);
   },
   async updateBlog(id, payload) {
-    const slug = slugify(payload.slug || payload.title);
+    const normalizedPayload = normalizeBlogPayload(payload);
+    const slug = slugify(normalizedPayload.slug || normalizedPayload.title).slice(0, 220);
     await blogsRepository.updateById(id, {
-      ...payload,
+      ...normalizedPayload,
       slug,
-      importSource: payload.importSource || "manual",
-      imageStatus: payload.imageStatus || (payload.coverImage || payload.featuredImage ? "uploaded" : "missing")
+      importSource: normalizedPayload.importSource || "manual",
+      imageStatus:
+        normalizedPayload.imageStatus || (normalizedPayload.coverImage || normalizedPayload.featuredImage ? "uploaded" : "missing")
     });
-    await blogsRepository.replaceSocialPublications(id, payload.distribution);
+    await blogsRepository.replaceSocialPublications(id, normalizedPayload.distribution);
     return this.getBlogAdminById(id);
   },
   async importBlogJson(payload) {
@@ -80,6 +120,9 @@ export const blogsService = {
       content: payload.content,
       metaTitle: payload.meta_title || payload.metaTitle || "",
       metaDescription: payload.meta_description || payload.metaDescription || "",
+      ogTitle: payload.og_title || payload.ogTitle || "",
+      ogDescription: payload.og_description || payload.ogDescription || "",
+      ogImage: payload.og_image || payload.ogImage || "",
       author: payload.author || "Quadravise Team",
       status: "draft",
       importSource: "json",
