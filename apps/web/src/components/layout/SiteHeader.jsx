@@ -54,7 +54,7 @@ function SiteHeader({ isAdmin = false }) {
         <div>
           <Link to={isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME} className="site-logo-link" aria-label="Quadravise Home">
             <span className="site-logo-stack">
-              <img src={logo} alt="Quadravise Logo" className="site-logo" />
+              <img src={logo} alt="Quadravise Logo" className="site-logo" width="48" height="48" />
               <span className="site-logo-text">Quadravise</span>
             </span>
           </Link>
