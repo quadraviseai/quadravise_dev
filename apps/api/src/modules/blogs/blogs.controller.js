@@ -1,4 +1,5 @@
 import { successResponse } from "../../utils/response.js";
+import { buildPublicUrl } from "../../utils/publicUrl.js";
 
 import { blogsService } from "./blogs.service.js";
 
@@ -180,7 +181,7 @@ export async function uploadBlogImage(req, res, next) {
       });
     }
 
-    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    const imageUrl = buildPublicUrl(req, `/uploads/${req.file.filename}`);
     const blog = await blogsService.uploadBlogImage(req.params.id, imageUrl);
 
     if (!blog) {

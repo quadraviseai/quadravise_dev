@@ -1,4 +1,5 @@
 import { successResponse } from "../../utils/response.js";
+import { buildPublicUrl } from "../../utils/publicUrl.js";
 
 export async function uploadImage(req, res, next) {
   try {
@@ -10,7 +11,7 @@ export async function uploadImage(req, res, next) {
     }
 
     const relativeUrl = `/uploads/${req.file.filename}`;
-    const absoluteUrl = `${req.protocol}://${req.get("host")}${relativeUrl}`;
+    const absoluteUrl = buildPublicUrl(req, relativeUrl);
 
     return successResponse(res, "Image uploaded successfully", {
       url: absoluteUrl,
