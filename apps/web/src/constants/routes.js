@@ -8,6 +8,8 @@ export const ROUTES = {
   BLOG_PREVIEW: "/blog/preview",
   ABOUT: "/about",
   CONTACT: "/contact",
+  PRIVACY_POLICY: "/privacy-policy",
+  COOKIE_POLICY: "/cookie-policy",
   ADMIN_LOGIN: "/admin/login",
   ADMIN_RESET_PASSWORD: "/admin/reset-password",
   ADMIN_DASHBOARD: "/admin/dashboard",

@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
+import { useCookieConsent } from "../../context/CookieConsentContext";
 import { useSiteSettings } from "../../hooks/useSiteSettings";
 
 function SiteFooter() {
+  const { openPreferences } = useCookieConsent();
   const { data } = useSiteSettings();
   const settings = data?.data || {};
 
@@ -75,13 +77,18 @@ function SiteFooter() {
               <Link to={ROUTES.ABOUT}>About</Link>
               <Link to={ROUTES.CONTACT}>Contact</Link>
               <Link to={ROUTES.BLOG}>Blog</Link>
+              <Link to={ROUTES.PRIVACY_POLICY}>Privacy Policy</Link>
+              <Link to={ROUTES.COOKIE_POLICY}>Cookie Policy</Link>
+              <button type="button" className="footer-text-button" onClick={openPreferences}>
+                Cookie Settings
+              </button>
             </div>
           </div>
         </div>
 
         <div className="footer-divider" />
         <div className="footer-bottom-row">
-          <span>© 2026 Quadravise. All rights reserved.</span>
+          <span>&copy; 2026 Quadravise. All rights reserved.</span>
           <span>Built for scalable digital products.</span>
         </div>
       </div>

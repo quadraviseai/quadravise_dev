@@ -83,6 +83,18 @@ export const pageSeo = {
     description:
       "Contact Quadravise to discuss web development, mobile app development, SaaS platforms, and custom software projects.",
     canonical: `${siteUrl}/contact`
+  },
+  privacyPolicy: {
+    title: "Privacy Policy | Quadravise",
+    description:
+      "Read the Quadravise privacy policy to understand what data is collected, how it is used, and how analytics consent works.",
+    canonical: `${siteUrl}/privacy-policy`
+  },
+  cookiePolicy: {
+    title: "Cookie Policy | Quadravise",
+    description:
+      "Read the Quadravise cookie policy to understand the cookies used on the website, their purpose, and how to manage consent.",
+    canonical: `${siteUrl}/cookie-policy`
   }
 };
 

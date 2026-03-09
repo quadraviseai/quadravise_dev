@@ -14,6 +14,8 @@ const BlogDetailPage = lazy(() => import("../pages/BlogDetailPage"));
 const BlogPreviewPage = lazy(() => import("../pages/BlogPreviewPage"));
 const AboutPage = lazy(() => import("../pages/AboutPage"));
 const ContactPage = lazy(() => import("../pages/ContactPage"));
+const PrivacyPolicyPage = lazy(() => import("../pages/PrivacyPolicyPage"));
+const CookiePolicyPage = lazy(() => import("../pages/CookiePolicyPage"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 const AdminLoginPage = lazy(() => import("../pages/AdminLoginPage"));
 const AdminResetPasswordPage = lazy(() => import("../pages/AdminResetPasswordPage"));
@@ -52,6 +54,8 @@ function AppRoutes() {
           <Route path={`${ROUTES.BLOG}/:slug`} element={<BlogDetailPage />} />
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
           <Route path={ROUTES.CONTACT} element={<ContactPage />} />
+          <Route path={ROUTES.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
+          <Route path={ROUTES.COOKIE_POLICY} element={<CookiePolicyPage />} />
           <Route path="/home" element={<Navigate to={ROUTES.HOME} replace />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
