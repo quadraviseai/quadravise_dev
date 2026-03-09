@@ -1,12 +1,35 @@
 const siteUrl = import.meta.env.VITE_SITE_URL || "https://quadravise.com";
 const defaultOgImage = `${siteUrl}/logo.png`;
+const coreKeywords = [
+  "software development company",
+  "web development company",
+  "mobile app development company",
+  "custom software development company",
+  "SaaS development company",
+  "software development for startups",
+  "MVP development company",
+  "startup app development company",
+  "startup product development company",
+  "SaaS product development company",
+  "custom web application development",
+  "web application development services",
+  "enterprise software development company",
+  "React development company",
+  "Node.js development company",
+  "full stack development company",
+  "hire mobile app developers",
+  "hire web developers",
+  "software development outsourcing company",
+  "build SaaS platform development company"
+];
+
+const joinKeywords = (...groups) => [...new Set(groups.flat())].join(", ");
 
 export const seoDefaults = {
   title: "Quadravise | Software Development Company",
   description:
     "Quadravise is a software development company providing web development, mobile app development, and custom software solutions.",
-  keywords:
-    "software development company, web development company, mobile app development, custom software development, quadravise",
+  keywords: joinKeywords(coreKeywords, ["quadravise"]),
   canonical: `${siteUrl}/`,
   ogImage: defaultOgImage,
   twitterCard: "summary_large_image"
@@ -70,4 +93,61 @@ export const organizationSchema = {
   url: siteUrl,
   logo: `${siteUrl}/logo.png`,
   sameAs: ["https://www.linkedin.com/company/quadravise"]
+};
+
+export const seoKeywords = {
+  default: seoDefaults.keywords,
+  home: joinKeywords(coreKeywords, ["quadravise"]),
+  services: joinKeywords(coreKeywords, [
+    "software development services",
+    "web development services",
+    "mobile app development services",
+    "custom software development"
+  ]),
+  serviceDetail: joinKeywords(coreKeywords, [
+    "software development service",
+    "web development service",
+    "mobile app development",
+    "custom software service"
+  ]),
+  products: joinKeywords(coreKeywords, [
+    "software products",
+    "SaaS products",
+    "startup software solutions",
+    "SaaS product development company"
+  ]),
+  quadraILearn: joinKeywords(coreKeywords, [
+    "QuadraiLearn",
+    "AI learning platform",
+    "edtech software",
+    "digital learning platform"
+  ]),
+  portfolio: joinKeywords(coreKeywords, [
+    "software development portfolio",
+    "web app portfolio",
+    "mobile app portfolio",
+    "SaaS case studies"
+  ]),
+  blog: joinKeywords(coreKeywords, [
+    "software development blog",
+    "SaaS blog",
+    "mobile app development insights",
+    "web development articles"
+  ]),
+  blogDetail: joinKeywords(coreKeywords, [
+    "software development blog",
+    "quadravise blog",
+    "web development insights"
+  ]),
+  about: joinKeywords(coreKeywords, [
+    "about quadravise",
+    "software company",
+    "product engineering company",
+    "custom software team"
+  ]),
+  contact: joinKeywords(coreKeywords, [
+    "contact quadravise",
+    "software project consultation",
+    "web development company contact"
+  ])
 };

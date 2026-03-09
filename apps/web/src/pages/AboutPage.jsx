@@ -7,7 +7,7 @@ import AboutTechStackSection from "../components/about/AboutTechStackSection";
 import AboutWhyChooseSection from "../components/about/AboutWhyChooseSection";
 import AboutCTASection from "../components/about/AboutCTASection";
 import AboutPositioningSection from "../components/about/AboutPositioningSection";
-import { pageSeo } from "../constants/seo";
+import { pageSeo, seoKeywords } from "../constants/seo";
 
 function AboutPage() {
   return (
@@ -15,7 +15,7 @@ function AboutPage() {
       <SEOHead
         title={pageSeo.about.title}
         description={pageSeo.about.description}
-        keywords="about quadravise, software company, product engineering company, custom software team"
+        keywords={seoKeywords.about}
         canonical={pageSeo.about.canonical}
       />
       <AboutHeroSection />

@@ -10,7 +10,7 @@ import BlogCard from "../components/blog/BlogCard";
 import SEOHead from "../components/seo/SEOHead";
 import { useBlogs } from "../hooks/useBlogs";
 import { ROUTES } from "../constants/routes";
-import { pageSeo } from "../constants/seo";
+import { pageSeo, seoKeywords } from "../constants/seo";
 
 function BlogPage() {
   const [category, setCategory] = useState("All");
@@ -35,7 +35,7 @@ function BlogPage() {
       <SEOHead
         title={pageSeo.blog.title}
         description={pageSeo.blog.description}
-        keywords="software development blog, SaaS blog, mobile app development insights, web development articles"
+        keywords={seoKeywords.blog}
         canonical={pageSeo.blog.canonical}
       />
       <section className="section blog-page-hero-section">

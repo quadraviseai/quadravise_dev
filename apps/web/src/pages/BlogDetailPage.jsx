@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import ErrorState from "../components/common/ErrorState";
 import SEOHead from "../components/seo/SEOHead";
-import { seoDefaults } from "../constants/seo";
+import { seoDefaults, seoKeywords } from "../constants/seo";
 import { useBlogBySlug } from "../hooks/useBlogs";
 
 function BlogDetailPage() {
@@ -17,7 +17,7 @@ function BlogDetailPage() {
       <SEOHead
         title={blog?.metaTitle || (blog ? `Quadravise | ${blog.title}` : "Quadravise | Blog Detail")}
         description={blog?.metaDescription || blog?.excerpt}
-        keywords="software development blog, quadravise blog, web development insights"
+        keywords={seoKeywords.blogDetail}
         canonical={canonical}
         ogTitle={blog?.ogTitle || blog?.metaTitle || blog?.title}
         ogDescription={blog?.ogDescription || blog?.metaDescription || blog?.excerpt}

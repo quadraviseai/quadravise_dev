@@ -2,7 +2,7 @@ import { Suspense, lazy, startTransition, useEffect, useState } from "react";
 
 import SEOHead from "../components/seo/SEOHead";
 import HeroSection from "../components/home/HeroSection";
-import { organizationSchema, pageSeo } from "../constants/seo";
+import { organizationSchema, pageSeo, seoKeywords } from "../constants/seo";
 
 const WhatWeDoSection = lazy(() => import("../components/home/WhatWeDoSection"));
 const WhyChooseUsSection = lazy(() => import("../components/home/WhyChooseUsSection"));
@@ -36,7 +36,7 @@ function HomePage() {
       <SEOHead
         title={pageSeo.home.title}
         description={pageSeo.home.description}
-        keywords="software development company, web development company, mobile app development, custom software development, quadravise"
+        keywords={seoKeywords.home}
         canonical={pageSeo.home.canonical}
         ogTitle="Quadravise Software Development Company"
         ogDescription="Build scalable software products with Quadravise. Web development, mobile app development and custom software solutions."

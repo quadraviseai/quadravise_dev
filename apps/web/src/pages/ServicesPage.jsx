@@ -9,7 +9,7 @@ import ServicesCTASection from "../components/services/ServicesCTASection";
 import ServicesPortfolioTeaserSection from "../components/services/ServicesPortfolioTeaserSection";
 import ServicesSeoContentSection from "../components/services/ServicesSeoContentSection";
 import SEOHead from "../components/seo/SEOHead";
-import { pageSeo } from "../constants/seo";
+import { pageSeo, seoKeywords } from "../constants/seo";
 import { servicesData } from "../constants/services";
 
 function ServicesPage() {
@@ -18,7 +18,7 @@ function ServicesPage() {
       <SEOHead
         title={pageSeo.services.title}
         description={pageSeo.services.description}
-        keywords="software development services, web development services, mobile app development services, custom software development"
+        keywords={seoKeywords.services}
         canonical={pageSeo.services.canonical}
       />
       <ServicesHeroSection />

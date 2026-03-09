@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import SectionHeader from "../components/common/SectionHeader";
 import SEOHead from "../components/seo/SEOHead";
 import { ROUTES } from "../constants/routes";
-import { pageSeo } from "../constants/seo";
+import { pageSeo, seoKeywords } from "../constants/seo";
 import { useSiteSettings } from "../hooks/useSiteSettings";
 
 const productFeatures = [
@@ -79,7 +79,7 @@ function ProductsPage() {
       <SEOHead
         title={pageSeo.products.title}
         description={pageSeo.products.description}
-        keywords="software products, AI learning platform, SaaS products, startup software solutions"
+        keywords={seoKeywords.products}
         canonical={pageSeo.products.canonical}
       />
 

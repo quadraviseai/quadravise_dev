@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import SEOHead from "../components/seo/SEOHead";
 import { servicesData } from "../constants/services";
 import { ROUTES } from "../constants/routes";
+import { seoKeywords } from "../constants/seo";
 
 function ServiceDetailPage() {
   const { slug } = useParams();
@@ -33,7 +34,7 @@ function ServiceDetailPage() {
       <SEOHead
         title={`Quadravise | ${service.title}`}
         description={service.description}
-        keywords="software development service, web development service, mobile app development, custom software service"
+        keywords={seoKeywords.serviceDetail}
         canonical={`${import.meta.env.VITE_SITE_URL || "https://quadravise.com"}/services/${service.slug}`}
       />
 

@@ -8,7 +8,7 @@ import ErrorState from "../components/common/ErrorState";
 import PortfolioCard from "../components/portfolio/PortfolioCard";
 import SEOHead from "../components/seo/SEOHead";
 import { ROUTES } from "../constants/routes";
-import { pageSeo } from "../constants/seo";
+import { pageSeo, seoKeywords } from "../constants/seo";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useSiteSettings } from "../hooks/useSiteSettings";
 
@@ -23,7 +23,7 @@ function PortfolioPage() {
       <SEOHead
         title={pageSeo.portfolio.title}
         description={pageSeo.portfolio.description}
-        keywords="software development portfolio, web app portfolio, mobile app portfolio, SaaS case studies"
+        keywords={seoKeywords.portfolio}
         canonical={pageSeo.portfolio.canonical}
       />
       <section className="section portfolio-page-hero-section">
