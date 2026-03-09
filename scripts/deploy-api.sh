@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+APP_ROOT="${APP_ROOT:-/var/www/Quadravise}"
+
+cd "$APP_ROOT"
+npm install
+
 cd apps/api
-npm install --omit=dev
+npm run db:migrate
+npm run db:seed
+
 sudo systemctl restart quadravise-api
+sudo systemctl status quadravise-api --no-pager --full

@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-set -e
-cd apps/web
-npm run build
-rsync -av dist/ /var/www/quadravise/web/
+set -euo pipefail
+
+APP_ROOT="${APP_ROOT:-/var/www/Quadravise}"
+
+cd "$APP_ROOT"
+npm install
+npm run build:web
+
+sudo systemctl reload nginx

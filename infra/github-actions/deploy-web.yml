@@ -1,8 +1,18 @@
 name: deploy-web
+
 on:
   workflow_dispatch:
+
 jobs:
-  deploy:
+  deploy-web:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Define web deploy steps"
+      - name: Deploy web over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /var/www/Quadravise
+            bash scripts/deploy-web.sh

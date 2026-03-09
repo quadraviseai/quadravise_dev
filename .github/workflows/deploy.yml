@@ -1,8 +1,21 @@
 name: deploy
+
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+
 jobs:
-  noop:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Configure deployment steps"
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /var/www/Quadravise
+            bash scripts/deploy-vps.sh
