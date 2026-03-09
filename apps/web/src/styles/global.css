@@ -2914,6 +2914,7 @@ p {
 .blog-detail-hero-section {
   background: radial-gradient(circle at 80% 16%, rgba(30, 134, 187, 0.12), transparent 40%),
     linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  padding-bottom: 32px;
 }
 
 .blog-detail-hero-title {
@@ -2940,6 +2941,7 @@ p {
 
 .blog-detail-content-section {
   background: #ffffff;
+  padding-top: 20px;
 }
 
 .blog-detail-card {

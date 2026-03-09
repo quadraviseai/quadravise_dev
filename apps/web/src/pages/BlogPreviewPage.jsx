@@ -6,6 +6,25 @@ import ErrorState from "../components/common/ErrorState";
 import SEOHead from "../components/seo/SEOHead";
 import { adminService } from "../services/adminService";
 
+function escapeRegExp(value = "") {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getRenderedBlogContent(blog) {
+  const content = blog?.content || "<p>No content available.</p>";
+  const title = String(blog?.title || "").trim();
+  if (!title) return content;
+
+  const titlePattern = escapeRegExp(title);
+  return content.replace(
+    new RegExp(
+      `^\\s*<h1[^>]*>\\s*(?:<strong>)?\\s*${titlePattern}\\s*(?:<\\/strong>)?\\s*<\\/h1>\\s*`,
+      "i"
+    ),
+    ""
+  );
+}
+
 function BlogPreviewPage() {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
@@ -68,7 +87,7 @@ function BlogPreviewPage() {
               ) : null}
               <div
                 className="blog-detail-rich-content prose"
-                dangerouslySetInnerHTML={{ __html: blog.content || "<p>No content available.</p>" }}
+                dangerouslySetInnerHTML={{ __html: getRenderedBlogContent(blog) }}
               />
             </Card>
           ) : null}

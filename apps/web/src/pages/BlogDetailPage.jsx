@@ -6,6 +6,25 @@ import SEOHead from "../components/seo/SEOHead";
 import { seoDefaults, seoKeywords } from "../constants/seo";
 import { useBlogBySlug } from "../hooks/useBlogs";
 
+function escapeRegExp(value = "") {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getRenderedBlogContent(blog) {
+  const content = blog?.content || "<p>No content available.</p>";
+  const title = String(blog?.title || "").trim();
+  if (!title) return content;
+
+  const titlePattern = escapeRegExp(title);
+  return content.replace(
+    new RegExp(
+      `^\\s*<h1[^>]*>\\s*(?:<strong>)?\\s*${titlePattern}\\s*(?:<\\/strong>)?\\s*<\\/h1>\\s*`,
+      "i"
+    ),
+    ""
+  );
+}
+
 function BlogDetailPage() {
   const { slug } = useParams();
   const { data, isLoading, isError, refetch } = useBlogBySlug(slug);
@@ -46,7 +65,7 @@ function BlogDetailPage() {
               ) : null}
               <div
                 className="blog-detail-rich-content prose"
-                dangerouslySetInnerHTML={{ __html: blog.content || "<p>No content available.</p>" }}
+                dangerouslySetInnerHTML={{ __html: getRenderedBlogContent(blog) }}
               />
             </Card>
           ) : null}
