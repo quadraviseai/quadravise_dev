@@ -90,7 +90,7 @@ function WhatWeDoSection() {
                     ))}
                   </div>
                   <Link className="service-learn-link" to={ROUTES.SERVICES}>
-                    Learn More
+                    Explore {service.title}
                   </Link>
                 </Space>
                 </Card>
