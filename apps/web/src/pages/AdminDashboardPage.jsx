@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Modal,
+  Segmented,
   Row,
   Select,
   Space,
@@ -43,6 +44,11 @@ function stripHtml(html = "") {
 function estimateReadTime(content = "") {
   const words = stripHtml(content).split(/\s+/).filter(Boolean).length;
   return `${words ? Math.max(1, Math.round(words / 220)) : 1} min read`;
+}
+
+function normalizeEditorContent(value = "") {
+  const normalizedValue = typeof value === "string" ? value : "";
+  return normalizedValue === "<p><br></p>" ? "" : normalizedValue;
 }
 
 const BLOG_EDITOR_MODULES = {
@@ -144,6 +150,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
   const [blogModalOpen, setBlogModalOpen] = useState(false);
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
+  const [blogEditorMode, setBlogEditorMode] = useState("rich");
 
   const [blogForm] = Form.useForm();
   const [portfolioForm] = Form.useForm();
@@ -155,6 +162,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
   function openCreateBlogModal() {
     navigate(ROUTES.ADMIN_BLOGS);
     setEditingBlogId(null);
+    setBlogEditorMode("rich");
     blogForm.resetFields();
     blogForm.setFieldsValue(getDefaultBlogFormValues());
     setBlogModalOpen(true);
@@ -388,6 +396,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
                   const response = await adminService.getBlogById(row.id);
                   const blog = response.data;
                   setEditingBlogId(row.id);
+                  setBlogEditorMode("rich");
                   blogForm.setFieldsValue({
                     title: blog.title,
                     slug: blog.slug,
@@ -642,6 +651,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
     try {
       const payload = {
         ...values,
+        content: normalizeEditorContent(values.content),
         slug: values.slug || slugifyText(values.title),
         category: (Array.isArray(values.category) && values.category[0]) || values.category || "General",
         tags: values.tags || [],
@@ -1339,16 +1349,36 @@ function AdminDashboardPage({ section = "dashboard" }) {
                                 <>
                                   <div className="admin-editor-note">
                                     Write the article directly with headings, lists, links, code blocks, and media.
+                                    Switch to HTML Source if you want to paste or edit raw HTML markup.
                                   </div>
-                                  <Form.Item name="content" label="Content" rules={[{ required: true }]}>
-                                    <ReactQuill
-                                      theme="snow"
-                                      modules={BLOG_EDITOR_MODULES}
-                                      formats={BLOG_EDITOR_FORMATS}
-                                      placeholder="Write the full article here..."
-                                      className="admin-rich-editor"
+                                  <Space direction="vertical" size={12} style={{ width: "100%" }}>
+                                    <Segmented
+                                      value={blogEditorMode}
+                                      onChange={setBlogEditorMode}
+                                      options={[
+                                        { label: "Rich Text", value: "rich" },
+                                        { label: "HTML Source", value: "html" }
+                                      ]}
                                     />
-                                  </Form.Item>
+                                    <Form.Item name="content" label="Content" rules={[{ required: true }]}>
+                                      {blogEditorMode === "html" ? (
+                                        <Input.TextArea
+                                          rows={18}
+                                          spellCheck={false}
+                                          placeholder="Paste or write raw HTML here..."
+                                        />
+                                      ) : (
+                                        <ReactQuill
+                                          theme="snow"
+                                          modules={BLOG_EDITOR_MODULES}
+                                          formats={BLOG_EDITOR_FORMATS}
+                                          placeholder="Write the full article here..."
+                                          className="admin-rich-editor"
+                                          preserveWhitespace
+                                        />
+                                      )}
+                                    </Form.Item>
+                                  </Space>
                                 </>
                               )
                             },
@@ -1420,6 +1450,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
                           </Button>
                           <Button
                             onClick={() => {
+                              setBlogEditorMode("rich");
                               setBlogModalOpen(false);
                               setEditingBlogId(null);
                               blogForm.resetFields();
