@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+Disallow: /admin/
+Disallow: /login/
+Disallow: /dashboard/
+Disallow: /api/
+
 Sitemap: https://quadravise.com/sitemap.xml
