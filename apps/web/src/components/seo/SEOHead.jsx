@@ -32,7 +32,7 @@ function SEOHead({
       <meta name="description" content={pageDescription} />
       <meta name="keywords" content={pageKeywords} />
       <link rel="canonical" href={pageCanonical} />
-      <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      <link rel="icon" href="/logo.png" type="image/png" />
       <meta property="og:title" content={ogTitle || pageTitle} />
       <meta property="og:description" content={ogDescription || pageDescription} />
       <meta property="og:image" content={pageOgImage} />

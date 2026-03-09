@@ -15,7 +15,7 @@ import { motion } from "motion/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
-import logo from "../../assets/logos/quadravise-logo.svg";
+import logo from "../../assets/logos/quadravise_logo.png";
 import { adminService } from "../../services/adminService";
 
 const { Header } = Layout;
