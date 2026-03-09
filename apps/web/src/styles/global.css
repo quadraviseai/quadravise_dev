@@ -30,6 +30,13 @@ p {
   margin: 0;
 }
 
+.route-loading-shell {
+  min-height: calc(100vh - var(--header-height));
+  display: grid;
+  place-items: center;
+  background: #f8fafc;
+}
+
 .site-header {
   position: fixed;
   top: 0;
