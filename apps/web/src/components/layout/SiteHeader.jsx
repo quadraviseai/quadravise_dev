@@ -11,7 +11,6 @@ import {
   RocketOutlined,
   ToolOutlined
 } from "@ant-design/icons";
-import { motion } from "motion/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
@@ -66,14 +65,14 @@ function SiteHeader({ isAdmin = false }) {
   return (
     <Header className={`site-header ${isScrolled ? "is-scrolled" : ""}`}>
       <div className="site-header-inner">
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <div>
           <Link to={isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME} className="site-logo-link" aria-label="Quadravise Home">
             <span className="site-logo-stack">
               <img src={logo} alt="Quadravise Logo" className="site-logo" />
               <span className="site-logo-text">Quadravise</span>
             </span>
           </Link>
-        </motion.div>
+        </div>
         {isAdmin ? (
           <div className="desktop-nav">
             <nav className="admin-header-nav" aria-label="Admin sections">
