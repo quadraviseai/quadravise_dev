@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      window.__QUADRAVISE_IS_HOME__ = window.location.pathname === "/";
+      if (window.__QUADRAVISE_IS_HOME__) {
+        document.documentElement.classList.add("quadravise-home-prerender");
+      }
+    </script>
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <link rel="dns-prefetch" href="//www.googletagmanager.com" />
     <script>
@@ -44,6 +50,27 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <style>
+      .home-prerender-shell {
+        display: none;
+      }
+
+      .quadravise-home-prerender .home-prerender-shell {
+        display: block;
+        min-height: calc(100vh - 84px);
+        padding: 112px 10px 40px;
+        background: radial-gradient(circle at 82% 18%, rgba(30, 134, 187, 0.15), transparent 36%),
+          linear-gradient(180deg, #f3f8ff 0%, #f8fbff 70%, #ffffff 100%);
+      }
+
+      .home-prerender-inner {
+        max-width: 1360px;
+        margin: 0 auto;
+      }
+
+      .home-prerender-copy {
+        max-width: 640px;
+      }
+
       .hero-title {
         margin: 0 0 18px;
         max-width: 560px;
@@ -66,6 +93,62 @@
         color: #3d566e;
         margin-bottom: 24px;
       }
+
+      .home-prerender-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .home-prerender-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .home-prerender-btn-primary {
+        color: #ffffff;
+        background: #ec5b16;
+        box-shadow: 0 10px 22px rgba(236, 91, 22, 0.24);
+      }
+
+      .home-prerender-btn-secondary {
+        color: #165596;
+        background: #ffffff;
+        border: 1px solid #165596;
+      }
+
+      @media (max-width: 768px) {
+        .quadravise-home-prerender .home-prerender-shell {
+          padding: 146px 12px 40px;
+          min-height: auto;
+        }
+
+        .hero-title {
+          font-size: 28px;
+          max-width: none;
+          text-align: center;
+        }
+
+        .hero-description {
+          font-size: 16px;
+          max-width: none;
+          text-align: center;
+        }
+
+        .home-prerender-copy {
+          max-width: none;
+        }
+
+        .home-prerender-actions {
+          justify-content: center;
+        }
+      }
     </style>
     <title>Quadravise | Software Development Company</title>
   </head>
@@ -78,6 +161,29 @@
         style="display: none; visibility: hidden"
       ></iframe>
     </noscript>
+    <section id="prerender-home-hero" class="home-prerender-shell">
+      <div class="home-prerender-inner">
+        <div class="home-prerender-copy">
+          <h1 class="hero-title">
+            Build Powerful
+            <br />
+            Websites, Mobile Apps,
+            <br />
+            and SaaS Products
+            <br />
+            <span class="hero-title-subline">with Quadravise</span>
+          </h1>
+          <p class="hero-description">
+            We help startups and businesses transform ideas into scalable digital products through expert website
+            development, mobile app development, and custom software solutions.
+          </p>
+          <div class="home-prerender-actions">
+            <a class="home-prerender-btn home-prerender-btn-primary" href="/contact">Book Free Consultation</a>
+            <a class="home-prerender-btn home-prerender-btn-secondary" href="/portfolio">View Our Work</a>
+          </div>
+        </div>
+      </div>
+    </section>
     <div id="root"></div>
     <script type="application/ld+json">
       {

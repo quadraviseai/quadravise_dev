@@ -12,8 +12,9 @@ import "./styles/utilities.css";
 import "./styles/global.css";
 
 const queryClient = new QueryClient();
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+root.render(
   <React.StrictMode>
     <HelmetProvider>
       <ConfigProvider theme={antdTheme}>
@@ -26,3 +27,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </HelmetProvider>
   </React.StrictMode>
 );
+
+window.requestAnimationFrame(() => {
+  const prerenderHero = document.getElementById("prerender-home-hero");
+  if (prerenderHero) {
+    prerenderHero.remove();
+  }
+  document.documentElement.classList.remove("quadravise-home-prerender");
+});
