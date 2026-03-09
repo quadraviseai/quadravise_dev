@@ -13,6 +13,32 @@ function trimOptionalText(value, maxLength) {
   return trimText(value, maxLength, "");
 }
 
+function normalizeBlogHtml(content = "") {
+  if (typeof content !== "string") return "";
+
+  let normalizedContent = content.replace(/\r\n/g, "\n").trim();
+
+  const emptyBlockPattern =
+    /<(p|h1|h2|h3|h4|h5|h6|blockquote|pre|li)(?:\s[^>]*)?>\s*(?:<br\s*\/?>|&nbsp;|\u00a0|\s)*<\/\1>/gi;
+
+  do {
+    const previous = normalizedContent;
+    normalizedContent = normalizedContent.replace(emptyBlockPattern, "");
+    if (previous === normalizedContent) break;
+  } while (true);
+
+  normalizedContent = normalizedContent
+    .replace(/<p>\s*<\/p>/gi, "")
+    .replace(/<(h[1-6]|p|li)>\s+/gi, "<$1>")
+    .replace(/\s+<\/(h[1-6]|p|li)>/gi, "</$1>")
+    .replace(/<ul>(?:\s|&nbsp;|\u00a0)*<\/ul>/gi, "")
+    .replace(/<ol>(?:\s|&nbsp;|\u00a0)*<\/ol>/gi, "")
+    .replace(/(?:<p><br><\/p>\s*){2,}/gi, "<p><br></p>")
+    .trim();
+
+  return normalizedContent || "<p>No content available.</p>";
+}
+
 function normalizeTags(tags) {
   if (!Array.isArray(tags)) return [];
   return tags
@@ -26,7 +52,7 @@ function normalizeBlogPayload(payload) {
     title: trimText(payload.title, 180, "Untitled Blog"),
     slug: trimOptionalText(payload.slug, 220),
     excerpt: trimText(payload.excerpt, 10000, ""),
-    content: typeof payload.content === "string" ? payload.content : "",
+    content: normalizeBlogHtml(payload.content),
     category: trimText(payload.category, 100, "General"),
     tags: normalizeTags(payload.tags),
     author: trimText(payload.author, 120, "Quadravise Team"),
