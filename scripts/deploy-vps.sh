@@ -21,4 +21,12 @@ sudo systemctl restart quadravise-api
 sudo nginx -t
 sudo systemctl reload nginx
 
-curl -fsS http://127.0.0.1:5000/api/health
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  if curl -fsS http://127.0.0.1:5000/api/health; then
+    exit 0
+  fi
+  sleep 2
+done
+
+echo "API health check failed after restart" >&2
+exit 1
