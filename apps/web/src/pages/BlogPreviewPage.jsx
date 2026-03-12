@@ -56,6 +56,7 @@ function BlogPreviewPage() {
       <SEOHead
         title={blog?.title ? `Quadravise | Draft Preview | ${blog.title}` : "Quadravise | Draft Preview"}
         description={blog?.excerpt || "Draft preview"}
+        robots="noindex, nofollow"
       />
       <section className="section blog-detail-hero-section">
         <div className="section-inner">

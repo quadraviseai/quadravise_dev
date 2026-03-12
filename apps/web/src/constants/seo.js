@@ -1,4 +1,4 @@
-const siteUrl = import.meta.env.VITE_SITE_URL || "https://quadravise.com";
+export const siteUrl = (import.meta.env.VITE_SITE_URL || "https://quadravise.com").replace(/\/+$/, "");
 const defaultOgImage = `${siteUrl}/logo.png`;
 const coreKeywords = [
   "software development company",

@@ -36,7 +36,7 @@ function AdminLoginPage() {
 
   return (
     <>
-      <SEOHead title="Quadravise | Admin Login" />
+      <SEOHead title="Quadravise | Admin Login" robots="noindex, nofollow" />
       <section className="section admin-login-section">
         <div className="section-inner admin-login-wrap">
           <Row gutter={[24, 24]} align="middle" className="admin-login-grid">

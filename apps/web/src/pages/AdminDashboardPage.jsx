@@ -834,7 +834,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
 
   return (
     <>
-      <SEOHead title="Quadravise | Admin Dashboard" />
+      <SEOHead title="Quadravise | Admin Dashboard" robots="noindex, nofollow" />
       {contextHolder}
       <section className="section admin-dashboard-section">
         <div className="section-inner">

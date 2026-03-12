@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import ErrorState from "../components/common/ErrorState";
 import SEOHead from "../components/seo/SEOHead";
-import { seoDefaults, seoKeywords } from "../constants/seo";
+import { seoKeywords, siteUrl } from "../constants/seo";
 import { useBlogBySlug } from "../hooks/useBlogs";
 
 function escapeRegExp(value = "") {
@@ -29,7 +29,7 @@ function BlogDetailPage() {
   const { slug } = useParams();
   const { data, isLoading, isError, refetch } = useBlogBySlug(slug);
   const blog = data?.data;
-  const canonical = blog?.canonicalUrl || (slug ? `${seoDefaults.canonical}/blog/${slug}` : undefined);
+  const canonical = blog?.canonicalUrl || (slug ? `${siteUrl}/blog/${slug}` : undefined);
 
   return (
     <>

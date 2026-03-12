@@ -31,7 +31,7 @@ function AdminResetPasswordPage() {
 
   return (
     <>
-      <SEOHead title="Quadravise | Admin Reset Password" />
+      <SEOHead title="Quadravise | Admin Reset Password" robots="noindex, nofollow" />
       <section className="section admin-login-section">
         <div className="section-inner admin-login-wrap">
           <Card className="admin-login-card">

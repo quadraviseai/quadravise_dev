@@ -12,6 +12,7 @@ function SEOHead({
   description,
   keywords,
   canonical,
+  robots,
   ogTitle,
   ogDescription,
   ogImage,
@@ -31,6 +32,7 @@ function SEOHead({
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
       <meta name="keywords" content={pageKeywords} />
+      {robots ? <meta name="robots" content={robots} /> : null}
       <link rel="canonical" href={pageCanonical} />
       <link rel="icon" href="/logo.png" type="image/png" />
       <meta property="og:title" content={ogTitle || pageTitle} />
