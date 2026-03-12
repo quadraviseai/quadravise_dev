@@ -1,6 +1,7 @@
 import { Card, Spin, Typography } from "antd";
 import { useParams } from "react-router-dom";
 
+import BlogArticleCTA from "../components/blog/BlogArticleCTA";
 import ErrorState from "../components/common/ErrorState";
 import SEOHead from "../components/seo/SEOHead";
 import { seoKeywords, siteUrl } from "../constants/seo";
@@ -67,6 +68,7 @@ function BlogDetailPage() {
                 className="blog-detail-rich-content prose"
                 dangerouslySetInnerHTML={{ __html: getRenderedBlogContent(blog) }}
               />
+              <BlogArticleCTA />
             </Card>
           ) : null}
         </div>
