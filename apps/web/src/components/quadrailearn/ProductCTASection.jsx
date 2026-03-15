@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
 
+const QUADRAILEARN_LIVE_URL = "https://quadrailearn.quadravise.com";
+
 function ProductCTASection() {
   const navigate = useNavigate();
   return (
@@ -31,6 +33,9 @@ function ProductCTASection() {
                 <Space size={14} wrap>
                   <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => navigate(ROUTES.CONTACT)}>
                     Request Demo
+                  </Button>
+                  <Button className="hero-btn hero-btn-secondary-contrast" href={QUADRAILEARN_LIVE_URL}>
+                    Open Live Landing Page
                   </Button>
                   <Button className="hero-btn hero-btn-secondary-contrast" onClick={() => navigate(ROUTES.CONTACT)}>
                     Talk to Team
