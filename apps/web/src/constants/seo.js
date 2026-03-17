@@ -60,6 +60,12 @@ export const pageSeo = {
       "Discover QuadraiLearn, the AI-powered learning platform from Quadravise built for structured education and measurable progress.",
     canonical: `${siteUrl}/products/quadra-ilearn`
   },
+  quadraILearnSurvey: {
+    title: "QuadraiLearn Survey | Quadravise",
+    description:
+      "Submit feedback about QuadraiLearn through the official survey form from Quadravise.",
+    canonical: `${siteUrl}/products/quadra-ilearn/survey`
+  },
   portfolio: {
     title: "Quadravise | Software Development Portfolio",
     description:
@@ -133,6 +139,11 @@ export const seoKeywords = {
     "AI learning platform",
     "edtech software",
     "digital learning platform"
+  ]),
+  quadraILearnSurvey: joinKeywords(coreKeywords, [
+    "QuadraiLearn survey",
+    "QuadraiLearn feedback",
+    "education software feedback form"
   ]),
   portfolio: joinKeywords(coreKeywords, [
     "software development portfolio",

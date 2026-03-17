@@ -8,6 +8,7 @@ const ServicesPage = lazy(() => import("../pages/ServicesPage"));
 const ServiceDetailPage = lazy(() => import("../pages/ServiceDetailPage"));
 const ProductsPage = lazy(() => import("../pages/ProductsPage"));
 const QuadraILearnPage = lazy(() => import("../pages/QuadraILearnPage"));
+const QuadraILearnSurveyPage = lazy(() => import("../pages/QuadraILearnSurveyPage"));
 const PortfolioPage = lazy(() => import("../pages/PortfolioPage"));
 const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailPage = lazy(() => import("../pages/BlogDetailPage"));
@@ -41,6 +42,7 @@ function AppRoutes() {
           <Route path="/services/:slug" element={<ServiceDetailPage />} />
           <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
           <Route path={ROUTES.QUADRA_ILEARN} element={<QuadraILearnPage />} />
+          <Route path={ROUTES.QUADRA_ILEARN_SURVEY} element={<QuadraILearnSurveyPage />} />
           <Route path={ROUTES.PORTFOLIO} element={<PortfolioPage />} />
           <Route path={ROUTES.BLOG} element={<BlogPage />} />
           <Route

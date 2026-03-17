@@ -34,6 +34,9 @@ function ProductCTASection() {
                   <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => navigate(ROUTES.CONTACT)}>
                     Request Demo
                   </Button>
+                  <Button className="hero-btn hero-btn-secondary" onClick={() => navigate(ROUTES.QUADRA_ILEARN_SURVEY)}>
+                    Fill Survey
+                  </Button>
                   <Button className="hero-btn hero-btn-secondary-contrast" href={QUADRAILEARN_LIVE_URL}>
                     Open Live Landing Page
                   </Button>

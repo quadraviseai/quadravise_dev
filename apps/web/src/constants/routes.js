@@ -3,6 +3,7 @@ export const ROUTES = {
   SERVICES: "/services",
   PRODUCTS: "/products",
   QUADRA_ILEARN: "/products/quadra-ilearn",
+  QUADRA_ILEARN_SURVEY: "/products/quadra-ilearn/survey",
   PORTFOLIO: "/portfolio",
   BLOG: "/blog",
   BLOG_PREVIEW: "/blog/preview",

@@ -6,11 +6,13 @@ import blogsRoutes from "./modules/blogs/blogs.routes.js";
 import portfolioRoutes from "./modules/portfolio/portfolio.routes.js";
 import settingsRoutes from "./modules/settings/settings.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
+import surveysRoutes from "./modules/surveys/surveys.routes.js";
 
 const router = Router();
 
 router.use("/health", healthRoutes);
 router.use("/leads", leadsRoutes);
+router.use("/surveys", surveysRoutes);
 router.use("/blogs", blogsRoutes);
 router.use("/portfolio", portfolioRoutes);
 router.use("/settings", settingsRoutes);
