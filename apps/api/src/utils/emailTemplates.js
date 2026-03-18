@@ -38,17 +38,22 @@ export function buildAdminPasswordResetEmail({ resetLink }) {
 
 export function buildSurveyNotificationEmail(survey) {
   return {
-    subject: `New QuadraiLearn survey from ${survey.name}`,
+    subject: `New QuadraiLearn survey from ${survey.respondent_type}`,
     text:
       `A new QuadraiLearn survey was submitted.\n\n` +
-      `Name: ${survey.name}\n` +
       `Email: ${survey.email || "Not provided"}\n` +
-      `Role: ${survey.role || "Not provided"}\n` +
-      `Recommended Features: ${survey.recommended_features?.join(", ") || "None selected"}\n` +
-      `Helpful Classes or Exams: ${survey.helpful_classes_or_exams || "Not provided"}\n` +
-      `Needs Multilingual Support: ${survey.needs_multilingual_support ? "Yes" : "No"}\n` +
-      `Specific Requirements: ${survey.specific_requirements || "Not provided"}\n` +
-      `Feedback: ${survey.feedback || "Not provided"}\n` +
+      `Who Are You: ${survey.respondent_type}\n` +
+      `Tracking Methods: ${survey.tracking_methods?.join(", ") || "None selected"}\n` +
+      `Tracking Methods Other: ${survey.tracking_methods_other || "Not provided"}\n` +
+      `Concept Confidence: ${survey.concept_confidence}\n` +
+      `Learning Challenges: ${survey.learning_challenges?.join(", ") || "None selected"}\n` +
+      `Content Over Understanding: ${survey.content_over_understanding}\n` +
+      `Study Routine: ${survey.study_routine}\n` +
+      `Learning Health Score: ${survey.learning_health_score}/5\n` +
+      `Valuable Features: ${survey.valuable_features?.join(", ") || "None selected"}\n` +
+      `Motivation With Streaks: ${survey.motivation_with_streaks}\n` +
+      `Willingness To Pay: ${survey.willingness_to_pay}\n` +
+      `Monthly Price Range: ${survey.monthly_price_range}\n` +
       `Submitted At: ${survey.created_at}`
   };
 }
@@ -57,13 +62,12 @@ export function buildSurveyAcknowledgementEmail(survey) {
   return {
     subject: "Quadravise | QuadraiLearn Survey Received",
     text:
-      `Hi ${survey.name},\n\n` +
+      `Hi,\n\n` +
       `Thank you for sharing your feedback on QuadraiLearn. We have received your survey and the team will review it.\n\n` +
       `Submitted details:\n` +
-      `Role: ${survey.role || "Not specified"}\n` +
-      `Recommended Features: ${survey.recommended_features?.join(", ") || "None selected"}\n` +
-      `Helpful Classes or Exams: ${survey.helpful_classes_or_exams || "Not specified"}\n` +
-      `Needs Multilingual Support: ${survey.needs_multilingual_support ? "Yes" : "No"}\n\n` +
+      `Who Are You: ${survey.respondent_type}\n` +
+      `Learning Health Score: ${survey.learning_health_score}/5\n` +
+      `Valuable Features: ${survey.valuable_features?.join(", ") || "None selected"}\n\n` +
       `Regards,\nQuadravise`
   };
 }

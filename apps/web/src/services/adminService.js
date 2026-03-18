@@ -61,6 +61,9 @@ export const adminService = {
     });
     return data;
   },
+  async uploadImage(file) {
+    return this.uploadBlogImage(file);
+  },
   async createBlog(payload) {
     const { data } = await apiClient.post("/api/admin/blogs", payload);
     return data;
@@ -109,8 +112,24 @@ export const adminService = {
     const { data } = await apiClient.post("/api/admin/portfolio", payload);
     return data;
   },
+  async importPortfolioJson(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const { data } = await apiClient.post("/api/admin/portfolio/import-json", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    return data;
+  },
   async updatePortfolio(id, payload) {
     const { data } = await apiClient.put(`/api/admin/portfolio/${id}`, payload);
+    return data;
+  },
+  async uploadPortfolioImage(id, file) {
+    const formData = new FormData();
+    formData.append("image", file);
+    const { data } = await apiClient.post(`/api/admin/portfolio/${id}/upload-image`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
     return data;
   },
   async deletePortfolio(id) {

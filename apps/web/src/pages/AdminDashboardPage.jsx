@@ -179,6 +179,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
   const [settingsForm] = Form.useForm();
   const blogPreviewValues = Form.useWatch([], blogForm) || {};
   const blogJsonInputRef = useRef(null);
+  const portfolioJsonInputRef = useRef(null);
 
   function openCreateBlogModal() {
     navigate(ROUTES.ADMIN_BLOGS);
@@ -226,6 +227,30 @@ function AdminDashboardPage({ section = "dashboard" }) {
     const link = document.createElement("a");
     link.href = objectUrl;
     link.download = "quadravise-blog-template.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(objectUrl);
+  }
+
+  function downloadPortfolioJsonTemplate() {
+    const template = {
+      title: "Startup SaaS Platform",
+      category: "SaaS",
+      description: "A portfolio-ready summary of the project scope, delivery, and business outcome.",
+      timeline: "8 weeks",
+      client_satisfaction: "95% satisfied",
+      tech_stack: ["React", "Node.js", "PostgreSQL"],
+      outcome: "Launched an MVP with admin workflows and scalable architecture.",
+      featured_image: "https://example.com/portfolio-cover.jpg",
+      is_published: true
+    };
+
+    const blob = new Blob([JSON.stringify(template, null, 2)], { type: "application/json" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = "quadravise-portfolio-template.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -539,7 +564,9 @@ function AdminDashboardPage({ section = "dashboard" }) {
                   category: row.category ? [row.category] : [],
                   description: row.description,
                   timeline: row.timeline || "",
+                  clientSatisfaction: row.clientSatisfaction || "",
                   techStack: (row.techStack || []).join(", "),
+                  outcome: row.outcome || "",
                   featuredImage: row.featuredImage || "",
                   isPublished: Boolean(row.isPublished)
                 });
@@ -548,6 +575,23 @@ function AdminDashboardPage({ section = "dashboard" }) {
             >
               Edit
             </Button>
+            <Upload
+              showUploadList={false}
+              accept="image/*"
+              customRequest={async ({ file, onSuccess, onError }) => {
+                try {
+                  await adminService.uploadPortfolioImage(row.id, file);
+                  api.success("Portfolio image uploaded.");
+                  fetchPortfolio();
+                  onSuccess?.({});
+                } catch (error) {
+                  api.error(error?.response?.data?.message || "Image upload failed.");
+                  onError?.(error);
+                }
+              }}
+            >
+              <Button type="text">Upload Image</Button>
+            </Upload>
             <Button
               danger
               type="text"
@@ -739,10 +783,12 @@ function AdminDashboardPage({ section = "dashboard" }) {
         ...values,
         category: (Array.isArray(values.category) && values.category[0]) || values.category || "General",
         timeline: values.timeline || "",
+        clientSatisfaction: values.clientSatisfaction || "",
         techStack: values.techStack
           .split(",")
           .map((item) => item.trim())
           .filter(Boolean),
+        outcome: values.outcome || "",
         featuredImage: values.featuredImage || "",
         isPublished: Boolean(values.isPublished)
       };
@@ -809,6 +855,16 @@ function AdminDashboardPage({ section = "dashboard" }) {
       fetchBlogs({ page: 1 });
     } catch (error) {
       api.error(error?.response?.data?.message || "Failed to import blog JSON.");
+    }
+  }
+
+  async function importPortfolioJsonFile(file) {
+    try {
+      await adminService.importPortfolioJson(file);
+      api.success("Portfolio JSON imported.");
+      fetchPortfolio({ page: 1 });
+    } catch (error) {
+      api.error(error?.response?.data?.message || "Failed to import portfolio JSON.");
     }
   }
 
@@ -1513,7 +1569,26 @@ function AdminDashboardPage({ section = "dashboard" }) {
                       >
                         Add Portfolio
                       </Button>
+                      <Button className="hero-btn hero-btn-secondary" onClick={() => portfolioJsonInputRef.current?.click()}>
+                        Upload Portfolio JSON
+                      </Button>
+                      <Button className="hero-btn hero-btn-secondary" onClick={downloadPortfolioJsonTemplate}>
+                        Download JSON Template
+                      </Button>
                     </Space>
+                    <input
+                      ref={portfolioJsonInputRef}
+                      type="file"
+                      accept=".json,application/json"
+                      style={{ display: "none" }}
+                      onChange={async (event) => {
+                        const file = event.target.files?.[0];
+                        if (file) {
+                          await importPortfolioJsonFile(file);
+                        }
+                        event.target.value = "";
+                      }}
+                    />
                     <Table
                       className="admin-table"
                       rowKey="id"
@@ -1577,8 +1652,20 @@ function AdminDashboardPage({ section = "dashboard" }) {
                             </Form.Item>
                           </Col>
                           <Col xs={24} md={12}>
+                            <Form.Item name="clientSatisfaction" label="Client Satisfaction">
+                              <Input placeholder="95% satisfied / 5/5 / Very satisfied" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row gutter={[16, 0]}>
+                          <Col xs={24} md={12}>
                             <Form.Item name="techStack" label="Tech Stack (comma separated)" rules={[{ required: true }]}>
                               <Input placeholder="React, Node.js, PostgreSQL" />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="outcome" label="Outcome">
+                              <Input.TextArea rows={3} />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -1591,7 +1678,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
                                 accept="image/*"
                                 customRequest={async ({ file, onSuccess, onError }) => {
                                   try {
-                                    const result = await adminService.uploadBlogImage(file);
+                                    const result = await adminService.uploadImage(file);
                                     const uploadedUrl = result?.data?.url;
                                     if (uploadedUrl) {
                                       portfolioForm.setFieldValue("featuredImage", uploadedUrl);

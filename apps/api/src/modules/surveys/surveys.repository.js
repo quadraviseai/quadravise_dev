@@ -7,35 +7,53 @@ export const surveysRepository = {
         INSERT INTO quadrailearn_surveys (
           name,
           email,
-          role,
-          recommended_features,
-          helpful_classes_or_exams,
-          needs_multilingual_support,
-          specific_requirements,
-          feedback
+          respondent_type,
+          tracking_methods,
+          tracking_methods_other,
+          concept_confidence,
+          learning_challenges,
+          content_over_understanding,
+          study_routine,
+          learning_health_score,
+          valuable_features,
+          motivation_with_streaks,
+          willingness_to_pay,
+          monthly_price_range
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
         RETURNING
           id,
           name,
           email,
-          role,
-          recommended_features,
-          helpful_classes_or_exams,
-          needs_multilingual_support,
-          specific_requirements,
-          feedback,
+          respondent_type,
+          tracking_methods,
+          tracking_methods_other,
+          concept_confidence,
+          learning_challenges,
+          content_over_understanding,
+          study_routine,
+          learning_health_score,
+          valuable_features,
+          motivation_with_streaks,
+          willingness_to_pay,
+          monthly_price_range,
           created_at
       `,
       [
-        payload.name,
+        null,
         payload.email || null,
-        payload.role || null,
-        payload.recommended_features,
-        payload.helpful_classes_or_exams || null,
-        payload.needs_multilingual_support,
-        payload.specific_requirements || null,
-        payload.feedback || null
+        payload.respondent_type,
+        payload.tracking_methods,
+        payload.tracking_methods_other || null,
+        payload.concept_confidence,
+        payload.learning_challenges,
+        payload.content_over_understanding,
+        payload.study_routine,
+        payload.learning_health_score,
+        payload.valuable_features,
+        payload.motivation_with_streaks,
+        payload.willingness_to_pay,
+        payload.monthly_price_range
       ]
     );
 

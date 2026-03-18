@@ -4,5 +4,6 @@ export const portfolioModelFields = [
   "slug",
   "description",
   "techStack",
+  "clientSatisfaction",
   "outcome"
 ];

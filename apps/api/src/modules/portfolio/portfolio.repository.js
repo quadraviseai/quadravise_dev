@@ -10,6 +10,7 @@ export const portfolioRepository = {
           slug,
           description,
           timeline,
+          client_satisfaction AS "clientSatisfaction",
           featured_image AS "featuredImage",
           featured_image AS "coverImage",
           tech_stack AS "techStack",
@@ -29,6 +30,7 @@ export const portfolioRepository = {
           slug,
           description,
           timeline,
+          client_satisfaction AS "clientSatisfaction",
           featured_image AS "featuredImage",
           featured_image AS "coverImage",
           tech_stack AS "techStack",
@@ -52,6 +54,7 @@ export const portfolioRepository = {
           category,
           description,
           timeline,
+          client_satisfaction AS "clientSatisfaction",
           featured_image AS "featuredImage",
           featured_image AS "coverImage",
           tech_stack AS "techStack",
@@ -76,6 +79,7 @@ export const portfolioRepository = {
           category,
           description,
           timeline,
+          client_satisfaction AS "clientSatisfaction",
           featured_image AS "featuredImage",
           featured_image AS "coverImage",
           tech_stack AS "techStack",
@@ -95,6 +99,7 @@ export const portfolioRepository = {
           COALESCE(category, 'General') ILIKE $1 OR
           description ILIKE $1 OR
           COALESCE(timeline, '') ILIKE $1 OR
+          COALESCE(client_satisfaction, '') ILIKE $1 OR
           outcome ILIKE $1 OR
           array_to_string(tech_stack, ', ') ILIKE $1
         )
@@ -116,6 +121,7 @@ export const portfolioRepository = {
           category,
           description,
           timeline,
+          client_satisfaction AS "clientSatisfaction",
           featured_image AS "featuredImage",
           featured_image AS "coverImage",
           tech_stack AS "techStack",
@@ -150,12 +156,13 @@ export const portfolioRepository = {
           category,
           description,
           timeline,
+          client_satisfaction,
           tech_stack,
           outcome,
           featured_image,
           is_published
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING id::text
       `,
       [
@@ -164,6 +171,7 @@ export const portfolioRepository = {
         payload.category,
         payload.description,
         payload.timeline || null,
+        payload.clientSatisfaction || null,
         payload.techStack,
         payload.outcome || null,
         payload.featuredImage || null,
@@ -183,12 +191,13 @@ export const portfolioRepository = {
           category = $3,
           description = $4,
           timeline = $5,
-          tech_stack = $6,
-          outcome = $7,
-          featured_image = $8,
-          is_published = $9,
+          client_satisfaction = $6,
+          tech_stack = $7,
+          outcome = $8,
+          featured_image = $9,
+          is_published = $10,
           updated_at = NOW()
-        WHERE id = $10::uuid
+        WHERE id = $11::uuid
         RETURNING id::text
       `,
       [
@@ -197,12 +206,28 @@ export const portfolioRepository = {
         payload.category,
         payload.description,
         payload.timeline || null,
+        payload.clientSatisfaction || null,
         payload.techStack,
         payload.outcome || null,
         payload.featuredImage || null,
         payload.isPublished,
         id
       ]
+    );
+
+    return rows[0] || null;
+  },
+  async updateImageById(id, imageUrl) {
+    const rows = await query(
+      `
+        UPDATE portfolio_projects
+        SET
+          featured_image = $1,
+          updated_at = NOW()
+        WHERE id = $2::uuid
+        RETURNING id::text
+      `,
+      [imageUrl, id]
     );
 
     return rows[0] || null;

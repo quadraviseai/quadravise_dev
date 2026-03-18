@@ -14,6 +14,7 @@ export const createPortfolioSchema = z.object({
   description: z.string().min(2),
   techStack: z.array(z.string().min(1)).min(1),
   timeline: z.string().min(2).max(120).optional().or(z.literal("")),
+  clientSatisfaction: z.string().max(120).optional().or(z.literal("")),
   outcome: z.string().min(2).optional().or(z.literal("")),
   featuredImage: z.string().url().optional().or(z.literal("")),
   isPublished: z.boolean().default(true)
