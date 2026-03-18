@@ -5,6 +5,7 @@ VPS, Nginx, SSL, CI/CD and release checklists.
 ## GitHub Actions deploy
 
 The repository includes a deploy workflow at `.github/workflows/deploy.yml`.
+It deploys automatically on every push to `main` and can also be started manually with `workflow_dispatch`.
 
 Required GitHub repository secrets:
 
@@ -13,6 +14,7 @@ Required GitHub repository secrets:
 - `VPS_PASSWORD`
 
 The workflow SSHes into the VPS and runs `scripts/deploy-vps.sh` inside `/var/www/Quadravise`.
+Deployments run in a single concurrency group so a newer push to `main` cancels any older in-progress production rollout.
 
 ## VPS deploy scripts
 

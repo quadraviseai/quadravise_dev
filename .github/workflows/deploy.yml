@@ -6,16 +6,26 @@ on:
     branches:
       - main
 
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
+    name: Deploy to VPS
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
     steps:
-      - name: Deploy over SSH
+      - name: Deploy latest main on VPS
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          script_stop: true
+          command_timeout: 30m
           script: |
             cd /var/www/Quadravise
             bash scripts/deploy-vps.sh
