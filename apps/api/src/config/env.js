@@ -1,6 +1,12 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
 import dotenv from "dotenv";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const corsOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
   .split(",")
@@ -12,6 +18,7 @@ export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   databaseUrl: process.env.DATABASE_URL || "",
   corsOrigins,
+  apiBaseUrl: process.env.API_BASE_URL || "",
   webBaseUrl: process.env.WEB_BASE_URL || "http://localhost:5173",
   adminUser: process.env.ADMIN_USER || "support@quadravise.com",
   adminPassword: process.env.ADMIN_PASSWORD || "Quadravice@123",

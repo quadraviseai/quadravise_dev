@@ -7,8 +7,22 @@ import { Router } from "express";
 
 import { validateRequest } from "../../middleware/validateRequest.js";
 
-import { createProject, deleteProject, getProjectsAdmin, importProjectJson, updateProject, uploadProjectImage } from "./portfolio.controller.js";
-import { createPortfolioSchema, portfolioIdParamSchema, updatePortfolioSchema } from "./portfolio.validator.js";
+import {
+  archiveProject,
+  bulkDeleteProjects,
+  bulkPublishProjects,
+  bulkUnpublishProjects,
+  createProject,
+  deleteProject,
+  duplicateProject,
+  getPortfolioPerformanceMetrics,
+  getProjectsAdmin,
+  importProjectJson,
+  restoreProject,
+  updateProject,
+  uploadProjectImage
+} from "./portfolio.controller.js";
+import { createPortfolioSchema, portfolioAnalyticsQuerySchema, portfolioBulkActionSchema, portfolioIdParamSchema, updatePortfolioSchema } from "./portfolio.validator.js";
 
 const router = Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -55,7 +69,14 @@ const jsonUpload = multer({
 });
 
 router.get("/", getProjectsAdmin);
+router.get("/analytics", validateRequest(portfolioAnalyticsQuerySchema, "query"), getPortfolioPerformanceMetrics);
+router.post("/bulk-delete", validateRequest(portfolioBulkActionSchema), bulkDeleteProjects);
+router.post("/bulk-publish", validateRequest(portfolioBulkActionSchema), bulkPublishProjects);
+router.post("/bulk-unpublish", validateRequest(portfolioBulkActionSchema), bulkUnpublishProjects);
 router.post("/import-json", jsonUpload.single("file"), importProjectJson);
+router.post("/:id/duplicate", validateRequest(portfolioIdParamSchema, "params"), duplicateProject);
+router.post("/:id/archive", validateRequest(portfolioIdParamSchema, "params"), archiveProject);
+router.post("/:id/restore", validateRequest(portfolioIdParamSchema, "params"), restoreProject);
 router.post("/:id/upload-image", validateRequest(portfolioIdParamSchema, "params"), imageUpload.single("image"), uploadProjectImage);
 router.post("/", validateRequest(createPortfolioSchema), createProject);
 router.put("/:id", validateRequest(portfolioIdParamSchema, "params"), validateRequest(updatePortfolioSchema), updateProject);

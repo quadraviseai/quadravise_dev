@@ -66,6 +66,12 @@ export const pageSeo = {
       "Submit feedback about QuadraiLearn through the official survey form from Quadravise.",
     canonical: `${siteUrl}/products/quadra-ilearn/survey`
   },
+  ourWork: {
+    title: "Our Work | Quadravise",
+    description:
+      "Explore the industries, product categories, and software case studies Quadravise has delivered across business websites, SaaS, and digital platforms.",
+    canonical: `${siteUrl}/our-work`
+  },
   portfolio: {
     title: "Quadravise | Software Development Portfolio",
     description:
@@ -144,6 +150,12 @@ export const seoKeywords = {
     "QuadraiLearn survey",
     "QuadraiLearn feedback",
     "education software feedback form"
+  ]),
+  ourWork: joinKeywords(coreKeywords, [
+    "our work",
+    "software case studies",
+    "industry software projects",
+    "digital product portfolio"
   ]),
   portfolio: joinKeywords(coreKeywords, [
     "software development portfolio",

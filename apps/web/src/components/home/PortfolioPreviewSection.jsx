@@ -3,7 +3,7 @@ import { Button, Col, Row, Spin, Tag, Typography } from "antd";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 
-import { usePortfolio } from "../../hooks/usePortfolio";
+import { useHomepagePortfolio } from "../../hooks/usePortfolio";
 import EmptyState from "../common/EmptyState";
 import ErrorState from "../common/ErrorState";
 import SectionHeader from "../common/SectionHeader";
@@ -58,8 +58,12 @@ function getOutcomeMetric(outcome = "") {
 }
 
 function PortfolioPreviewSection() {
-  const { data, isLoading, isError, refetch } = usePortfolio();
-  const projects = ((data?.data && data.data.length ? data.data : demoProjects) || []).slice(0, 3);
+  const { data, isLoading, isError, refetch } = useHomepagePortfolio();
+  const sourceProjects = (data?.data && data.data.length ? data.data : demoProjects) || [];
+  const projects = sourceProjects
+    .slice()
+    .sort((a, b) => (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999) || Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)))
+    .slice(0, 3);
 
   return (
     <section className="section portfolio-preview-section">
@@ -83,9 +87,11 @@ function PortfolioPreviewSection() {
                   transition={{ duration: 0.4, delay: index * 0.06 }}
                 >
                   <article className="case-study-card">
-                    <Tag className={`case-study-badge case-study-badge-${tone}`}>{category}</Tag>
+                    <Tag className={`case-study-badge case-study-badge-${tone}`}>{project.projectBadge || category}</Tag>
                     <h3 className="case-study-title">{project.title}</h3>
-                    <Typography.Paragraph className="case-study-description">{project.description}</Typography.Paragraph>
+                    <Typography.Paragraph className="case-study-description">
+                      {project.shortSummary || project.description}
+                    </Typography.Paragraph>
                     <div className="case-study-stack">
                       {project.techStack?.map((tech) => (
                         <Tag key={tech} className="case-study-chip">
@@ -102,7 +108,7 @@ function PortfolioPreviewSection() {
                         ) : null}
                       </p>
                     </div>
-                    <Link className="case-study-cta" to={ROUTES.PORTFOLIO}>
+                    <Link className="case-study-cta" to={project.slug ? `${ROUTES.PORTFOLIO}/${project.slug}` : ROUTES.PORTFOLIO}>
                       View Case Study <ArrowRightOutlined />
                     </Link>
                   </article>

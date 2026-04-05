@@ -1,3 +1,4 @@
+import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -10,7 +11,15 @@ const navItems = [
   { key: ROUTES.SERVICES, label: "Services" },
   { key: ROUTES.PRODUCTS, label: "Products" },
   { key: ROUTES.QUADRA_ILEARN, label: "QuadraiLearn" },
-  { key: ROUTES.PORTFOLIO, label: "Portfolio" },
+  {
+    key: ROUTES.OUR_WORK,
+    label: "Our Work",
+    activePaths: [ROUTES.OUR_WORK, ROUTES.PORTFOLIO],
+    children: [
+      ["Ecommerce", "Static Website", "Gated Website", "Portfolio Website"],
+      ["Business Website", "WordPress Website"]
+    ]
+  },
   { key: ROUTES.BLOG, label: "Blog" },
   { key: ROUTES.ABOUT, label: "About" },
   { key: ROUTES.CONTACT, label: "Contact" }
@@ -21,7 +30,15 @@ const mobileNavItems = [
   { key: ROUTES.SERVICES, label: "Services" },
   { key: ROUTES.PRODUCTS, label: "Products" },
   { key: ROUTES.QUADRA_ILEARN, label: "QuadraiLearn" },
-  { key: ROUTES.PORTFOLIO, label: "Portfolio" },
+  {
+    key: ROUTES.OUR_WORK,
+    label: "Our Work",
+    activePaths: [ROUTES.OUR_WORK, ROUTES.PORTFOLIO],
+    children: [
+      ["Ecommerce", "Static Website", "Gated Website", "Portfolio Website"],
+      ["Business Website", "WordPress Website"]
+    ]
+  },
   { key: ROUTES.BLOG, label: "Blog" },
   { key: ROUTES.ABOUT, label: "About" },
   { key: ROUTES.CONTACT, label: "Contact" }
@@ -47,6 +64,15 @@ function SiteHeader({ isAdmin = false }) {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  function isNavItemActive(item) {
+    const activePaths = item.activePaths || [item.key];
+    return activePaths.some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`));
+  }
+
+  function getSubmenuHref(label) {
+    return `${ROUTES.OUR_WORK}/${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`;
+  }
 
   return (
     <header className={`site-header ${isScrolled ? "is-scrolled" : ""}`}>
@@ -76,13 +102,39 @@ function SiteHeader({ isAdmin = false }) {
           ) : (
             <nav className="site-nav-list" aria-label="Primary navigation">
               {navItems.map((item) => (
-                <Link
-                  key={item.key}
-                  to={item.key}
-                  className={`site-nav-link ${location.pathname === item.key ? "is-active" : ""}`}
-                >
-                  {item.label}
-                </Link>
+                item.children?.length ? (
+                  <div key={item.key} className={`site-nav-item site-nav-item-has-menu ${isNavItemActive(item) ? "is-active" : ""}`}>
+                    <span className={`site-nav-link site-nav-link-trigger ${isNavItemActive(item) ? "is-active" : ""}`}>
+                      <span>{item.label}</span>
+                      <DownOutlined className="site-nav-caret" />
+                    </span>
+                    <div className="site-nav-submenu" role="menu" aria-label={`${item.label} submenu`}>
+                      <div className="site-nav-submenu-grid">
+                        {item.children.map((group, groupIndex) => (
+                          <div key={`${item.key}-group-${groupIndex}`} className="site-nav-submenu-column">
+                            {group.map((childLabel) => (
+                              <Link
+                                key={childLabel}
+                                to={getSubmenuHref(childLabel)}
+                                className="site-nav-submenu-link"
+                              >
+                                {childLabel}
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={item.key}
+                    to={item.key}
+                    className={`site-nav-link ${isNavItemActive(item) ? "is-active" : ""}`}
+                  >
+                    {item.label}
+                  </Link>
+                )
               ))}
             </nav>
           )}
@@ -127,14 +179,38 @@ function SiteHeader({ isAdmin = false }) {
         <div className="site-mobile-panel" role="dialog" aria-label="Menu">
           <div className="site-mobile-panel-inner">
             {mobileNavItems.map((item) => (
-              <Link
-                key={item.key}
-                to={item.key}
-                className={`site-mobile-link ${location.pathname === item.key ? "is-active" : ""}`}
-                onClick={() => setOpen(false)}
-              >
-                <span>{item.label}</span>
-              </Link>
+              item.children?.length ? (
+                <div key={item.key} className="site-mobile-group">
+                  <Link
+                    to={item.key}
+                    className={`site-mobile-link ${isNavItemActive(item) ? "is-active" : ""}`}
+                    onClick={() => setOpen(false)}
+                  >
+                    <span>{item.label}</span>
+                  </Link>
+                  <div className="site-mobile-sublinks">
+                    {item.children.flat().map((childLabel) => (
+                      <Link
+                        key={childLabel}
+                        to={getSubmenuHref(childLabel)}
+                        className="site-mobile-sublink"
+                        onClick={() => setOpen(false)}
+                      >
+                        {childLabel}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.key}
+                  to={item.key}
+                  className={`site-mobile-link ${isNavItemActive(item) ? "is-active" : ""}`}
+                  onClick={() => setOpen(false)}
+                >
+                  <span>{item.label}</span>
+                </Link>
+              )
             ))}
           </div>
         </div>

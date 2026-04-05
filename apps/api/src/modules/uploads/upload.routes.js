@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import { Router } from "express";
 
-import { uploadImage } from "./uploads.controller.js";
+import { deleteUpload, uploadDocument, uploadImage } from "./uploads.controller.js";
 
 const router = Router();
 
@@ -16,28 +16,54 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-const storage = multer.diskStorage({
+const imageStorage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadsDir),
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname || "").toLowerCase();
-    const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext) ? ext : ".jpg";
+    const safeExt = [".jpg", ".jpeg", ".png", ".webp"].includes(ext) ? ext : ".jpg";
     const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `blog-${unique}${safeExt}`);
+    cb(null, `media-${unique}${safeExt}`);
   }
 });
 
-const upload = multer({
-  storage,
+const documentStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadsDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    const safeExt = [".pdf", ".doc", ".docx"].includes(ext) ? ext : ".pdf";
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `document-${unique}${safeExt}`);
+  }
+});
+
+const imageUpload = multer({
+  storage: imageStorage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
-    if (!file.mimetype?.startsWith("image/")) {
-      cb(new Error("Only image files are allowed"));
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    if (![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
+      cb(new Error("Only JPG, PNG, and WEBP images are allowed"));
       return;
     }
     cb(null, true);
   }
 });
 
-router.post("/image", upload.single("image"), uploadImage);
+const documentUpload = multer({
+  storage: documentStorage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    if (![".pdf", ".doc", ".docx"].includes(ext)) {
+      cb(new Error("Only PDF, DOC, and DOCX files are allowed"));
+      return;
+    }
+    cb(null, true);
+  }
+});
+
+router.post("/image", imageUpload.single("image"), uploadImage);
+router.post("/document", documentUpload.single("document"), uploadDocument);
+router.delete("/", deleteUpload);
 
 export default router;

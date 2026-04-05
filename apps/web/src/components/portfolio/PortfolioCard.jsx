@@ -1,9 +1,18 @@
+import { ArrowRightOutlined } from "@ant-design/icons";
 import { Card, Tag } from "antd";
+import { Link } from "react-router-dom";
+
+import { ROUTES } from "../../constants/routes";
 
 function PortfolioCard({ project }) {
   return (
     <Card className="portfolio-page-card" title={project.title}>
-      <p className="portfolio-page-card-description">{project.description}</p>
+      <div className="portfolio-page-card-meta">
+        {project.isFeatured ? <Tag color="gold">Featured</Tag> : null}
+        {project.projectBadge ? <Tag color="blue">{project.projectBadge}</Tag> : null}
+        {project.projectType ? <Tag>{project.projectType}</Tag> : null}
+      </div>
+      <p className="portfolio-page-card-description">{project.shortSummary || project.description}</p>
       <div className="portfolio-page-card-stack">
         {project.techStack?.map((tech) => (
           <Tag key={tech} className="portfolio-tech-tag">
@@ -14,6 +23,11 @@ function PortfolioCard({ project }) {
       <div className="portfolio-page-card-outcome">
         <strong>Outcome:</strong> {project.outcome}
       </div>
+      {project.slug ? (
+        <Link className="portfolio-page-card-link" to={`${ROUTES.PORTFOLIO}/${project.slug}`}>
+          View Project <ArrowRightOutlined />
+        </Link>
+      ) : null}
     </Card>
   );
 }

@@ -1,0 +1,12 @@
+ALTER TABLE portfolio_projects
+ADD COLUMN IF NOT EXISTS short_summary VARCHAR(300),
+ADD COLUMN IF NOT EXISTS detailed_description TEXT,
+ADD COLUMN IF NOT EXISTS is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS project_type VARCHAR(120),
+ADD COLUMN IF NOT EXISTS client_name VARCHAR(180),
+ADD COLUMN IF NOT EXISTS client_industry VARCHAR(180),
+ADD COLUMN IF NOT EXISTS client_location VARCHAR(180),
+ADD COLUMN IF NOT EXISTS client_website TEXT,
+ADD COLUMN IF NOT EXISTS is_confidential BOOLEAN NOT NULL DEFAULT FALSE;
+
+CREATE INDEX IF NOT EXISTS idx_portfolio_projects_featured ON portfolio_projects(is_featured);

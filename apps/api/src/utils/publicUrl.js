@@ -5,7 +5,7 @@ function normalizeOrigin(value = "") {
 }
 
 export function getPublicOrigin(req) {
-  const configuredOrigin = normalizeOrigin(env.webBaseUrl);
+  const configuredOrigin = normalizeOrigin(env.apiBaseUrl);
   if (configuredOrigin) return configuredOrigin;
 
   const forwardedProto = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();

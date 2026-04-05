@@ -1,0 +1,11 @@
+ALTER TABLE portfolio_projects
+ADD COLUMN IF NOT EXISTS testimonial_content TEXT,
+ADD COLUMN IF NOT EXISTS testimonial_author_name VARCHAR(180),
+ADD COLUMN IF NOT EXISTS testimonial_author_designation VARCHAR(180),
+ADD COLUMN IF NOT EXISTS testimonial_author_image TEXT,
+ADD COLUMN IF NOT EXISTS testimonial_rating SMALLINT,
+ADD COLUMN IF NOT EXISTS show_testimonial BOOLEAN NOT NULL DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS meta_title VARCHAR(70),
+ADD COLUMN IF NOT EXISTS meta_description VARCHAR(160),
+ADD COLUMN IF NOT EXISTS og_image TEXT,
+ADD COLUMN IF NOT EXISTS seo_keywords TEXT[] NOT NULL DEFAULT '{}';

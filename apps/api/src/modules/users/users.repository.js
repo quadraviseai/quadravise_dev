@@ -67,6 +67,25 @@ export const usersRepository = {
     return rows[0] || null;
   },
 
+  async findByEmail(email) {
+    const rows = await query(
+      `
+        SELECT
+          id::text,
+          full_name AS "fullName",
+          email,
+          role,
+          products,
+          is_active AS "isActive"
+        FROM admin_managed_users
+        WHERE LOWER(email) = LOWER($1)
+        LIMIT 1
+      `,
+      [email]
+    );
+    return rows[0] || null;
+  },
+
   async create(payload) {
     const rows = await query(
       `

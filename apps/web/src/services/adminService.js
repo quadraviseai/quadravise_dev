@@ -64,6 +64,20 @@ export const adminService = {
   async uploadImage(file) {
     return this.uploadBlogImage(file);
   },
+  async uploadDocument(file) {
+    const formData = new FormData();
+    formData.append("document", file);
+    const { data } = await apiClient.post("/api/admin/uploads/document", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    return data;
+  },
+  async deleteUpload(relativeUrl) {
+    const { data } = await apiClient.delete("/api/admin/uploads", {
+      data: { relativeUrl }
+    });
+    return data;
+  },
   async createBlog(payload) {
     const { data } = await apiClient.post("/api/admin/blogs", payload);
     return data;
@@ -90,6 +104,10 @@ export const adminService = {
   },
   async getPortfolio(params = {}) {
     const { data } = await apiClient.get("/api/admin/portfolio", { params });
+    return data;
+  },
+  async getPortfolioAnalytics(params = {}) {
+    const { data } = await apiClient.get("/api/admin/portfolio/analytics", { params });
     return data;
   },
   async getUsers(params = {}) {
@@ -124,12 +142,36 @@ export const adminService = {
     const { data } = await apiClient.put(`/api/admin/portfolio/${id}`, payload);
     return data;
   },
+  async duplicatePortfolio(id) {
+    const { data } = await apiClient.post(`/api/admin/portfolio/${id}/duplicate`);
+    return data;
+  },
+  async archivePortfolio(id) {
+    const { data } = await apiClient.post(`/api/admin/portfolio/${id}/archive`);
+    return data;
+  },
+  async restorePortfolio(id) {
+    const { data } = await apiClient.post(`/api/admin/portfolio/${id}/restore`);
+    return data;
+  },
   async uploadPortfolioImage(id, file) {
     const formData = new FormData();
     formData.append("image", file);
     const { data } = await apiClient.post(`/api/admin/portfolio/${id}/upload-image`, formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
+    return data;
+  },
+  async bulkDeletePortfolio(ids) {
+    const { data } = await apiClient.post("/api/admin/portfolio/bulk-delete", { ids });
+    return data;
+  },
+  async bulkPublishPortfolio(ids) {
+    const { data } = await apiClient.post("/api/admin/portfolio/bulk-publish", { ids });
+    return data;
+  },
+  async bulkUnpublishPortfolio(ids) {
+    const { data } = await apiClient.post("/api/admin/portfolio/bulk-unpublish", { ids });
     return data;
   },
   async deletePortfolio(id) {

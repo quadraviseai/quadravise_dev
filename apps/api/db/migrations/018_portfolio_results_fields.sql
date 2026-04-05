@@ -1,0 +1,10 @@
+ALTER TABLE portfolio_projects
+ADD COLUMN IF NOT EXISTS features_delivered TEXT[] NOT NULL DEFAULT '{}',
+ADD COLUMN IF NOT EXISTS modules_implemented TEXT[] NOT NULL DEFAULT '{}',
+ADD COLUMN IF NOT EXISTS integrations_used TEXT[] NOT NULL DEFAULT '{}',
+ADD COLUMN IF NOT EXISTS architecture_overview TEXT,
+ADD COLUMN IF NOT EXISTS kpi_metrics JSONB NOT NULL DEFAULT '[]'::jsonb,
+ADD COLUMN IF NOT EXISTS before_value TEXT,
+ADD COLUMN IF NOT EXISTS after_value TEXT,
+ADD COLUMN IF NOT EXISTS impact_summary TEXT,
+ADD COLUMN IF NOT EXISTS outcome_description TEXT;

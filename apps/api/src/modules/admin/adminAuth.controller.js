@@ -119,7 +119,12 @@ export async function logoutAdmin(_req, res, next) {
 
 export async function getAdminSession(req, res, next) {
   try {
-    return successResponse(res, "Session valid", { username: req.admin?.username || env.adminUser });
+    return successResponse(res, "Session valid", {
+      username: req.admin?.username || env.adminUser,
+      role: req.admin?.role || "admin",
+      managedUserId: req.admin?.managedUserId || null,
+      products: req.admin?.products || ["portfolio"]
+    });
   } catch (error) {
     return next(error);
   }
