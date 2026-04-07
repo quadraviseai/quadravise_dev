@@ -22,7 +22,7 @@ function HeroSection() {
               <br />
               and SaaS Products
               <br />
-              <span className="hero-title-subline">with Quadravise</span>
+              <span className="hero-title-subline">with Octane</span>
             </h1>
             <div>
               <Typography.Paragraph className="hero-description">

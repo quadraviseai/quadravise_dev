@@ -17,9 +17,9 @@ const workPages = {
     work: [
       {
         title: "VTrustCarz",
-        summary: "Automotive-focused ecommerce experience designed to present inventory, build trust, and support inquiry-driven purchase journeys.",
-        stack: ["Ecommerce UI", "Product Listing", "Responsive Commerce"],
-        outcome: "Created a cleaner digital storefront for showcasing vehicles and guiding buyers toward action.",
+        summary: "Trusted marketplace for buying and selling pre-owned vehicles in India, with verified used cars, 150+ point inspections, transparent listings, and hassle-free documentation support.",
+        stack: ["Used Car Marketplace", "Vehicle Verification", "Documentation Support"],
+        outcome: "Supports financing, RTO documentation, insurance, maintenance, warranty, detailing, and pan-India transfer to make used car buying seamless, transparent, and risk-free.",
         url: "https://www.vtrustcarz.com/",
         image: vtrustImage
       }
@@ -39,17 +39,17 @@ const workPages = {
       },
       {
         title: "Phoenix Inner Balance",
-        summary: "Static presentation website for a wellness-focused brand with calm content hierarchy and trust-oriented service presentation.",
-        stack: ["Static Pages", "Brand Website", "Responsive UI"],
-        outcome: "Created a lightweight and polished website that supports clarity, brand trust, and service visibility.",
+        summary: "Holistic mental health and wellness practice in Bengaluru offering integrative therapy that combines evidence-based psychology with Ayurvedic gut-health consultation.",
+        stack: ["Mental Wellness", "Integrative Therapy", "Responsive Website"],
+        outcome: "Provides compassionate in-person and online care in an LGBTQIA+ affirming, culturally sensitive space that helps clients build resilience, clarity, and lasting well-being.",
         url: "https://phoenixinnerbalance.com/",
         image: phoenixInnerBalanceImage
       },
       {
         title: "NexaBurst",
-        summary: "Static marketing website with a sharp startup-facing presentation, service communication, and modern page hierarchy.",
-        stack: ["Responsive Layout", "Marketing Site", "Fast Load"],
-        outcome: "Created a polished digital presence designed to support visibility, messaging clarity, and first impressions.",
+        summary: "Digital agency website based in Bangalore, built to support growth through data-driven strategy, AI-powered tools, and professional web, app, and marketing services.",
+        stack: ["AI-Powered Tools", "Digital Agency", "Growth Website"],
+        outcome: "Helps businesses improve visibility, generate better leads, and scale revenue by combining self-service analysis with custom digital solutions.",
         url: "https://nexaburst.com/",
         image: nexabImage
       }
@@ -83,9 +83,9 @@ const workPages = {
       },
       {
         title: "Phoenix Inner Balance",
-        summary: "Portfolio-style brand website highlighting wellness services, presentation quality, and a refined visual identity.",
-        stack: ["Portfolio Layout", "Visual Storytelling", "Responsive Build"],
-        outcome: "Improved the way the brand presents its work, tone, and service credibility online.",
+        summary: "Holistic mental health and wellness practice in Bengaluru offering integrative therapy that combines evidence-based psychology with Ayurvedic gut-health consultation.",
+        stack: ["Mental Wellness", "Integrative Therapy", "Responsive Website"],
+        outcome: "Provides compassionate in-person and online care in an LGBTQIA+ affirming, culturally sensitive space that helps clients build resilience, clarity, and lasting well-being.",
         url: "https://phoenixinnerbalance.com/",
         image: phoenixInnerBalanceImage
       }
@@ -97,9 +97,9 @@ const workPages = {
     work: [
       {
         title: "NexaBurst",
-        summary: "Business website designed to communicate services clearly, support growth-stage positioning, and create stronger first impressions.",
-        stack: ["Business Website", "Messaging", "Responsive UI"],
-        outcome: "Created a sharper web presence for presenting the business offer and guiding visitors toward contact and conversion.",
+        summary: "Digital agency website based in Bangalore, built to support growth through data-driven strategy, AI-powered tools, and professional web, app, and marketing services.",
+        stack: ["AI-Powered Tools", "Digital Agency", "Growth Website"],
+        outcome: "Helps businesses improve visibility, generate better leads, and scale revenue by combining self-service analysis with custom digital solutions.",
         url: "https://nexaburst.com/",
         image: nexabImage
       }

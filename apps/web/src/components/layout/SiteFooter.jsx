@@ -24,9 +24,9 @@ function SiteFooter() {
       <div className="section-inner footer-inner">
         <div className="footer-grid">
           <div className="footer-brand-block">
-            <h3 className="footer-brand-title">Quadravise</h3>
+            <h3 className="footer-brand-title">Octane</h3>
             <p className="footer-brand-description">
-              Quadravise builds websites, mobile apps, and SaaS platforms for startups and growing businesses.
+              Octane builds websites, mobile apps, and SaaS platforms for startups and growing businesses.
             </p>
             <div className="footer-socials">
               {showLinkedin ? (
@@ -88,7 +88,7 @@ function SiteFooter() {
 
         <div className="footer-divider" />
         <div className="footer-bottom-row">
-          <span>&copy; 2026 Quadravise. All rights reserved.</span>
+          <span>&copy; 2026 Octane. All rights reserved.</span>
           <span>Built for scalable digital products.</span>
         </div>
       </div>

@@ -19,7 +19,7 @@ function ProductsSection() {
   return (
     <section className="section products-highlight-section">
       <div className="section-inner">
-        <SectionHeader title="Products Built by Quadravise" />
+        <SectionHeader title="Products Built by Octane" />
         <Row gutter={[24, 24]} align="middle">
           <Col xs={24} lg={13}>
             <Card className="products-highlight-card">
