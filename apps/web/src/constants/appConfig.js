@@ -1,5 +1,5 @@
 export const appConfig = {
-  companyName: "Octane",
+  companyName: "Quadravise",
   ctaPrimary: "Book Free Consultation",
   ctaSecondary: "View Our Work",
   maxContentWidth: 1200

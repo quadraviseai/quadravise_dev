@@ -15,7 +15,7 @@ function TestimonialsSection() {
           <Col xs={24} lg={14}>
             <Card className="proof-quote-card">
               <Typography.Paragraph>
-                Octane helped us turn our concept into a fully functional platform with a clear, efficient process.
+                Quadravise helped us turn our concept into a fully functional platform with a clear, efficient process.
               </Typography.Paragraph>
               <Typography.Text strong>- Founder, SaaS Startup</Typography.Text>
             </Card>

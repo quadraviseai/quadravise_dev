@@ -31,7 +31,7 @@ function WhyChooseUsSection() {
   return (
     <section className="section why-section">
       <div className="section-inner">
-        <SectionHeader title="Why Businesses Choose Octane" />
+        <SectionHeader title="Why Businesses Choose Quadravise" />
         <Row gutter={[20, 20]}>
           {items.map((item, index) => (
             <Col key={item.title} xs={24} md={12} lg={12}>

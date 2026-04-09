@@ -78,10 +78,10 @@ function SiteHeader({ isAdmin = false }) {
     <header className={`site-header ${isScrolled ? "is-scrolled" : ""}`}>
       <div className="site-header-inner">
         <div>
-          <Link to={isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME} className="site-logo-link" aria-label="Octane Home">
+          <Link to={isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME} className="site-logo-link" aria-label="Quadravise Home">
             <span className="site-logo-stack">
-              <img src={logo} alt="Octane Logo" className="site-logo" width="48" height="48" />
-              <span className="site-logo-text">Octane</span>
+              <img src={logo} alt="Quadravise Logo" className="site-logo" width="48" height="48" />
+              <span className="site-logo-text">Quadravise</span>
             </span>
           </Link>
         </div>

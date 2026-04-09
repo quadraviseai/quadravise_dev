@@ -64,7 +64,7 @@ function WhatWeDoSection() {
       <div className="section-inner">
         <SectionHeader
           title="Software Development Services"
-          subtitle="Octane delivers modern software solutions that help businesses launch faster, scale efficiently, and stay competitive in the digital world."
+          subtitle="Quadravise delivers modern software solutions that help businesses launch faster, scale efficiently, and stay competitive in the digital world."
         />
         <Row gutter={[20, 20]}>
           {services.map((service, index) => (
