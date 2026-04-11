@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 const MainLayout = lazy(() => import("../layouts/MainLayout"));
 const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
+const ClientLayout = lazy(() => import("../layouts/ClientLayout"));
 const HomePage = lazy(() => import("../pages/HomePage"));
 const ServicesPage = lazy(() => import("../pages/ServicesPage"));
 const ServiceDetailPage = lazy(() => import("../pages/ServiceDetailPage"));
@@ -23,7 +24,12 @@ const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 const AdminLoginPage = lazy(() => import("../pages/AdminLoginPage"));
 const AdminResetPasswordPage = lazy(() => import("../pages/AdminResetPasswordPage"));
 const AdminDashboardPage = lazy(() => import("../pages/AdminDashboardPage"));
+const ClientLoginPage = lazy(() => import("../pages/ClientLoginPage"));
+const ClientNoProjectsPage = lazy(() => import("../pages/ClientNoProjectsPage"));
+const ClientDashboardPage = lazy(() => import("../pages/ClientDashboardPage"));
+const ClientBugsPage = lazy(() => import("../pages/ClientBugsPage"));
 import AdminRouteGuard from "../components/admin/AdminRouteGuard";
+import ClientRouteGuard from "../components/client/ClientRouteGuard";
 import { ROUTES } from "../constants/routes";
 
 const routeFallback = (
@@ -38,6 +44,7 @@ function AppRoutes() {
       <Routes>
         <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLoginPage />} />
         <Route path={ROUTES.ADMIN_RESET_PASSWORD} element={<AdminResetPasswordPage />} />
+        <Route path={ROUTES.CLIENT_LOGIN} element={<ClientLoginPage />} />
         <Route element={<MainLayout />}>
           <Route path={ROUTES.HOME} element={<HomePage />} />
           <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
@@ -66,6 +73,32 @@ function AppRoutes() {
           <Route path="/home" element={<Navigate to={ROUTES.HOME} replace />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
+        <Route element={<ClientLayout />}>
+          <Route
+            path={ROUTES.CLIENT_NO_PROJECTS}
+            element={
+              <ClientRouteGuard>
+                <ClientNoProjectsPage />
+              </ClientRouteGuard>
+            }
+          />
+          <Route
+            path={ROUTES.CLIENT_PROJECT_DASHBOARD}
+            element={
+              <ClientRouteGuard>
+                <ClientDashboardPage />
+              </ClientRouteGuard>
+            }
+          />
+          <Route
+            path={ROUTES.CLIENT_PROJECT_BUGS}
+            element={
+              <ClientRouteGuard>
+                <ClientBugsPage />
+              </ClientRouteGuard>
+            }
+          />
+        </Route>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Navigate to={ROUTES.ADMIN_DASHBOARD} replace />} />
           <Route
@@ -73,6 +106,14 @@ function AppRoutes() {
             element={
               <AdminRouteGuard>
                 <AdminDashboardPage section="dashboard" />
+              </AdminRouteGuard>
+            }
+          />
+          <Route
+            path={ROUTES.ADMIN_CLIENT_ACCESS}
+            element={
+              <AdminRouteGuard>
+                <AdminDashboardPage section="client-access" />
               </AdminRouteGuard>
             }
           />
@@ -97,6 +138,14 @@ function AppRoutes() {
             element={
               <AdminRouteGuard>
                 <AdminDashboardPage section="users" />
+              </AdminRouteGuard>
+            }
+          />
+          <Route
+            path={ROUTES.ADMIN_CONFIGURATION}
+            element={
+              <AdminRouteGuard>
+                <AdminDashboardPage section="configuration" />
               </AdminRouteGuard>
             }
           />

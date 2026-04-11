@@ -48,7 +48,9 @@ const adminNavItems = [
   { key: ROUTES.ADMIN_DASHBOARD, label: "Dashboard" },
   { key: ROUTES.ADMIN_BLOGS, label: "Blog" },
   { key: ROUTES.ADMIN_PORTFOLIO, label: "Portfolio" },
-  { key: ROUTES.ADMIN_USERS, label: "Add User" },
+  { key: ROUTES.ADMIN_CLIENT_ACCESS, label: "Client Access" },
+  { key: ROUTES.ADMIN_USERS, label: "User Management" },
+  { key: ROUTES.ADMIN_CONFIGURATION, label: "Configuration" },
   { key: ROUTES.ADMIN_LEADS, label: "Leads Record" },
   { key: ROUTES.ADMIN_SETTINGS, label: "Settings" }
 ];

@@ -12,12 +12,18 @@ export const ROUTES = {
   CONTACT: "/contact",
   PRIVACY_POLICY: "/privacy-policy",
   COOKIE_POLICY: "/cookie-policy",
+  CLIENT_LOGIN: "/client/login",
+  CLIENT_NO_PROJECTS: "/client/no-projects",
+  CLIENT_PROJECT_DASHBOARD: "/client/projects/:projectSlug/dashboard",
+  CLIENT_PROJECT_BUGS: "/client/projects/:projectSlug/bugs",
   ADMIN_LOGIN: "/admin/login",
   ADMIN_RESET_PASSWORD: "/admin/reset-password",
   ADMIN_DASHBOARD: "/admin/dashboard",
+  ADMIN_CLIENT_ACCESS: "/admin/client-access",
   ADMIN_BLOGS: "/admin/blogs",
   ADMIN_PORTFOLIO: "/admin/portfolio",
   ADMIN_USERS: "/admin/users",
+  ADMIN_CONFIGURATION: "/admin/configuration",
   ADMIN_LEADS: "/admin/leads",
   ADMIN_SETTINGS: "/admin/settings"
 };

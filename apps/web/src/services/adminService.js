@@ -114,6 +114,34 @@ export const adminService = {
     const { data } = await apiClient.get("/api/admin/users", { params });
     return data;
   },
+  async getClientAccessOverview() {
+    const { data } = await apiClient.get("/api/admin/client-access");
+    return data;
+  },
+  async createClientProject(payload) {
+    const { data } = await apiClient.post("/api/admin/client-access/projects", payload);
+    return data;
+  },
+  async updateClientProject(id, payload) {
+    const { data } = await apiClient.put(`/api/admin/client-access/projects/${id}`, payload);
+    return data;
+  },
+  async createClientUser(payload) {
+    const { data } = await apiClient.post("/api/admin/client-access/users", payload);
+    return data;
+  },
+  async updateClientUser(id, payload) {
+    const { data } = await apiClient.put(`/api/admin/client-access/users/${id}`, payload);
+    return data;
+  },
+  async getConfiguration() {
+    const { data } = await apiClient.get("/api/admin/configuration");
+    return data;
+  },
+  async updateConfiguration(payload) {
+    const { data } = await apiClient.put("/api/admin/configuration", payload);
+    return data;
+  },
   async createUser(payload) {
     const { data } = await apiClient.post("/api/admin/users", payload);
     return data;

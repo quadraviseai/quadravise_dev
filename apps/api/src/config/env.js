@@ -24,6 +24,8 @@ export const env = {
   adminPassword: process.env.ADMIN_PASSWORD || "Quadravice@123",
   adminTokenSecret: process.env.ADMIN_TOKEN_SECRET || "change-this-secret",
   adminCookieName: process.env.ADMIN_COOKIE_NAME || "quadravise_admin_token",
+  clientTokenSecret: process.env.CLIENT_TOKEN_SECRET || "change-this-client-secret",
+  clientCookieName: process.env.CLIENT_COOKIE_NAME || "quadravise_client_token",
   smtpHost: process.env.SMTP_HOST || "",
   smtpPort: Number(process.env.SMTP_PORT || 587),
   smtpSecure: process.env.SMTP_SECURE === "true",

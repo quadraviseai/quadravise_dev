@@ -1,4 +1,16 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MinusCircleOutlined, PlusOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  LinkOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  SaveOutlined,
+  TeamOutlined,
+  UploadOutlined
+} from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -51,6 +63,15 @@ function formatAdminDate(value) {
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) return "Just now";
   return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function getClientWorkspacePath(slug = "") {
+  return `/client/projects/${slug}/dashboard`;
+}
+
+function getClientWorkspaceUrl(slug = "") {
+  if (typeof window === "undefined") return getClientWorkspacePath(slug);
+  return `${window.location.origin}${getClientWorkspacePath(slug)}`;
 }
 
 function getDefaultPortfolioFormValues() {
@@ -375,6 +396,78 @@ function getDefaultBlogFormValues() {
   };
 }
 
+function getDefaultAdminConfiguration() {
+  return {
+    roles: [
+      {
+        key: "admin",
+        name: "Admin",
+        description: "Full access across all configured products and admin tools.",
+        productKeys: ["website", "blog", "portfolio", "services", "quadrailearn", "finance", "crm"],
+        isActive: true
+      },
+      {
+        key: "manager",
+        name: "Manager",
+        description: "Operational access for teams managing delivery and publishing.",
+        productKeys: ["website", "blog", "portfolio", "services"],
+        isActive: true
+      },
+      {
+        key: "editor",
+        name: "Editor",
+        description: "Content-focused access for publishing and updates.",
+        productKeys: ["website", "blog", "portfolio"],
+        isActive: true
+      }
+    ],
+    products: [
+      {
+        key: "website",
+        label: "Website",
+        description: "Main website content and structure.",
+        isActive: true
+      },
+      {
+        key: "blog",
+        label: "Blog",
+        description: "Blog authoring, publishing, and editorial operations.",
+        isActive: true
+      },
+      {
+        key: "portfolio",
+        label: "Portfolio",
+        description: "Case studies, project pages, and showcase content.",
+        isActive: true
+      },
+      {
+        key: "services",
+        label: "Services",
+        description: "Service pages and commercial messaging.",
+        isActive: true
+      },
+      {
+        key: "quadrailearn",
+        label: "QuadraiLearn",
+        description: "Learning-product content and operations.",
+        isActive: true
+      },
+      {
+        key: "finance",
+        label: "Finance",
+        description: "Finance-related workflows and records.",
+        isActive: true
+      },
+      {
+        key: "crm",
+        label: "CRM",
+        description: "Customer and pipeline management workflows.",
+        isActive: true
+      }
+    ]
+  };
+}
+
 function AdminDashboardPage({ section = "dashboard" }) {
   const navigate = useNavigate();
   const [api, contextHolder] = message.useMessage();
@@ -382,8 +475,11 @@ function AdminDashboardPage({ section = "dashboard" }) {
   const [blogs, setBlogs] = useState([]);
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
+  const [clientWorkspaceProjects, setClientWorkspaceProjects] = useState([]);
+  const [clientWorkspaceUsers, setClientWorkspaceUsers] = useState([]);
   const [leads, setLeads] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [adminConfiguration, setAdminConfiguration] = useState(getDefaultAdminConfiguration());
   const [blogCategories, setBlogCategories] = useState([]);
   const [socialAccounts, setSocialAccounts] = useState([]);
 
@@ -403,7 +499,9 @@ function AdminDashboardPage({ section = "dashboard" }) {
   const [portfolioLoading, setPortfolioLoading] = useState(true);
   const [userLoading, setUserLoading] = useState(true);
   const [leadLoading, setLeadLoading] = useState(true);
+  const [clientAccessLoading, setClientAccessLoading] = useState(true);
   const [settingsLoading, setSettingsLoading] = useState(true);
+  const [configurationLoading, setConfigurationLoading] = useState(true);
   const [adminSession, setAdminSession] = useState(null);
   const [activeAdminTab, setActiveAdminTab] = useState(section);
   const isDashboardSection = activeAdminTab === "dashboard";
@@ -411,17 +509,34 @@ function AdminDashboardPage({ section = "dashboard" }) {
   const [editingBlogId, setEditingBlogId] = useState(null);
   const [editingProjectId, setEditingProjectId] = useState(null);
   const [editingUserId, setEditingUserId] = useState(null);
+  const [editingClientProjectId, setEditingClientProjectId] = useState(null);
+  const [editingClientUserId, setEditingClientUserId] = useState(null);
   const [blogModalOpen, setBlogModalOpen] = useState(false);
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
+  const [clientProjectModalOpen, setClientProjectModalOpen] = useState(false);
+  const [clientUserModalOpen, setClientUserModalOpen] = useState(false);
+  const [productModalOpen, setProductModalOpen] = useState(false);
+  const [editingProductIndex, setEditingProductIndex] = useState(null);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [editingRoleIndex, setEditingRoleIndex] = useState(null);
   const [blogEditorMode, setBlogEditorMode] = useState("rich");
 
   const [blogForm] = Form.useForm();
   const [portfolioForm] = Form.useForm();
   const [userForm] = Form.useForm();
+  const [clientProjectForm] = Form.useForm();
+  const [clientUserForm] = Form.useForm();
   const [settingsForm] = Form.useForm();
+  const [configurationForm] = Form.useForm();
+  const [productForm] = Form.useForm();
+  const [roleForm] = Form.useForm();
+  const clientProjectNameValue = Form.useWatch("name", { form: clientProjectForm, preserve: true });
+  const clientProjectSlugValue = Form.useWatch("slug", { form: clientProjectForm, preserve: true });
   const blogPreviewValues = Form.useWatch([], { form: blogForm, preserve: true }) || {};
   const portfolioPreviewValues = Form.useWatch([], { form: portfolioForm, preserve: true }) || {};
+  const draftConfigurationProducts = Form.useWatch("products", { form: configurationForm, preserve: true }) || [];
+  const draftConfigurationRoles = Form.useWatch("roles", { form: configurationForm, preserve: true }) || [];
   const projectStartDateValue = Form.useWatch("projectStartDate", { form: portfolioForm, preserve: true });
   const projectEndDateValue = Form.useWatch("projectEndDate", { form: portfolioForm, preserve: true });
   const blogJsonInputRef = useRef(null);
@@ -453,6 +568,84 @@ function AdminDashboardPage({ section = "dashboard" }) {
   const portfolioVideoPreviewUrl = useMemo(
     () => getVideoEmbedUrl(portfolioPreviewValues.videoUrl),
     [portfolioPreviewValues.videoUrl]
+  );
+  const activeRoleOptions = useMemo(
+    () =>
+      (adminConfiguration.roles || [])
+        .filter((role) => role.isActive !== false)
+        .map((role) => ({
+          label: role.name,
+          value: role.key
+        })),
+    [adminConfiguration]
+  );
+  const activeProductOptions = useMemo(
+    () =>
+      (adminConfiguration.products || [])
+        .filter((product) => product.isActive !== false)
+        .map((product) => ({
+          label: product.label,
+          value: product.key
+        })),
+    [adminConfiguration]
+  );
+  const productLabelMap = useMemo(
+    () =>
+      Object.fromEntries((adminConfiguration.products || []).map((product) => [product.key, product.label || product.key])),
+    [adminConfiguration]
+  );
+  const roleLabelMap = useMemo(
+    () => Object.fromEntries((adminConfiguration.roles || []).map((role) => [role.key, role.name || role.key])),
+    [adminConfiguration]
+  );
+  const configurationProductOptions = useMemo(
+    () =>
+      (draftConfigurationProducts || []).map((product, index) => ({
+        label: product?.label || product?.key || `Product ${index + 1}`,
+        value: product?.key
+      })),
+    [draftConfigurationProducts]
+  );
+  const configurationProductsTableData = useMemo(
+    () =>
+      (draftConfigurationProducts || []).map((product, index) => ({
+        id: product?.key || `product-${index}`,
+        index,
+        label: product?.label || "",
+        key: product?.key || "",
+        description: product?.description || "",
+        isActive: product?.isActive !== false
+      })),
+    [draftConfigurationProducts]
+  );
+  const configurationRolesTableData = useMemo(
+    () =>
+      (draftConfigurationRoles || []).map((role, index) => ({
+        id: role?.key || `role-${index}`,
+        index,
+        name: role?.name || "",
+        key: role?.key || "",
+        description: role?.description || "",
+        productKeys: role?.productKeys || [],
+        isActive: role?.isActive !== false
+      })),
+    [draftConfigurationRoles]
+  );
+  const clientWorkspaceUserOptions = useMemo(
+    () =>
+      clientWorkspaceUsers.map((user) => ({
+        label: `${user.fullName} (${user.email})`,
+        value: user.id
+      })),
+    [clientWorkspaceUsers]
+  );
+  const clientWorkspaceProjectOptions = useMemo(
+    () =>
+      clientWorkspaceProjects.map((project) => ({
+        label: `${project.name} (${project.slug})`,
+        value: project.id
+      })),
+    [clientWorkspaceProjects]
   );
 
   useEffect(() => {
@@ -487,10 +680,74 @@ function AdminDashboardPage({ section = "dashboard" }) {
     navigate(ROUTES.ADMIN_USERS);
     setEditingUserId(null);
     userForm.resetFields();
-    userForm.setFieldValue("role", "manager");
+    userForm.setFieldValue("role", activeRoleOptions[0]?.value || "manager");
     userForm.setFieldValue("products", []);
     userForm.setFieldValue("isActive", true);
     setUserModalOpen(true);
+  }
+
+  function openCreateClientProjectModal() {
+    navigate(ROUTES.ADMIN_CLIENT_ACCESS);
+    setEditingClientProjectId(null);
+    clientProjectForm.resetFields();
+    clientProjectForm.setFieldsValue({
+      name: "",
+      slug: "",
+      description: "",
+      status: "active",
+      clientUserIds: []
+    });
+    setClientProjectModalOpen(true);
+  }
+
+  function openEditClientProjectModal(project) {
+    navigate(ROUTES.ADMIN_CLIENT_ACCESS);
+    setEditingClientProjectId(project.id);
+    clientProjectForm.resetFields();
+    clientProjectForm.setFieldsValue({
+      name: project.name,
+      slug: project.slug,
+      description: project.description || "",
+      status: project.status || "active",
+      clientUserIds: (project.assignedUsers || []).map((user) => user.id)
+    });
+    setClientProjectModalOpen(true);
+  }
+
+  useEffect(() => {
+    if (!clientProjectModalOpen) return;
+    const nextSlug = slugifyText(clientProjectNameValue || "");
+    if ((clientProjectSlugValue || "") !== nextSlug) {
+      clientProjectForm.setFieldValue("slug", nextSlug);
+    }
+  }, [clientProjectForm, clientProjectModalOpen, clientProjectNameValue, clientProjectSlugValue]);
+
+  function openCreateClientUserModal() {
+    navigate(ROUTES.ADMIN_CLIENT_ACCESS);
+    setEditingClientUserId(null);
+    clientUserForm.resetFields();
+    clientUserForm.setFieldsValue({
+      fullName: "",
+      email: "",
+      password: "",
+      isActive: true,
+      projectIds: []
+    });
+    setClientUserModalOpen(true);
+  }
+
+  function openEditClientUserModal(user) {
+    navigate(ROUTES.ADMIN_CLIENT_ACCESS);
+    setEditingClientUserId(user.id);
+    clientUserForm.resetFields();
+    clientUserForm.setFieldsValue({
+      fullName: user.fullName,
+      email: user.email,
+      password: "",
+      isActive: user.isActive !== false,
+      projectIds: (user.assignedProjects || []).map((project) => project.id)
+    });
+    setClientUserModalOpen(true);
   }
 
   function downloadBlogJsonTemplate() {
@@ -635,6 +892,23 @@ function AdminDashboardPage({ section = "dashboard" }) {
       api.error("Failed to load settings.");
     } finally {
       setSettingsLoading(false);
+    }
+  }
+
+  async function loadAdminConfiguration() {
+    try {
+      setConfigurationLoading(true);
+      const response = await adminService.getConfiguration();
+      const configurationData = response.data || getDefaultAdminConfiguration();
+      setAdminConfiguration(configurationData);
+      configurationForm.setFieldsValue(configurationData);
+    } catch (_error) {
+      const fallback = getDefaultAdminConfiguration();
+      setAdminConfiguration(fallback);
+      configurationForm.setFieldsValue(fallback);
+      api.error("Failed to load configuration.");
+    } finally {
+      setConfigurationLoading(false);
     }
   }
 
@@ -790,9 +1064,71 @@ function AdminDashboardPage({ section = "dashboard" }) {
     }
   }
 
+  async function fetchClientAccessOverview() {
+    try {
+      setClientAccessLoading(true);
+      const response = await adminService.getClientAccessOverview();
+      const payload = response.data || {};
+      setClientWorkspaceProjects(payload.projects || []);
+      setClientWorkspaceUsers(payload.users || []);
+    } catch (_error) {
+      api.error("Failed to load client access workspace.");
+    } finally {
+      setClientAccessLoading(false);
+    }
+  }
+
+  async function saveClientProject(values) {
+    try {
+      if (editingClientProjectId) {
+        await adminService.updateClientProject(editingClientProjectId, values);
+        api.success("Client project updated successfully.");
+      } else {
+        await adminService.createClientProject(values);
+        api.success("Client project created successfully.");
+      }
+      setClientProjectModalOpen(false);
+      setEditingClientProjectId(null);
+      clientProjectForm.resetFields();
+      fetchClientAccessOverview();
+    } catch (error) {
+      const details = error?.response?.data?.errors?.map((item) => `${item.field}: ${item.message}`).join(" | ");
+      api.error(details || error?.response?.data?.message || "Failed to save client project.");
+    }
+  }
+
+  async function saveClientUser(values) {
+    try {
+      if (editingClientUserId) {
+        await adminService.updateClientUser(editingClientUserId, values);
+        api.success("Client user updated successfully.");
+      } else {
+        await adminService.createClientUser(values);
+        api.success("Client user created successfully.");
+      }
+      setClientUserModalOpen(false);
+      setEditingClientUserId(null);
+      clientUserForm.resetFields();
+      fetchClientAccessOverview();
+    } catch (error) {
+      const details = error?.response?.data?.errors?.map((item) => `${item.field}: ${item.message}`).join(" | ");
+      api.error(details || error?.response?.data?.message || "Failed to save client user.");
+    }
+  }
+
+  async function copyClientWorkspaceLink(slug) {
+    try {
+      await navigator.clipboard.writeText(getClientWorkspaceUrl(slug));
+      api.success("Client workspace link copied.");
+    } catch (_error) {
+      api.error("Unable to copy the workspace link.");
+    }
+  }
+
   useEffect(() => {
     loadAdminSession();
     loadSettings();
+    loadAdminConfiguration();
     loadBlogCategories();
     loadSocialAccounts();
     fetchBlogs();
@@ -800,6 +1136,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
     loadPortfolioAnalytics();
     fetchUsers();
     fetchLeads();
+    fetchClientAccessOverview();
   }, []);
 
   useEffect(() => {
@@ -1161,11 +1498,16 @@ function AdminDashboardPage({ section = "dashboard" }) {
     () => [
       { title: "Name", dataIndex: "fullName", key: "fullName" },
       { title: "Email", dataIndex: "email", key: "email" },
-      { title: "Role", dataIndex: "role", key: "role" },
+      {
+        title: "Role",
+        dataIndex: "role",
+        key: "role",
+        render: (value) => roleLabelMap[value] || value
+      },
       {
         title: "Products",
         key: "products",
-        render: (_, row) => (row.products || []).join(", ")
+        render: (_, row) => (row.products || []).map((product) => productLabelMap[product] || product).join(", ")
       },
       {
         title: "Status",
@@ -1214,7 +1556,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
         )
       }
     ],
-    [api, userForm]
+    [api, productLabelMap, roleLabelMap, userForm]
   );
 
   const leadColumns = useMemo(
@@ -1606,6 +1948,160 @@ function AdminDashboardPage({ section = "dashboard" }) {
     }
   }
 
+  async function saveConfiguration(values) {
+    try {
+      const payload = {
+        roles: (values.roles || []).map((role) => ({
+          key: String(role?.key || "").trim().toLowerCase(),
+          name: String(role?.name || "").trim(),
+          description: String(role?.description || "").trim(),
+          productKeys: (role?.productKeys || []).map((productKey) => String(productKey || "").trim().toLowerCase()).filter(Boolean),
+          isActive: role?.isActive !== false
+        })),
+        products: (values.products || []).map((product) => ({
+          key: String(product?.key || "").trim().toLowerCase(),
+          label: String(product?.label || "").trim(),
+          description: String(product?.description || "").trim(),
+          isActive: product?.isActive !== false
+        }))
+      };
+      const response = await adminService.updateConfiguration(payload);
+      const nextConfiguration = response.data || payload;
+      setAdminConfiguration(nextConfiguration);
+      configurationForm.setFieldsValue(nextConfiguration);
+      api.success("Configuration updated.");
+    } catch (error) {
+      const details = error?.response?.data?.errors?.map((item) => `${item.field}: ${item.message}`).join(" | ");
+      api.error(details || error?.response?.data?.message || "Failed to save configuration.");
+    }
+  }
+
+  function openCreateProductModal() {
+    setEditingProductIndex(null);
+    productForm.resetFields();
+    productForm.setFieldsValue({
+      key: "",
+      label: "",
+      description: "",
+      isActive: true
+    });
+    setProductModalOpen(true);
+  }
+
+  function openEditProductModal(productIndex) {
+    const product = (configurationForm.getFieldValue("products") || [])[productIndex];
+    if (!product) return;
+
+    setEditingProductIndex(productIndex);
+    productForm.setFieldsValue({
+      key: product.key || "",
+      label: product.label || "",
+      description: product.description || "",
+      isActive: product.isActive !== false
+    });
+    setProductModalOpen(true);
+  }
+
+  function deleteProduct(productIndex) {
+    const currentProducts = [...(configurationForm.getFieldValue("products") || [])];
+    const nextProducts = currentProducts.filter((_, index) => index !== productIndex);
+    const nextRoles = (configurationForm.getFieldValue("roles") || []).map((role) => ({
+      ...role,
+      productKeys: (role.productKeys || []).filter((productKey) => productKey !== currentProducts[productIndex]?.key)
+    }));
+
+    configurationForm.setFieldsValue({
+      products: nextProducts,
+      roles: nextRoles
+    });
+  }
+
+  function saveProductDraft(values) {
+    const normalizedProduct = {
+      key: String(values.key || "").trim().toLowerCase(),
+      label: String(values.label || "").trim(),
+      description: String(values.description || "").trim(),
+      isActive: values.isActive !== false
+    };
+    const currentProducts = [...(configurationForm.getFieldValue("products") || [])];
+
+    if (editingProductIndex === null) {
+      currentProducts.push(normalizedProduct);
+    } else {
+      const previousKey = currentProducts[editingProductIndex]?.key;
+      currentProducts[editingProductIndex] = normalizedProduct;
+
+      if (previousKey && previousKey !== normalizedProduct.key) {
+        const nextRoles = (configurationForm.getFieldValue("roles") || []).map((role) => ({
+          ...role,
+          productKeys: (role.productKeys || []).map((productKey) => (productKey === previousKey ? normalizedProduct.key : productKey))
+        }));
+        configurationForm.setFieldsValue({ roles: nextRoles });
+      }
+    }
+
+    configurationForm.setFieldValue("products", currentProducts);
+    setProductModalOpen(false);
+    setEditingProductIndex(null);
+    productForm.resetFields();
+  }
+
+  function openCreateRoleModal() {
+    setEditingRoleIndex(null);
+    roleForm.resetFields();
+    roleForm.setFieldsValue({
+      key: "",
+      name: "",
+      description: "",
+      productKeys: [],
+      isActive: true
+    });
+    setRoleModalOpen(true);
+  }
+
+  function openEditRoleModal(roleIndex) {
+    const role = (configurationForm.getFieldValue("roles") || [])[roleIndex];
+    if (!role) return;
+
+    setEditingRoleIndex(roleIndex);
+    roleForm.setFieldsValue({
+      key: role.key || "",
+      name: role.name || "",
+      description: role.description || "",
+      productKeys: role.productKeys || [],
+      isActive: role.isActive !== false
+    });
+    setRoleModalOpen(true);
+  }
+
+  function deleteRole(roleIndex) {
+    const currentRoles = [...(configurationForm.getFieldValue("roles") || [])];
+    const nextRoles = currentRoles.filter((_, index) => index !== roleIndex);
+    configurationForm.setFieldValue("roles", nextRoles);
+  }
+
+  function saveRoleDraft(values) {
+    const normalizedRole = {
+      key: String(values.key || "").trim().toLowerCase(),
+      name: String(values.name || "").trim(),
+      description: String(values.description || "").trim(),
+      productKeys: (values.productKeys || []).map((productKey) => String(productKey || "").trim().toLowerCase()).filter(Boolean),
+      isActive: values.isActive !== false
+    };
+    const currentRoles = [...(configurationForm.getFieldValue("roles") || [])];
+
+    if (editingRoleIndex === null) {
+      currentRoles.push(normalizedRole);
+    } else {
+      currentRoles[editingRoleIndex] = normalizedRole;
+    }
+
+    configurationForm.setFieldValue("roles", currentRoles);
+    setRoleModalOpen(false);
+    setEditingRoleIndex(null);
+    roleForm.resetFields();
+  }
+
   async function saveUser(values) {
     try {
       const payload = {
@@ -1624,6 +2120,8 @@ function AdminDashboardPage({ section = "dashboard" }) {
 
       setEditingUserId(null);
       userForm.resetFields();
+      userForm.setFieldValue("role", activeRoleOptions[0]?.value || "manager");
+      userForm.setFieldValue("products", []);
       userForm.setFieldValue("isActive", true);
       setUserModalOpen(false);
       fetchUsers({ page: 1 });
@@ -1662,9 +2160,11 @@ function AdminDashboardPage({ section = "dashboard" }) {
   function navigateToAdminSection(nextSection) {
     const sectionRoutes = {
       dashboard: ROUTES.ADMIN_DASHBOARD,
+      "client-access": ROUTES.ADMIN_CLIENT_ACCESS,
       blogs: ROUTES.ADMIN_BLOGS,
       portfolio: ROUTES.ADMIN_PORTFOLIO,
       users: ROUTES.ADMIN_USERS,
+      configuration: ROUTES.ADMIN_CONFIGURATION,
       leads: ROUTES.ADMIN_LEADS,
       settings: ROUTES.ADMIN_SETTINGS
     };
@@ -1718,6 +2218,14 @@ function AdminDashboardPage({ section = "dashboard" }) {
                       onClick={openCreateUserModal}
                     >
                       Add User
+                    </Button>
+                    <Button
+                      className="hero-btn hero-btn-secondary"
+                      onClick={() => {
+                        navigateToAdminSection("client-access");
+                      }}
+                    >
+                      Open Client Access
                     </Button>
                     <Button
                       className="hero-btn hero-btn-secondary"
@@ -1806,6 +2314,9 @@ function AdminDashboardPage({ section = "dashboard" }) {
                             </Button>
                             <Button type="primary" className="hero-btn hero-btn-primary" icon={<PlusOutlined />} onClick={openCreateUserModal}>
                               Add User
+                            </Button>
+                            <Button className="hero-btn hero-btn-secondary" onClick={() => navigateToAdminSection("client-access")}>
+                              Open Client Access
                             </Button>
                             <Button className="hero-btn hero-btn-secondary" onClick={() => navigateToAdminSection("leads")}>
                               Open Leads Record
@@ -3567,6 +4078,267 @@ function AdminDashboardPage({ section = "dashboard" }) {
                 )
               },
               {
+                key: "client-access",
+                label: "Client Access",
+                children: (
+                  <Card className="admin-card" loading={clientAccessLoading}>
+                    <Row gutter={[16, 16]}>
+                      <Col xs={24} xl={14}>
+                        <Card
+                          size="small"
+                          title="Client Projects"
+                          extra={(
+                            <Button type="primary" icon={<PlusOutlined />} onClick={openCreateClientProjectModal}>
+                              Add Client Project
+                            </Button>
+                          )}
+                        >
+                          <Table
+                            className="admin-table"
+                            rowKey="id"
+                            pagination={{ pageSize: 5, showSizeChanger: true }}
+                            scroll={{ x: 880 }}
+                            dataSource={clientWorkspaceProjects}
+                            columns={[
+                              { title: "Project", dataIndex: "name", key: "name" },
+                              { title: "Slug", dataIndex: "slug", key: "slug" },
+                              {
+                                title: "Status",
+                                dataIndex: "status",
+                                key: "status",
+                                render: (value) => <Tag color={value === "active" ? "green" : "default"}>{value || "active"}</Tag>
+                              },
+                              {
+                                title: "Assigned Clients",
+                                dataIndex: "assignedUsers",
+                                key: "assignedUsers",
+                                render: (items) => (items || []).length
+                                  ? (items || []).map((item) => item.fullName).join(", ")
+                                  : "-"
+                              },
+                              {
+                                title: "Workspace Link",
+                                key: "workspaceLink",
+                                render: (_, row) => (
+                                  <Space>
+                                    <Typography.Text copyable={{ text: getClientWorkspaceUrl(row.slug) }}>
+                                      {getClientWorkspacePath(row.slug)}
+                                    </Typography.Text>
+                                    <Button type="text" icon={<CopyOutlined />} onClick={() => copyClientWorkspaceLink(row.slug)}>
+                                      Copy
+                                    </Button>
+                                  </Space>
+                                )
+                              },
+                              {
+                                title: "Action",
+                                key: "action",
+                                render: (_, row) => (
+                                  <Space>
+                                    <Button
+                                      type="text"
+                                      icon={<EyeOutlined />}
+                                      onClick={() => window.open(getClientWorkspacePath(row.slug), "_blank", "noopener,noreferrer")}
+                                    >
+                                      Open Dashboard
+                                    </Button>
+                                    <Button type="text" icon={<EditOutlined />} onClick={() => openEditClientProjectModal(row)}>
+                                      Edit
+                                    </Button>
+                                  </Space>
+                                )
+                              }
+                            ]}
+                            locale={{ emptyText: "No client projects created yet." }}
+                          />
+                        </Card>
+                      </Col>
+                      <Col xs={24} xl={10}>
+                        <Card
+                          size="small"
+                          title="Client Users"
+                          extra={(
+                            <Button type="primary" icon={<PlusOutlined />} onClick={openCreateClientUserModal}>
+                              Add Client User
+                            </Button>
+                          )}
+                        >
+                          <Table
+                            className="admin-table"
+                            rowKey="id"
+                            pagination={{ pageSize: 5, showSizeChanger: true }}
+                            scroll={{ x: 760 }}
+                            dataSource={clientWorkspaceUsers}
+                            columns={[
+                              { title: "Full Name", dataIndex: "fullName", key: "fullName" },
+                              { title: "Email", dataIndex: "email", key: "email" },
+                              {
+                                title: "Status",
+                                dataIndex: "isActive",
+                                key: "isActive",
+                                render: (value) => (value ? "Active" : "Inactive")
+                              },
+                              {
+                                title: "Assigned Projects",
+                                dataIndex: "assignedProjects",
+                                key: "assignedProjects",
+                                render: (items) => (items || []).length
+                                  ? (items || []).map((item) => item.name).join(", ")
+                                  : "-"
+                              },
+                              {
+                                title: "Action",
+                                key: "action",
+                                render: (_, row) => (
+                                  <Button type="text" icon={<EditOutlined />} onClick={() => openEditClientUserModal(row)}>
+                                    Edit
+                                  </Button>
+                                )
+                              }
+                            ]}
+                            locale={{ emptyText: "No client users created yet." }}
+                          />
+                        </Card>
+                      </Col>
+                    </Row>
+                    <Modal
+                      title={editingClientProjectId ? "Edit Client Project" : "Add Client Project"}
+                      open={clientProjectModalOpen}
+                      onCancel={() => {
+                        setClientProjectModalOpen(false);
+                        setEditingClientProjectId(null);
+                        clientProjectForm.resetFields();
+                      }}
+                      footer={null}
+                      width={760}
+                    >
+                      <Form
+                        layout="vertical"
+                        form={clientProjectForm}
+                        onFinish={saveClientProject}
+                      >
+                        <Row gutter={[16, 0]}>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="name" label="Project Name" rules={[{ required: true }]}>
+                              <Input placeholder="Phoenix Wellness Portal" />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="slug" label="Project Slug" rules={[{ required: true }]}>
+                              <Input placeholder="Auto-generated from project name" readOnly />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24}>
+                            <Form.Item name="description" label="Description">
+                              <Input.TextArea rows={3} placeholder="What this client workspace covers." />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+                              <Select
+                                options={[
+                                  { label: "Active", value: "active" },
+                                  { label: "Paused", value: "paused" },
+                                  { label: "Completed", value: "completed" },
+                                  { label: "Archived", value: "archived" }
+                                ]}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="clientUserIds" label="Assigned Client Users">
+                              <Select mode="multiple" options={clientWorkspaceUserOptions} placeholder="Assign client users" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Card size="small" style={{ marginBottom: 16 }}>
+                          <Typography.Text strong>Workspace Link Preview</Typography.Text>
+                          <Typography.Paragraph style={{ marginBottom: 0, marginTop: 8 }}>
+                            {clientProjectSlugValue
+                              ? getClientWorkspacePath(clientProjectSlugValue)
+                              : "Enter a project name to generate the workspace link."}
+                          </Typography.Paragraph>
+                        </Card>
+                        <Space>
+                          <Button type="primary" icon={editingClientProjectId ? <SaveOutlined /> : <PlusOutlined />} htmlType="submit">
+                            {editingClientProjectId ? "Update Project" : "Create Project"}
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setClientProjectModalOpen(false);
+                              setEditingClientProjectId(null);
+                              clientProjectForm.resetFields();
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </Space>
+                      </Form>
+                    </Modal>
+                    <Modal
+                      title={editingClientUserId ? "Edit Client User" : "Add Client User"}
+                      open={clientUserModalOpen}
+                      onCancel={() => {
+                        setClientUserModalOpen(false);
+                        setEditingClientUserId(null);
+                        clientUserForm.resetFields();
+                      }}
+                      footer={null}
+                      width={760}
+                    >
+                      <Form layout="vertical" form={clientUserForm} onFinish={saveClientUser} initialValues={{ isActive: true }}>
+                        <Row gutter={[16, 0]}>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="fullName" label="Full Name" rules={[{ required: true }]}>
+                              <Input placeholder="Client Contact" />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}>
+                              <Input placeholder="client@example.com" />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item
+                              name="password"
+                              label={editingClientUserId ? "Password Reset" : "Temporary Password"}
+                              rules={editingClientUserId ? [] : [{ required: true, min: 8 }]}
+                              extra={editingClientUserId ? "Leave blank to keep the current password." : "Share this with the client securely."}
+                            >
+                              <Input.Password placeholder="Minimum 8 characters" />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24} md={12}>
+                            <Form.Item name="isActive" label="Active" valuePropName="checked">
+                              <Switch />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={24}>
+                            <Form.Item name="projectIds" label="Assigned Projects">
+                              <Select mode="multiple" options={clientWorkspaceProjectOptions} placeholder="Assign accessible projects" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Space>
+                          <Button type="primary" icon={editingClientUserId ? <SaveOutlined /> : <PlusOutlined />} htmlType="submit">
+                            {editingClientUserId ? "Update Client User" : "Create Client User"}
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setClientUserModalOpen(false);
+                              setEditingClientUserId(null);
+                              clientUserForm.resetFields();
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </Space>
+                      </Form>
+                    </Modal>
+                  </Card>
+                )
+              },
+              {
                 key: "users",
                 label: "User Management",
                 children: (
@@ -3616,7 +4388,12 @@ function AdminDashboardPage({ section = "dashboard" }) {
                       footer={null}
                       width={720}
                     >
-                      <Form layout="vertical" form={userForm} onFinish={saveUser} initialValues={{ role: "manager", isActive: true }}>
+                      <Form
+                        layout="vertical"
+                        form={userForm}
+                        onFinish={saveUser}
+                        initialValues={{ role: activeRoleOptions[0]?.value || "manager", isActive: true }}
+                      >
                         <Row gutter={[16, 0]}>
                           <Col xs={24} md={12}>
                             <Form.Item name="fullName" label="Full Name" rules={[{ required: true }]}>
@@ -3632,13 +4409,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
                         <Row gutter={[16, 0]}>
                           <Col xs={24} md={12}>
                             <Form.Item name="role" label="Role" rules={[{ required: true }]}>
-                              <Select
-                                options={[
-                                  { label: "Admin", value: "admin" },
-                                  { label: "Manager", value: "manager" },
-                                  { label: "Editor", value: "editor" }
-                                ]}
-                              />
+                              <Select options={activeRoleOptions} />
                             </Form.Item>
                           </Col>
                           <Col xs={24} md={12}>
@@ -3650,15 +4421,7 @@ function AdminDashboardPage({ section = "dashboard" }) {
                         <Form.Item name="products" label="Assigned Products">
                           <Select
                             mode="multiple"
-                            options={[
-                              { label: "Website", value: "website" },
-                              { label: "Blog", value: "blog" },
-                              { label: "Portfolio", value: "portfolio" },
-                              { label: "Services", value: "services" },
-                              { label: "QuadraiLearn", value: "quadrailearn" },
-                              { label: "Finance", value: "finance" },
-                              { label: "CRM", value: "crm" }
-                            ]}
+                            options={activeProductOptions}
                           />
                         </Form.Item>
                         <Space>
@@ -3677,6 +4440,267 @@ function AdminDashboardPage({ section = "dashboard" }) {
                         </Space>
                       </Form>
                     </Modal>
+                  </Card>
+                )
+              },
+              {
+                key: "configuration",
+                label: "Configuration",
+                children: (
+                  <Card className="admin-card" loading={configurationLoading}>
+                    <Typography.Title level={4}>Role and Access Management</Typography.Title>
+                    <Typography.Paragraph>
+                      Manage the roles available to admin users and define which products each role can access.
+                    </Typography.Paragraph>
+                    <Form layout="vertical" form={configurationForm} onFinish={saveConfiguration} initialValues={adminConfiguration}>
+                      <Row gutter={[16, 16]}>
+                        <Col xs={24} md={8}>
+                          <Card size="small" bordered={false}>
+                            <Space size={8} align="center">
+                              <TeamOutlined />
+                              <Typography.Text type="secondary">Active Roles</Typography.Text>
+                            </Space>
+                            <Typography.Title level={2} style={{ marginTop: 8, marginBottom: 0 }}>
+                              {(adminConfiguration.roles || []).filter((role) => role.isActive !== false).length}
+                            </Typography.Title>
+                          </Card>
+                        </Col>
+                        <Col xs={24} md={8}>
+                          <Card size="small" bordered={false}>
+                            <Space size={8} align="center">
+                              <AppstoreOutlined />
+                              <Typography.Text type="secondary">Active Products</Typography.Text>
+                            </Space>
+                            <Typography.Title level={2} style={{ marginTop: 8, marginBottom: 0 }}>
+                              {(adminConfiguration.products || []).filter((product) => product.isActive !== false).length}
+                            </Typography.Title>
+                          </Card>
+                        </Col>
+                        <Col xs={24} md={8}>
+                          <Card size="small" bordered={false}>
+                            <Space size={8} align="center">
+                              <LinkOutlined />
+                              <Typography.Text type="secondary">Access Links</Typography.Text>
+                            </Space>
+                            <Typography.Title level={2} style={{ marginTop: 8, marginBottom: 0 }}>
+                              {(adminConfiguration.roles || []).reduce((total, role) => total + (role.productKeys?.length || 0), 0)}
+                            </Typography.Title>
+                          </Card>
+                        </Col>
+                      </Row>
+                      <Divider />
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                        <Typography.Title level={5} style={{ margin: 0 }}>
+                          Product Catalog
+                        </Typography.Title>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={openCreateProductModal}>
+                          Add Product
+                        </Button>
+                      </div>
+                      <Table
+                        className="admin-table"
+                        rowKey="id"
+                        pagination={{
+                          pageSize: 5,
+                          showSizeChanger: true,
+                          pageSizeOptions: [5, 10, 20]
+                        }}
+                        scroll={{ x: 720 }}
+                        dataSource={configurationProductsTableData}
+                        columns={[
+                          { title: "Label", dataIndex: "label", key: "label" },
+                          { title: "Key", dataIndex: "key", key: "key", render: (value) => value || "-" },
+                          {
+                            title: "Description",
+                            dataIndex: "description",
+                            key: "description",
+                            render: (value) => value || "-"
+                          },
+                          {
+                            title: "Status",
+                            dataIndex: "isActive",
+                            key: "isActive",
+                            render: (value) => (value ? "Active" : "Inactive")
+                          },
+                          {
+                            title: "Action",
+                            key: "action",
+                            render: (_, row) => (
+                              <Space>
+                                <Button type="text" icon={<EditOutlined />} onClick={() => openEditProductModal(row.index)}>
+                                  Edit
+                                </Button>
+                                <Button danger type="text" icon={<DeleteOutlined />} onClick={() => deleteProduct(row.index)}>
+                                  Delete
+                                </Button>
+                              </Space>
+                            )
+                          }
+                        ]}
+                        locale={{ emptyText: "No products configured." }}
+                      />
+                      <Modal
+                        title={editingProductIndex === null ? "Add Product" : "Edit Product"}
+                        open={productModalOpen}
+                        onCancel={() => {
+                          setProductModalOpen(false);
+                          setEditingProductIndex(null);
+                          productForm.resetFields();
+                        }}
+                        footer={null}
+                        width={680}
+                      >
+                        <Form layout="vertical" form={productForm} onFinish={saveProductDraft} initialValues={{ isActive: true }}>
+                          <Row gutter={[16, 0]}>
+                            <Col xs={24} md={12}>
+                              <Form.Item name="label" label="Label" rules={[{ required: true, message: "Product label is required" }]}>
+                                <Input placeholder="Website" />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item name="key" label="Key" rules={[{ required: true, message: "Product key is required" }]}>
+                                <Input placeholder="website" />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24}>
+                              <Form.Item name="description" label="Description">
+                                <Input placeholder="What this product access covers." />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item name="isActive" label="Active" valuePropName="checked">
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Space>
+                            <Button type="primary" icon={editingProductIndex === null ? <PlusOutlined /> : <SaveOutlined />} htmlType="submit">
+                              {editingProductIndex === null ? "Add Product" : "Update Product"}
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setProductModalOpen(false);
+                                setEditingProductIndex(null);
+                                productForm.resetFields();
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </Space>
+                        </Form>
+                      </Modal>
+                      <Divider />
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                        <Typography.Title level={5} style={{ margin: 0 }}>
+                          Role Management
+                        </Typography.Title>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={openCreateRoleModal}>
+                          Add Role
+                        </Button>
+                      </div>
+                      <Table
+                        className="admin-table"
+                        rowKey="id"
+                        pagination={{
+                          pageSize: 5,
+                          showSizeChanger: true,
+                          pageSizeOptions: [5, 10, 20]
+                        }}
+                        scroll={{ x: 760 }}
+                        dataSource={configurationRolesTableData}
+                        columns={[
+                          { title: "Role Name", dataIndex: "name", key: "name" },
+                          { title: "Key", dataIndex: "key", key: "key", render: (value) => value || "-" },
+                          {
+                            title: "Accessible Products",
+                            dataIndex: "productKeys",
+                            key: "productKeys",
+                            render: (values) =>
+                              (values || []).map((productKey) => productLabelMap[productKey] || productKey).join(", ") || "-"
+                          },
+                          {
+                            title: "Status",
+                            dataIndex: "isActive",
+                            key: "isActive",
+                            render: (value) => (value ? "Active" : "Inactive")
+                          },
+                          {
+                            title: "Action",
+                            key: "action",
+                            render: (_, row) => (
+                              <Space>
+                                <Button type="text" icon={<EditOutlined />} onClick={() => openEditRoleModal(row.index)}>
+                                  Edit
+                                </Button>
+                                <Button danger type="text" icon={<DeleteOutlined />} onClick={() => deleteRole(row.index)}>
+                                  Delete
+                                </Button>
+                              </Space>
+                            )
+                          }
+                        ]}
+                        locale={{ emptyText: "No roles configured." }}
+                      />
+                      <Modal
+                        title={editingRoleIndex === null ? "Add Role" : "Edit Role"}
+                        open={roleModalOpen}
+                        onCancel={() => {
+                          setRoleModalOpen(false);
+                          setEditingRoleIndex(null);
+                          roleForm.resetFields();
+                        }}
+                        footer={null}
+                        width={760}
+                      >
+                        <Form layout="vertical" form={roleForm} onFinish={saveRoleDraft} initialValues={{ isActive: true }}>
+                          <Row gutter={[16, 0]}>
+                            <Col xs={24} md={12}>
+                              <Form.Item name="name" label="Role Name" rules={[{ required: true, message: "Role name is required" }]}>
+                                <Input placeholder="Manager" />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item name="key" label="Role Key" rules={[{ required: true, message: "Role key is required" }]}>
+                                <Input placeholder="manager" />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24}>
+                              <Form.Item name="description" label="Description">
+                                <Input placeholder="What this role is responsible for." />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24}>
+                              <Form.Item name="productKeys" label="Accessible Products">
+                                <Select mode="multiple" options={configurationProductOptions.filter((option) => option.value)} />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item name="isActive" label="Active" valuePropName="checked">
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Space>
+                            <Button type="primary" icon={editingRoleIndex === null ? <PlusOutlined /> : <SaveOutlined />} htmlType="submit">
+                              {editingRoleIndex === null ? "Add Role" : "Update Role"}
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setRoleModalOpen(false);
+                                setEditingRoleIndex(null);
+                                roleForm.resetFields();
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </Space>
+                        </Form>
+                      </Modal>
+                      <Divider />
+                      <Button type="primary" icon={<SaveOutlined />} htmlType="submit">
+                        Save Configuration
+                      </Button>
+                    </Form>
                   </Card>
                 )
               },
