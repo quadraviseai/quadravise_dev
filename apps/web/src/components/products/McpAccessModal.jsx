@@ -55,6 +55,13 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
     authForm.resetFields();
   }
 
+  function isExistingUserError(status, messageText) {
+    if (status === 409) return true;
+
+    const normalizedMessage = String(messageText || "").toLowerCase();
+    return normalizedMessage.includes("already exists") || normalizedMessage.includes("already registered");
+  }
+
   async function handleRegister(values) {
     setSubmitting(true);
     setAuthError("");
@@ -76,7 +83,11 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
       const registerData = await registerResponse.json().catch(() => ({}));
 
       if (!registerResponse.ok) {
-        throw new Error(registerData?.message || "Registration failed.");
+        const errorMessage = registerData?.message || registerData?.error || "Registration failed.";
+        const error = new Error(errorMessage);
+        error.status = registerResponse.status;
+        error.code = registerData?.code;
+        throw error;
       }
 
       setAuthResponse({
@@ -91,7 +102,17 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
         password: values.password
       });
     } catch (error) {
-      setAuthError(error.message || "Unable to complete registration.");
+      if (isExistingUserError(error.status, error.message)) {
+        setMode("login");
+        setAuthResponse(null);
+        setAuthError("Account already exists. Please log in.");
+        authForm.setFieldsValue({
+          email: values.email,
+          password: values.password
+        });
+      } else {
+        setAuthError(error.message || "Unable to complete registration.");
+      }
     } finally {
       setSubmitting(false);
     }
