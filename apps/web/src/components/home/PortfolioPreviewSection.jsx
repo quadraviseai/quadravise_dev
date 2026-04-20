@@ -1,43 +1,11 @@
 import { ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Col, Row, Spin, Tag, Typography } from "antd";
+import { Button, Col, Row, Tag, Typography } from "antd";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 
-import { useHomepagePortfolio } from "../../hooks/usePortfolio";
-import EmptyState from "../common/EmptyState";
-import ErrorState from "../common/ErrorState";
+import { staticHomepagePortfolioProjects } from "../../constants/portfolio";
 import SectionHeader from "../common/SectionHeader";
 import { ROUTES } from "../../constants/routes";
-
-const demoProjects = [
-  {
-    id: "demo-1",
-    category: "SaaS Platform",
-    title: "Startup SaaS Platform",
-    slug: "startup-saas-platform",
-    description: "Subscription-based platform for workflow automation and client onboarding.",
-    techStack: ["React", "Node.js", "PostgreSQL"],
-    outcome: "Reduced operational turnaround time by 60%"
-  },
-  {
-    id: "demo-2",
-    category: "Business Website",
-    title: "Corporate Business Website",
-    slug: "corporate-business-website",
-    description: "SEO-focused business website with lead capture and service conversion flows.",
-    techStack: ["React", "Ant Design", "Express"],
-    outcome: "Improved qualified lead conversion by 38%"
-  },
-  {
-    id: "demo-3",
-    category: "Education Platform",
-    title: "Education Platform",
-    slug: "education-platform",
-    description: "Learning platform with structured modules, tests, and performance analytics.",
-    techStack: ["React", "Node.js", "PostgreSQL"],
-    outcome: "Increased learner engagement by 42%"
-  }
-];
 
 function getCategory(project) {
   if (project.category) return project.category;
@@ -58,9 +26,7 @@ function getOutcomeMetric(outcome = "") {
 }
 
 function PortfolioPreviewSection() {
-  const { data, isLoading, isError, refetch } = useHomepagePortfolio();
-  const sourceProjects = (data?.data && data.data.length ? data.data : demoProjects) || [];
-  const projects = sourceProjects
+  const projects = staticHomepagePortfolioProjects
     .slice()
     .sort((a, b) => (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999) || Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)))
     .slice(0, 3);
@@ -71,9 +37,6 @@ function PortfolioPreviewSection() {
         <div className="portfolio-section-top">
           <SectionHeader title="Featured Project Previews" subtitle="Real outcomes across startup SaaS, business platforms, and education products." />
         </div>
-        {isLoading ? <Spin /> : null}
-        {isError ? <ErrorState onRetry={refetch} /> : null}
-        {!isLoading && !isError && !projects.length ? <EmptyState message="No portfolio items available." /> : null}
         <Row gutter={[20, 20]} className="portfolio-preview-carousel">
           {projects.map((project, index) => {
             const category = getCategory(project);
@@ -108,7 +71,10 @@ function PortfolioPreviewSection() {
                         ) : null}
                       </p>
                     </div>
-                    <Link className="case-study-cta" to={project.slug ? `${ROUTES.PORTFOLIO}/${project.slug}` : ROUTES.PORTFOLIO}>
+                    <Link
+                      className="case-study-cta"
+                      to={project.route || ROUTES.PORTFOLIO}
+                    >
                       View Case Study <ArrowRightOutlined />
                     </Link>
                   </article>

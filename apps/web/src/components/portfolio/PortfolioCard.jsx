@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 
 function PortfolioCard({ project }) {
+  const targetRoute = project.route || (project.slug ? `${ROUTES.PORTFOLIO}/${project.slug}` : null);
+
   return (
     <Card className="portfolio-page-card" title={project.title}>
       <div className="portfolio-page-card-meta">
@@ -23,8 +25,8 @@ function PortfolioCard({ project }) {
       <div className="portfolio-page-card-outcome">
         <strong>Outcome:</strong> {project.outcome}
       </div>
-      {project.slug ? (
-        <Link className="portfolio-page-card-link" to={`${ROUTES.PORTFOLIO}/${project.slug}`}>
+      {targetRoute ? (
+        <Link className="portfolio-page-card-link" to={targetRoute}>
           View Project <ArrowRightOutlined />
         </Link>
       ) : null}

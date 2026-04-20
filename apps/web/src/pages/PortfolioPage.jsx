@@ -1,22 +1,16 @@
 import { CheckCircleFilled } from "@ant-design/icons";
-import { Button, Col, Row, Space, Spin, Typography } from "antd";
+import { Button, Col, Row, Space, Typography } from "antd";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 
-import EmptyState from "../components/common/EmptyState";
-import ErrorState from "../components/common/ErrorState";
 import PortfolioCard from "../components/portfolio/PortfolioCard";
 import SEOHead from "../components/seo/SEOHead";
+import { staticPortfolioProjects } from "../constants/portfolio";
 import { ROUTES } from "../constants/routes";
 import { pageSeo, seoKeywords } from "../constants/seo";
-import { usePortfolio } from "../hooks/usePortfolio";
-import { useSiteSettings } from "../hooks/useSiteSettings";
 
 function PortfolioPage() {
-  const { data, isLoading, isError, refetch } = usePortfolio();
-  const { data: settingsData } = useSiteSettings();
-  const projects = data?.data || [];
-  const settings = settingsData?.data || {};
+  const projects = staticPortfolioProjects;
 
   return (
     <>
@@ -76,11 +70,11 @@ function PortfolioPage() {
                 </div>
                 <div className="page-hero-preview-metrics">
                   <div>
-                    <strong>{projects.length || "50+"}</strong>
+                    <strong>{projects.length}</strong>
                     <span>Projects Delivered</span>
                   </div>
                   <div>
-                    <strong>{settings.industriesServed || "6"}</strong>
+                    <strong>3</strong>
                     <span>Industries Supported</span>
                   </div>
                   <div>
@@ -99,12 +93,52 @@ function PortfolioPage() {
       </section>
       <section className="section portfolio-page-grid-section">
         <div className="section-inner" id="portfolio-grid">
-          {isLoading ? <Spin /> : null}
-          {isError ? <ErrorState onRetry={refetch} /> : null}
-          {!isLoading && !isError && !projects.length ? <EmptyState message="No projects published yet." /> : null}
+          <div className="portfolio-page-featured-case-study">
+            <div className="portfolio-page-featured-copy">
+              <span className="portfolio-page-featured-eyebrow">Featured Case Study</span>
+              <Typography.Title level={2}>Website Audit Tool That Turns Traffic Into Leads</Typography.Title>
+              <Typography.Paragraph>
+                See how Quadravise built a lightweight audit experience on Nexaburst that simplifies SEO and website
+                performance data, then turns that insight into a natural lead-generation funnel.
+              </Typography.Paragraph>
+              <div className="page-hero-points">
+                <span>
+                  <CheckCircleFilled />
+                  Beginner-friendly website audit experience
+                </span>
+                <span>
+                  <CheckCircleFilled />
+                  Built for conversion, not raw data overload
+                </span>
+              </div>
+              <Space size={14} wrap style={{ marginTop: 20 }}>
+                <Button type="primary" className="hero-btn hero-btn-primary">
+                  <Link to={ROUTES.CASE_STUDY_WEBSITE_AUDIT}>Read Case Study</Link>
+                </Button>
+              </Space>
+            </div>
+            <div className="portfolio-page-featured-panel">
+              <div>
+                <strong>Nexaburst</strong>
+                <span>Hosted Platform</span>
+              </div>
+              <div>
+                <strong>Instant</strong>
+                <span>Audit Delivery</span>
+              </div>
+              <div>
+                <strong>SEO + Tech</strong>
+                <span>Insight Coverage</span>
+              </div>
+              <div>
+                <strong>Lead Gen</strong>
+                <span>Business Outcome</span>
+              </div>
+            </div>
+          </div>
           <Row gutter={[20, 20]}>
             {projects.map((project) => (
-              <Col key={project.slug || project.title} xs={24} md={12} lg={8}>
+              <Col key={project.id || project.title} xs={24} md={12} lg={8}>
                 <PortfolioCard project={project} />
               </Col>
             ))}

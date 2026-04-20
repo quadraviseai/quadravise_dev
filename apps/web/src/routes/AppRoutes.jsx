@@ -8,11 +8,14 @@ const HomePage = lazy(() => import("../pages/HomePage"));
 const ServicesPage = lazy(() => import("../pages/ServicesPage"));
 const ServiceDetailPage = lazy(() => import("../pages/ServiceDetailPage"));
 const ProductsPage = lazy(() => import("../pages/ProductsPage"));
+const AuthDomainMcpPage = lazy(() => import("../pages/AuthDomainMcpPage"));
+const AuthDomainMcpAccountPage = lazy(() => import("../pages/AuthDomainMcpAccountPage"));
 const QuadraILearnPage = lazy(() => import("../pages/QuadraILearnPage"));
 const QuadraILearnSurveyPage = lazy(() => import("../pages/QuadraILearnSurveyPage"));
 const OurWorkPage = lazy(() => import("../pages/OurWorkPage"));
 const PortfolioPage = lazy(() => import("../pages/PortfolioPage"));
 const PortfolioDetailPage = lazy(() => import("../pages/PortfolioDetailPage"));
+const WebsiteAuditCaseStudyPage = lazy(() => import("../pages/WebsiteAuditCaseStudyPage"));
 const BlogPage = lazy(() => import("../pages/BlogPage"));
 const BlogDetailPage = lazy(() => import("../pages/BlogDetailPage"));
 const BlogPreviewPage = lazy(() => import("../pages/BlogPreviewPage"));
@@ -50,11 +53,14 @@ function AppRoutes() {
           <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
           <Route path="/services/:slug" element={<ServiceDetailPage />} />
           <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
+          <Route path={ROUTES.AUTH_DOMAIN_MCP} element={<AuthDomainMcpPage />} />
+          <Route path={ROUTES.AUTH_DOMAIN_MCP_ACCOUNT} element={<AuthDomainMcpAccountPage />} />
           <Route path={ROUTES.QUADRA_ILEARN} element={<QuadraILearnPage />} />
           <Route path={ROUTES.QUADRA_ILEARN_SURVEY} element={<QuadraILearnSurveyPage />} />
           <Route path={ROUTES.OUR_WORK} element={<Navigate to={`${ROUTES.OUR_WORK}/ecommerce`} replace />} />
           <Route path={`${ROUTES.OUR_WORK}/:slug`} element={<OurWorkPage />} />
           <Route path={ROUTES.PORTFOLIO} element={<PortfolioPage />} />
+          <Route path={ROUTES.CASE_STUDY_WEBSITE_AUDIT} element={<WebsiteAuditCaseStudyPage />} />
           <Route path={`${ROUTES.PORTFOLIO}/:slug`} element={<PortfolioDetailPage />} />
           <Route path={ROUTES.BLOG} element={<BlogPage />} />
           <Route
