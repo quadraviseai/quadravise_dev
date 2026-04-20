@@ -22,6 +22,51 @@ const cardIcons = {
   saas: <RocketOutlined />
 };
 
+const userGuideSteps = [
+  {
+    number: "01",
+    title: "Open Quadravise",
+    description:
+      "Start at quadravise.com and sign in with your account so you can reach the Auth Domain MCP flow."
+  },
+  {
+    number: "02",
+    title: "Create or log in",
+    description:
+      "Register first if you are new. Existing users should log in with the same email and password they already use."
+  },
+  {
+    number: "03",
+    title: "Create your MCP token",
+    description:
+      "After login, create the live token from your account page. Session tokens are for the account API; live tokens are for Codex."
+  },
+  {
+    number: "04",
+    title: "Add the MCP in Codex",
+    description:
+      "Use the token in Codex CLI or VS Code. On Windows, pick the shell that matches your terminal.",
+    codeVariants: [
+      {
+        label: "PowerShell",
+        code: `$env:AUTH_DOMAIN_MCP_TOKEN="paste-your-admcp_live-token-here"
+codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`
+      },
+      {
+        label: "Command Prompt",
+        code: `set AUTH_DOMAIN_MCP_TOKEN=paste-your-admcp_live-token-here
+codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`
+      }
+    ]
+  },
+  {
+    number: "05",
+    title: "Restart and verify",
+    description:
+      "Restart Codex or VS Code, then run /mcp and confirm that auth-domain appears in the active server list."
+  }
+];
+
 function McpProductsPage() {
   const [searchValue, setSearchValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -77,6 +122,41 @@ function McpProductsPage() {
                 focused product dialog.
               </Typography.Paragraph>
             </div>
+          </div>
+
+          <div className="auth-mcp-guide-section">
+            <div className="auth-mcp-guide-header">
+              <Typography.Title level={2}>User Guide</Typography.Title>
+              <Typography.Paragraph className="auth-mcp-guide-note">
+                Follow these steps to connect Auth Domain MCP inside Codex. The setup works from both PowerShell and
+                Command Prompt on Windows.
+              </Typography.Paragraph>
+            </div>
+
+            <Card className="auth-mcp-guide-simple-card">
+              <div className="auth-mcp-guide-simple-list">
+                {userGuideSteps.map((step) => (
+                  <div key={step.number} className="auth-mcp-guide-simple-item">
+                    <div className="auth-mcp-guide-simple-number">{step.number}</div>
+                    <div className="auth-mcp-guide-simple-content">
+                      <Typography.Title level={4}>{step.title}</Typography.Title>
+                      <Typography.Paragraph>{step.description}</Typography.Paragraph>
+
+                      {step.codeVariants ? (
+                        <div className="auth-mcp-guide-code-variants">
+                          {step.codeVariants.map((variant) => (
+                            <div key={variant.label} className="auth-mcp-guide-code-variant">
+                              <Typography.Text strong>{variant.label}</Typography.Text>
+                              <pre className="auth-mcp-guide-code-block">{variant.code}</pre>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
           </div>
 
           <Card className="mcp-catalog-toolbar-card">

@@ -1,4 +1,5 @@
 import {
+  CodeOutlined,
   CopyOutlined,
   MailOutlined,
   SafetyCertificateOutlined,
@@ -284,10 +285,26 @@ codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --be
                     </Typography.Paragraph>
                   </div>
                   <Space wrap>
-                    <Button type="primary" className="hero-btn hero-btn-primary" onClick={handleCopyToken} disabled={!token}>
+                    <Button
+                      type="primary"
+                      className="hero-btn hero-btn-primary"
+                      icon={<CopyOutlined />}
+                      onClick={handleCopyToken}
+                      disabled={!token}
+                    >
                       Copy Token Again
                     </Button>
-                    <Button onClick={() => window.open("https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started", "_blank", "noopener,noreferrer")}>
+                    <Button
+                      className="hero-btn hero-btn-secondary"
+                      icon={<CodeOutlined />}
+                      onClick={() =>
+                        window.open(
+                          "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started",
+                          "_blank",
+                          "noopener,noreferrer"
+                        )
+                      }
+                    >
                       Codex CLI Help
                     </Button>
                   </Space>
