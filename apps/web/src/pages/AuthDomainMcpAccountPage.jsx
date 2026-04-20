@@ -5,12 +5,13 @@ import {
   DeploymentUnitOutlined,
   LaptopOutlined,
   MailOutlined,
+  QuestionCircleOutlined,
   SafetyCertificateOutlined,
   UserOutlined
 } from "@ant-design/icons";
-import { Button, Card, Col, Row, Space, Typography, message, Spin } from "antd";
+import { Button, Card, Col, Modal, Row, Space, Typography, message, Spin } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import SEOHead from "../components/seo/SEOHead";
 import { ROUTES } from "../constants/routes";
@@ -28,7 +29,8 @@ const userGuideSteps = [
     description: "Open your working project in Visual Studio Code so you can inspect files, review changes, and work from the same repository structure as the MCP outputs.",
     icon: <LaptopOutlined />,
     actionLabel: "Open VS Code",
-    href: "https://code.visualstudio.com/"
+    href: "https://code.visualstudio.com/",
+    kind: "external"
   },
   {
     key: "cli",
@@ -37,7 +39,8 @@ const userGuideSteps = [
     description: "Set up Codex CLI in your terminal so you can run guided edits, inspect the codebase, and use agent-driven workflows from the same project folder.",
     icon: <DeploymentUnitOutlined />,
     actionLabel: "View Codex CLI Guide",
-    href: "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started"
+    href: "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started",
+    kind: "external"
   },
   {
     key: "catalog",
@@ -46,7 +49,8 @@ const userGuideSteps = [
     description: "Go back to the catalog, open the product you want, and use the same registered account to continue your workflow without repeating registration.",
     icon: <CodeOutlined />,
     actionLabel: "Open MCP Catalog",
-    href: ROUTES.MCP_PRODUCTS
+    href: ROUTES.MCP_PRODUCTS,
+    kind: "route"
   }
 ];
 
@@ -91,6 +95,7 @@ function AuthDomainMcpAccountPage() {
   const [session, setSession] = useState(null);
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
+  const [guideOpen, setGuideOpen] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -148,6 +153,16 @@ function AuthDomainMcpAccountPage() {
     } catch {
       api.error("Unable to copy token.");
     }
+  }
+
+  function handleGuideAction(step) {
+    if (step.kind === "external") {
+      window.open(step.href, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    setGuideOpen(false);
+    navigate(step.href);
   }
 
   const summaryCards = [
@@ -275,47 +290,65 @@ function AuthDomainMcpAccountPage() {
                 <div className="auth-mcp-guide-header">
                   <Typography.Title level={2}>User Guide</Typography.Title>
                   <Typography.Paragraph className="auth-mcp-paragraph">
-                    Follow these steps after login to start working with the MCP flow in a clean, predictable order.
+                    Open the quick guide to see the next steps in simple language.
                   </Typography.Paragraph>
                 </div>
-
-                <div className="auth-mcp-guide-list">
-                  {userGuideSteps.map((step, index) => (
-                    <Card key={step.key} className="auth-mcp-guide-card">
-                      <div className="auth-mcp-guide-step">
-                        <div className="auth-mcp-guide-rail">
-                          <span className="auth-mcp-guide-step-number">{step.step}</span>
-                          {index < userGuideSteps.length - 1 ? <span className="auth-mcp-guide-step-line" /> : null}
-                        </div>
-                        <div className="auth-mcp-guide-content">
-                          <div className="auth-mcp-guide-content-top">
-                            <span className="auth-mcp-guide-icon">{step.icon}</span>
-                            <div>
-                              <Typography.Title level={4}>{step.title}</Typography.Title>
-                              <Typography.Paragraph>{step.description}</Typography.Paragraph>
-                            </div>
-                          </div>
-
-                          {String(step.href).startsWith("http") ? (
-                            <a href={step.href} target="_blank" rel="noreferrer" className="auth-mcp-guide-link">
-                              {step.actionLabel}
-                              <ArrowRightOutlined />
-                            </a>
-                          ) : (
-                            <Button type="primary" className="hero-btn hero-btn-primary">
-                              <Link to={step.href}>{step.actionLabel}</Link>
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
+                <Card className="auth-mcp-guide-launch-card">
+                  <div className="auth-mcp-guide-launch-content">
+                    <span className="auth-mcp-guide-launch-icon">
+                      <QuestionCircleOutlined />
+                    </span>
+                    <div>
+                      <Typography.Title level={4}>Simple setup guide</Typography.Title>
+                      <Typography.Paragraph>
+                        This guide shows what to do next after login, one step at a time.
+                      </Typography.Paragraph>
+                    </div>
+                  </div>
+                  <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => setGuideOpen(true)}>
+                    Open User Guide
+                  </Button>
+                </Card>
               </section>
             </>
           )}
         </div>
       </section>
+
+      <Modal
+        open={guideOpen}
+        onCancel={() => setGuideOpen(false)}
+        footer={null}
+        width="min(820px, calc(100vw - 24px))"
+        title="MCP User Guide"
+        destroyOnHidden
+      >
+        <div className="auth-mcp-guide-modal-list">
+          {userGuideSteps.map((step, index) => (
+            <div key={step.key} className="auth-mcp-guide-modal-step">
+              <div className="auth-mcp-guide-rail">
+                <span className="auth-mcp-guide-step-number">{step.step}</span>
+                {index < userGuideSteps.length - 1 ? <span className="auth-mcp-guide-step-line" /> : null}
+              </div>
+              <Card className="auth-mcp-guide-card">
+                <div className="auth-mcp-guide-content">
+                  <div className="auth-mcp-guide-content-top">
+                    <span className="auth-mcp-guide-icon">{step.icon}</span>
+                    <div>
+                      <Typography.Title level={4}>{step.title}</Typography.Title>
+                      <Typography.Paragraph>{step.description}</Typography.Paragraph>
+                    </div>
+                  </div>
+                  <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => handleGuideAction(step)}>
+                    {step.actionLabel}
+                    <ArrowRightOutlined />
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </>
   );
 }

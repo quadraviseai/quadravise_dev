@@ -2511,6 +2511,53 @@ p {
   gap: 16px;
 }
 
+.auth-mcp-guide-launch-card {
+  border-radius: 24px;
+  border: 1px solid rgba(21, 74, 132, 0.1);
+  box-shadow: 0 18px 42px rgba(17, 55, 100, 0.08);
+  background:
+    radial-gradient(circle at top right, rgba(91, 145, 226, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.98));
+}
+
+.auth-mcp-guide-launch-card .ant-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 26px;
+}
+
+.auth-mcp-guide-launch-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.auth-mcp-guide-launch-content h4 {
+  margin: 0 0 8px !important;
+  color: #163f6d !important;
+}
+
+.auth-mcp-guide-launch-content p {
+  margin: 0 !important;
+  color: #4e6a84;
+  line-height: 1.75;
+}
+
+.auth-mcp-guide-launch-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: rgba(21, 74, 132, 0.07);
+  color: #154a84;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
 .auth-mcp-guide-card {
   overflow: hidden;
   border-radius: 24px;
@@ -2603,6 +2650,19 @@ p {
   gap: 8px;
   color: #154a84;
   font-weight: 700;
+}
+
+.auth-mcp-guide-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.auth-mcp-guide-modal-step {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 18px;
 }
 
 .auth-mcp-summary-card {
@@ -2790,14 +2850,22 @@ p {
     gap: 14px;
   }
 
+  .auth-mcp-guide-launch-card .ant-card-body,
+  .auth-mcp-guide-launch-content,
+  .auth-mcp-guide-modal-step,
   .auth-mcp-guide-rail {
+    grid-template-columns: 1fr;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .auth-mcp-guide-step-line {
     width: 100%;
     min-height: 2px;
+  }
+
+  .auth-mcp-guide-launch-card .ant-card-body {
+    align-items: flex-start;
   }
 
   .auth-mcp-guide-content-top {
