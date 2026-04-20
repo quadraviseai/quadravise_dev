@@ -2511,145 +2511,63 @@ p {
   gap: 16px;
 }
 
-.auth-mcp-guide-launch-card {
+.auth-mcp-guide-simple-card {
   border-radius: 24px;
   border: 1px solid rgba(21, 74, 132, 0.1);
-  box-shadow: 0 18px 42px rgba(17, 55, 100, 0.08);
-  background:
-    radial-gradient(circle at top right, rgba(91, 145, 226, 0.14), transparent 30%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.98));
+  box-shadow: 0 16px 34px rgba(17, 55, 100, 0.08);
 }
 
-.auth-mcp-guide-launch-card .ant-card-body {
+.auth-mcp-guide-simple-card .ant-card-body {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  gap: 22px;
   padding: 24px 26px;
 }
 
-.auth-mcp-guide-launch-content {
+.auth-mcp-guide-simple-list {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 16px;
 }
 
-.auth-mcp-guide-launch-content h4 {
-  margin: 0 0 8px !important;
-  color: #163f6d !important;
-}
-
-.auth-mcp-guide-launch-content p {
-  margin: 0 !important;
-  color: #4e6a84;
-  line-height: 1.75;
-}
-
-.auth-mcp-guide-launch-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 18px;
-  background: rgba(21, 74, 132, 0.07);
-  color: #154a84;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.auth-mcp-guide-card {
-  overflow: hidden;
-  border-radius: 24px;
-  border: 1px solid rgba(21, 74, 132, 0.1);
-  box-shadow: 0 18px 42px rgba(17, 55, 100, 0.08);
-  background:
-    radial-gradient(circle at top right, rgba(91, 145, 226, 0.14), transparent 30%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.98));
-}
-
-.auth-mcp-guide-card .ant-card-body {
-  padding: 24px 26px;
-}
-
-.auth-mcp-guide-step {
+.auth-mcp-guide-simple-item {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 18px;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
 }
 
-.auth-mcp-guide-rail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.auth-mcp-guide-step-number {
+.auth-mcp-guide-simple-number {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #154a84 0%, #3f82d6 100%);
-  color: #ffffff;
-  font-size: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(21, 74, 132, 0.08);
+  color: #154a84;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  box-shadow: 0 16px 30px rgba(21, 74, 132, 0.18);
 }
 
-.auth-mcp-guide-step-line {
-  flex: 1;
-  width: 2px;
-  min-height: 52px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(21, 74, 132, 0.28), rgba(21, 74, 132, 0.04));
-}
-
-.auth-mcp-guide-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.auth-mcp-guide-content-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.auth-mcp-guide-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 18px;
-  background: rgba(21, 74, 132, 0.07);
-  color: #154a84;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.auth-mcp-guide-content h4 {
+.auth-mcp-guide-simple-item h4,
+.auth-mcp-guide-simple-code-wrap h4 {
   margin: 0 0 8px !important;
   color: #163f6d !important;
 }
 
-.auth-mcp-guide-content p {
+.auth-mcp-guide-simple-item p,
+.auth-mcp-guide-simple-code-wrap p {
   margin: 0 !important;
   color: #4e6a84;
   line-height: 1.75;
 }
 
-.auth-mcp-guide-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #154a84;
-  font-weight: 700;
+.auth-mcp-guide-simple-code-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .auth-mcp-guide-note {
@@ -2668,19 +2586,6 @@ p {
   line-height: 1.7;
   overflow-x: auto;
   white-space: pre-wrap;
-}
-
-.auth-mcp-guide-modal-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 8px;
-}
-
-.auth-mcp-guide-modal-step {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 18px;
 }
 
 .auth-mcp-summary-card {
@@ -2868,26 +2773,8 @@ p {
     gap: 14px;
   }
 
-  .auth-mcp-guide-launch-card .ant-card-body,
-  .auth-mcp-guide-launch-content,
-  .auth-mcp-guide-modal-step,
-  .auth-mcp-guide-rail {
+  .auth-mcp-guide-simple-item {
     grid-template-columns: 1fr;
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .auth-mcp-guide-step-line {
-    width: 100%;
-    min-height: 2px;
-  }
-
-  .auth-mcp-guide-launch-card .ant-card-body {
-    align-items: flex-start;
-  }
-
-  .auth-mcp-guide-content-top {
-    flex-direction: column;
   }
 
   .auth-mcp-guide-launch-card .ant-btn {

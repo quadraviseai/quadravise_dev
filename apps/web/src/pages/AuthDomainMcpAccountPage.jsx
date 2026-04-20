@@ -1,15 +1,10 @@
 import {
-  ArrowRightOutlined,
-  CodeOutlined,
   CopyOutlined,
-  DeploymentUnitOutlined,
-  LaptopOutlined,
   MailOutlined,
-  QuestionCircleOutlined,
   SafetyCertificateOutlined,
   UserOutlined
 } from "@ant-design/icons";
-import { Button, Card, Col, Modal, Row, Space, Typography, message, Spin } from "antd";
+import { Button, Card, Col, Row, Space, Typography, message, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -23,34 +18,19 @@ const AUTH_MCP_SESSION_KEY = "auth_domain_mcp_session";
 
 const userGuideSteps = [
   {
-    key: "editor",
     step: "01",
-    title: "Open VS Code",
-    description: "Open your working project in Visual Studio Code so you can inspect files, review changes, and work from the same repository structure as the MCP outputs.",
-    icon: <LaptopOutlined />,
-    actionLabel: "Open VS Code",
-    href: "https://code.visualstudio.com/",
-    kind: "external"
+    title: "Copy your token",
+    description: "Use the copy button above and keep the token ready. This is the value you will use when you connect the MCP."
   },
   {
-    key: "cli",
     step: "02",
-    title: "Install Codex CLI",
-    description: "Set up Codex CLI in your terminal so you can run guided edits, inspect the codebase, and use agent-driven workflows from the same project folder.",
-    icon: <DeploymentUnitOutlined />,
-    actionLabel: "View Codex CLI Guide",
-    href: "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started",
-    kind: "external"
+    title: "Add the MCP in Codex",
+    description: "Add the hosted Auth Domain MCP using your token in Codex or your local setup."
   },
   {
-    key: "catalog",
     step: "03",
-    title: "Return to the MCP Catalog",
-    description: "Go back to the catalog, open the product you want, and use the same registered account to continue your workflow without repeating registration.",
-    icon: <CodeOutlined />,
-    actionLabel: "Open MCP Catalog",
-    href: ROUTES.MCP_PRODUCTS,
-    kind: "route"
+    title: "Restart and verify",
+    description: "Restart the app once and confirm `auth-domain` appears in your MCP list."
   }
 ];
 
@@ -95,8 +75,6 @@ function AuthDomainMcpAccountPage() {
   const [session, setSession] = useState(null);
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
-  const [guideOpen, setGuideOpen] = useState(false);
-
   useEffect(() => {
     async function loadProfile() {
       const storedToken = localStorage.getItem(AUTH_MCP_TOKEN_KEY) || "";
@@ -153,16 +131,6 @@ function AuthDomainMcpAccountPage() {
     } catch {
       api.error("Unable to copy token.");
     }
-  }
-
-  function handleGuideAction(step) {
-    if (step.kind === "external") {
-      window.open(step.href, "_blank", "noopener,noreferrer");
-      return;
-    }
-
-    setGuideOpen(false);
-    navigate(step.href);
   }
 
   const summaryCards = [
@@ -290,65 +258,45 @@ function AuthDomainMcpAccountPage() {
                 <div className="auth-mcp-guide-header">
                   <Typography.Title level={2}>User Guide</Typography.Title>
                   <Typography.Paragraph className="auth-mcp-paragraph">
-                    Open the quick guide to see the next steps in simple language.
+                    This guide appears only after login. Follow these simple steps to use the Auth Domain MCP.
                   </Typography.Paragraph>
                 </div>
-                <Card className="auth-mcp-guide-launch-card">
-                  <div className="auth-mcp-guide-launch-content">
-                    <span className="auth-mcp-guide-launch-icon">
-                      <QuestionCircleOutlined />
-                    </span>
-                    <div>
-                      <Typography.Title level={4}>Simple setup guide</Typography.Title>
-                      <Typography.Paragraph>
-                        This guide shows what to do next after login, one step at a time.
-                      </Typography.Paragraph>
-                    </div>
+                <Card className="auth-mcp-guide-simple-card">
+                  <div className="auth-mcp-guide-simple-list">
+                    {userGuideSteps.map((step) => (
+                      <div key={step.step} className="auth-mcp-guide-simple-item">
+                        <span className="auth-mcp-guide-simple-number">{step.step}</span>
+                        <div>
+                          <Typography.Title level={4}>{step.title}</Typography.Title>
+                          <Typography.Paragraph>{step.description}</Typography.Paragraph>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => setGuideOpen(true)}>
-                    Open User Guide
-                  </Button>
+
+                  <div className="auth-mcp-guide-simple-code-wrap">
+                    <Typography.Title level={4}>Codex setup</Typography.Title>
+                    <pre className="auth-mcp-guide-code-block">{`# PowerShell
+$env:AUTH_DOMAIN_MCP_TOKEN="paste-your-token-here"
+codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`}</pre>
+                    <Typography.Paragraph className="auth-mcp-guide-note">
+                      After this, restart Codex once and check that `auth-domain` appears in the MCP list.
+                    </Typography.Paragraph>
+                  </div>
+                  <Space wrap>
+                    <Button type="primary" className="hero-btn hero-btn-primary" onClick={handleCopyToken} disabled={!token}>
+                      Copy Token Again
+                    </Button>
+                    <Button onClick={() => window.open("https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started", "_blank", "noopener,noreferrer")}>
+                      Codex CLI Help
+                    </Button>
+                  </Space>
                 </Card>
               </section>
             </>
           )}
         </div>
       </section>
-
-      <Modal
-        open={guideOpen}
-        onCancel={() => setGuideOpen(false)}
-        footer={null}
-        width="min(820px, calc(100vw - 24px))"
-        title="MCP User Guide"
-        destroyOnHidden
-      >
-        <div className="auth-mcp-guide-modal-list">
-          {userGuideSteps.map((step, index) => (
-            <div key={step.key} className="auth-mcp-guide-modal-step">
-              <div className="auth-mcp-guide-rail">
-                <span className="auth-mcp-guide-step-number">{step.step}</span>
-                {index < userGuideSteps.length - 1 ? <span className="auth-mcp-guide-step-line" /> : null}
-              </div>
-              <Card className="auth-mcp-guide-card">
-                <div className="auth-mcp-guide-content">
-                  <div className="auth-mcp-guide-content-top">
-                    <span className="auth-mcp-guide-icon">{step.icon}</span>
-                    <div>
-                      <Typography.Title level={4}>{step.title}</Typography.Title>
-                      <Typography.Paragraph>{step.description}</Typography.Paragraph>
-                    </div>
-                  </div>
-                  <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => handleGuideAction(step)}>
-                    {step.actionLabel}
-                    <ArrowRightOutlined />
-                  </Button>
-                </div>
-              </Card>
-            </div>
-          ))}
-        </div>
-      </Modal>
     </>
   );
 }

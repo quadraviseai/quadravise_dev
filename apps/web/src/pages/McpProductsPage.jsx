@@ -1,10 +1,6 @@
 import {
   AppstoreOutlined,
-  ArrowRightOutlined,
-  CheckCircleFilled,
-  CodeOutlined,
   FilterOutlined,
-  LaptopOutlined,
   LockOutlined,
   RocketOutlined,
   SearchOutlined,
@@ -25,57 +21,6 @@ const cardIcons = {
   automation: <AppstoreOutlined />,
   saas: <RocketOutlined />
 };
-
-const userGuideSteps = [
-  {
-    number: "01",
-    icon: <LaptopOutlined />,
-    title: "Open the main site",
-    description: "Start at the Quadravise homepage and open Auth Domain MCP from the Products menu.",
-    detail: "Main website: https://quadravise.com",
-    actionLabel: "Open Quadravise",
-    href: "https://quadravise.com"
-  },
-  {
-    number: "02",
-    icon: <SafetyCertificateOutlined />,
-    title: "Create your account and log in",
-    description: "Register a new account or log in with an existing account to receive your session token.",
-    detail: "Session tokens are the login token you use for account actions."
-  },
-  {
-    number: "03",
-    icon: <CheckCircleFilled />,
-    title: "Create the live MCP token",
-    description: "Use the session token to create the MCP token that Codex or VS Code will use.",
-    detail: "Session token starts with `admcp_sess_...` and the MCP token starts with `admcp_live_...`.",
-    code: `curl -X POST https://auth-backend.quadravise.com/api/tokens \\
-  -H "Content-Type: application/json" \\
-  -H "Authorization: Bearer <your-session-token>" \\
-  -d '{
-    "label": "My Codex Token",
-    "scopes": ["tools:generate"]
-  }'`
-  },
-  {
-    number: "04",
-    icon: <CodeOutlined />,
-    title: "Add the MCP in Codex",
-    description: "Set the MCP token as an environment variable and register the hosted MCP server.",
-    code: `# PowerShell
-$env:AUTH_DOMAIN_MCP_TOKEN="paste-your-admcp_live-token-here"
-codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`,
-    actionLabel: "Codex CLI Help",
-    href: "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started"
-  },
-  {
-    number: "05",
-    icon: <CodeOutlined />,
-    title: "Restart and verify",
-    description: "Restart Codex or VS Code, then run /mcp and confirm auth-domain appears in the list.",
-    detail: "If it does not appear, check token type, URL, and restart the app once more."
-  }
-];
 
 function McpProductsPage() {
   const [searchValue, setSearchValue] = useState("");
@@ -161,74 +106,6 @@ function McpProductsPage() {
               </div>
             </div>
           </Card>
-        </div>
-      </section>
-
-      <section className="section auth-mcp-guide-section">
-        <div className="section-inner auth-mcp-shell">
-          <div className="auth-mcp-guide-header">
-            <Typography.Title level={2}>Auth Domain MCP User Guide</Typography.Title>
-            <Typography.Paragraph className="auth-mcp-paragraph">
-              Follow this flow to register, create the correct token, and connect the hosted MCP to Codex.
-            </Typography.Paragraph>
-          </div>
-
-          <Card className="auth-mcp-guide-launch-card">
-            <div className="auth-mcp-guide-launch-content">
-              <span className="auth-mcp-guide-launch-icon">
-                <SafetyCertificateOutlined />
-              </span>
-              <div>
-                <Typography.Title level={4}>Start here</Typography.Title>
-                <Typography.Paragraph>
-                  The hosted Auth Domain MCP is the place to create your session token and the live MCP token for Codex.
-                </Typography.Paragraph>
-              </div>
-            </div>
-            <Button type="primary" className="hero-btn hero-btn-primary">
-              <Link to="/products/auth-domain-mcp">Open Auth Domain MCP</Link>
-            </Button>
-          </Card>
-
-          <div className="auth-mcp-guide-list">
-            {userGuideSteps.map((step) => (
-              <Card key={step.number} className="auth-mcp-guide-card">
-                <div className="auth-mcp-guide-step">
-                  <div className="auth-mcp-guide-rail">
-                    <span className="auth-mcp-guide-step-number">{step.number}</span>
-                    <span className="auth-mcp-guide-step-line" />
-                  </div>
-
-                  <div className="auth-mcp-guide-content">
-                    <div className="auth-mcp-guide-content-top">
-                      <span className="auth-mcp-guide-icon">{step.icon}</span>
-                      <div>
-                        <Typography.Title level={4}>{step.title}</Typography.Title>
-                        <Typography.Paragraph>{step.description}</Typography.Paragraph>
-                      </div>
-                    </div>
-
-                    {step.detail ? <Typography.Text className="auth-mcp-guide-note">{step.detail}</Typography.Text> : null}
-                    {step.code ? <pre className="auth-mcp-guide-code-block">{step.code}</pre> : null}
-
-                    {step.actionLabel && step.href ? (
-                      step.href.startsWith("http") ? (
-                        <a href={step.href} target="_blank" rel="noreferrer" className="auth-mcp-guide-link">
-                          {step.actionLabel}
-                          <ArrowRightOutlined />
-                        </a>
-                      ) : (
-                        <Link to={step.href} className="auth-mcp-guide-link">
-                          {step.actionLabel}
-                          <ArrowRightOutlined />
-                        </Link>
-                      )
-                    ) : null}
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
         </div>
       </section>
 
