@@ -2652,6 +2652,24 @@ p {
   font-weight: 700;
 }
 
+.auth-mcp-guide-note {
+  color: #5d7490;
+  line-height: 1.7;
+}
+
+.auth-mcp-guide-code-block {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid #dbe7f3;
+  background: #f8fbff;
+  color: #173552;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
 .auth-mcp-guide-modal-list {
   display: flex;
   flex-direction: column;
@@ -2870,6 +2888,10 @@ p {
 
   .auth-mcp-guide-content-top {
     flex-direction: column;
+  }
+
+  .auth-mcp-guide-launch-card .ant-btn {
+    width: 100%;
   }
 
   .mcp-access-modal-overview-grid {
