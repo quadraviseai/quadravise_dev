@@ -1,4 +1,15 @@
-import { AppstoreOutlined, FilterOutlined, LockOutlined, RocketOutlined, SearchOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  ArrowRightOutlined,
+  CodeOutlined,
+  DeploymentUnitOutlined,
+  FilterOutlined,
+  LaptopOutlined,
+  LockOutlined,
+  RocketOutlined,
+  SearchOutlined,
+  SafetyCertificateOutlined
+} from "@ant-design/icons";
 import { Button, Card, Col, Empty, Input, Row, Select, Space, Tag, Typography } from "antd";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -15,6 +26,30 @@ const cardIcons = {
   automation: <AppstoreOutlined />,
   saas: <RocketOutlined />
 };
+
+const userGuideSteps = [
+  {
+    icon: <LaptopOutlined />,
+    title: "Open VS Code",
+    description: "Use Visual Studio Code to review the repository, edit files, and work with the MCP catalog pages.",
+    actionLabel: "Open VS Code",
+    href: "https://code.visualstudio.com/"
+  },
+  {
+    icon: <DeploymentUnitOutlined />,
+    title: "Install Codex CLI",
+    description: "Use Codex CLI from your terminal to inspect, modify, and test code with agent assistance.",
+    actionLabel: "Open Codex CLI Guide",
+    href: "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started"
+  },
+  {
+    icon: <CodeOutlined />,
+    title: "Use the MCP catalog",
+    description: "Search MCPs, open a product card, and use Register or Login to continue the same auth flow.",
+    actionLabel: "Go to MCPs",
+    href: ROUTES.MCP_PRODUCTS
+  }
+];
 
 function McpProductsPage() {
   const [searchValue, setSearchValue] = useState("");
@@ -65,13 +100,12 @@ function McpProductsPage() {
         <div className="section-inner auth-mcp-shell">
           <div className="mcp-catalog-page-hero">
             <div>
-               <Typography.Title className="auth-mcp-account-title">Explore Available MCPs</Typography.Title>
+              <Typography.Title className="auth-mcp-account-title">Explore Available MCPs</Typography.Title>
               <Typography.Paragraph className="auth-mcp-paragraph mcp-catalog-page-copy">
                 Browse the Quadravise MCP catalog, review product summaries, and open access actions directly from a
                 focused product dialog.
               </Typography.Paragraph>
             </div>
-            
           </div>
 
           <Card className="mcp-catalog-toolbar-card">
@@ -101,6 +135,37 @@ function McpProductsPage() {
               </div>
             </div>
           </Card>
+        </div>
+      </section>
+
+      <section className="section mcp-guide-section">
+        <div className="section-inner auth-mcp-shell">
+          <SectionHeader
+            title="User Guide"
+            subtitle="Simple steps for using this page with VS Code and Codex CLI."
+          />
+          <Row gutter={[20, 20]}>
+            {userGuideSteps.map((step, index) => (
+              <Col key={step.title} xs={24} md={8}>
+                <Card className="mcp-guide-card">
+                  <span className="mcp-guide-step-number">0{index + 1}</span>
+                  <span className="mcp-guide-icon">{step.icon}</span>
+                  <Typography.Title level={4}>{step.title}</Typography.Title>
+                  <Typography.Paragraph>{step.description}</Typography.Paragraph>
+                  {step.href.startsWith("http") ? (
+                    <a href={step.href} target="_blank" rel="noreferrer" className="mcp-guide-link">
+                      {step.actionLabel}
+                      <ArrowRightOutlined />
+                    </a>
+                  ) : (
+                    <Button type="primary" className="hero-btn hero-btn-primary">
+                      <Link to={step.href}>{step.actionLabel}</Link>
+                    </Button>
+                  )}
+                </Card>
+              </Col>
+            ))}
+          </Row>
         </div>
       </section>
 
