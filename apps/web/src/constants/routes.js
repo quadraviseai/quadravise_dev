@@ -2,6 +2,7 @@ export const ROUTES = {
   HOME: "/",
   SERVICES: "/services",
   PRODUCTS: "/products",
+  MCP_PRODUCTS: "/products/mcp",
   AUTH_DOMAIN_MCP: "/products/auth-domain-mcp",
   AUTH_DOMAIN_MCP_ACCOUNT: "/products/auth-domain-mcp/account",
   QUADRA_ILEARN: "/products/quadra-ilearn",

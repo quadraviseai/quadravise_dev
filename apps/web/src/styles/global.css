@@ -2145,6 +2145,153 @@ p {
   margin-top: 4px;
 }
 
+.mcp-access-modal-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mcp-access-modal-shell .ant-form-item {
+  margin-bottom: 18px;
+}
+
+.mcp-access-modal-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.mcp-access-modal-top-content {
+  flex: 1;
+}
+
+.mcp-access-modal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #154a84;
+  font-size: 34px;
+  flex-shrink: 0;
+}
+
+.mcp-access-modal-description {
+  margin: 14px 0 0 !important;
+  max-width: 720px;
+}
+
+.mcp-access-modal-status-tag {
+  border-color: rgba(21, 74, 132, 0.14);
+  color: #154a84;
+  background: rgba(21, 74, 132, 0.06);
+}
+
+.mcp-access-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mcp-access-modal-chip {
+  margin: 0;
+  border-radius: 999px;
+  padding: 5px 12px;
+  color: #1f3347;
+  background: #f4f8fc;
+  border-color: #dbe7f3;
+}
+
+.mcp-access-modal-audience {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mcp-access-modal-audience-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mcp-access-modal-audience-list span {
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: #f8fbff;
+  border: 1px solid #e0eaf4;
+  color: #35506d;
+}
+
+.mcp-access-modal-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mcp-access-modal-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.mcp-access-modal-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mcp-access-modal-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #35506d;
+  line-height: 1.7;
+}
+
+.mcp-access-modal-info-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 9px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: #154a84;
+}
+
+.mcp-access-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.mcp-access-modal-button {
+  min-width: 106px;
+  height: 44px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  font-weight: 600;
+}
+
+.mcp-access-modal-button .ant-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.mcp-access-inline-token {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid #d7e3f1;
+  background: #f8fbff;
+}
+
 .auth-mcp-modal-response-card {
   border-radius: 20px;
   border: 1px solid rgba(21, 74, 132, 0.1);
@@ -2198,6 +2345,147 @@ p {
 .auth-mcp-account-title {
   margin-bottom: 10px !important;
   color: #154a84 !important;
+}
+
+.mcp-catalog-page-section {
+  background:
+    radial-gradient(circle at top right, rgba(236, 91, 22, 0.1), transparent 22%),
+    radial-gradient(circle at left center, rgba(21, 74, 132, 0.11), transparent 26%),
+    linear-gradient(180deg, #f9fbff 0%, #ffffff 100%);
+  padding-top: 48px;
+  padding-bottom: 28px;
+}
+
+.mcp-catalog-page-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.mcp-catalog-page-copy {
+  max-width: 760px;
+  margin-bottom: 0 !important;
+}
+
+.mcp-catalog-toolbar-card {
+  border-radius: 24px;
+  border: 1px solid rgba(21, 74, 132, 0.1);
+  box-shadow: 0 16px 34px rgba(17, 55, 100, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 252, 0.98));
+}
+
+.mcp-catalog-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) 180px 220px auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.mcp-catalog-toolbar-summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #edf5ff 0%, #fff4ec 100%);
+  color: #154a84;
+  font-weight: 600;
+}
+
+.mcp-catalog-card {
+  height: 100%;
+  border-radius: 24px;
+  border: 1px solid rgba(21, 74, 132, 0.1);
+  box-shadow: 0 16px 34px rgba(17, 55, 100, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 252, 0.98));
+}
+
+.mcp-catalog-card .ant-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mcp-catalog-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mcp-catalog-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #154a84;
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.mcp-catalog-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mcp-catalog-status-tag {
+  margin: 0;
+}
+
+.mcp-catalog-status-tag-live {
+  border-color: rgba(19, 134, 102, 0.14);
+  color: #0d7d63;
+  background: rgba(21, 164, 126, 0.08);
+}
+
+.mcp-catalog-status-tag-roadmap {
+  border-color: rgba(215, 118, 21, 0.14);
+  color: #c36a11;
+  background: rgba(243, 165, 49, 0.08);
+}
+
+.mcp-catalog-card h4 {
+  margin: 0 !important;
+  color: #163f6d !important;
+}
+
+.mcp-catalog-card p {
+  margin: 0 !important;
+  color: #4e6a84;
+  line-height: 1.7;
+}
+
+.mcp-catalog-card-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mcp-catalog-card-chip-row span {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #f4f8fc;
+  border: 1px solid #dbe7f3;
+  color: #35506d;
+  font-size: 13px;
+}
+
+.mcp-catalog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.mcp-catalog-card-link {
+  color: #154a84;
+  font-weight: 600;
 }
 
 .auth-mcp-account-grid {
@@ -2369,6 +2657,52 @@ p {
 
   .auth-mcp-modal-response-header {
     flex-direction: column;
+  }
+
+  .mcp-access-modal-top,
+  .mcp-catalog-page-hero,
+  .mcp-access-inline-token,
+  .mcp-catalog-card-footer,
+  .mcp-access-modal-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mcp-catalog-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .mcp-access-modal-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mcp-catalog-card-tags {
+    justify-content: flex-start;
+  }
+
+  .mcp-access-modal-shell {
+    gap: 16px;
+  }
+
+  .mcp-access-modal-top {
+    gap: 10px;
+  }
+
+  .mcp-access-modal-icon {
+    font-size: 28px;
+  }
+
+  .mcp-access-modal-description {
+    margin-top: 10px !important;
+  }
+
+  .mcp-access-modal-button {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mcp-access-inline-token {
+    padding: 12px 14px;
   }
 
   .auth-mcp-token-header {

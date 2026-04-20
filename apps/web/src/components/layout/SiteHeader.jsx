@@ -9,15 +9,28 @@ import { adminService } from "../../services/adminService";
 const navItems = [
   { key: ROUTES.HOME, label: "Home" },
   { key: ROUTES.SERVICES, label: "Services" },
-  { key: ROUTES.PRODUCTS, label: "Products" },
+  {
+    key: ROUTES.PRODUCTS,
+    label: "Products",
+    activePaths: [ROUTES.PRODUCTS, ROUTES.MCP_PRODUCTS, ROUTES.AUTH_DOMAIN_MCP],
+    children: [[{ label: "MCP", to: ROUTES.MCP_PRODUCTS }]]
+  },
   { key: ROUTES.QUADRA_ILEARN, label: "QuadraiLearn" },
   {
     key: ROUTES.OUR_WORK,
     label: "Our Work",
     activePaths: [ROUTES.OUR_WORK, ROUTES.PORTFOLIO],
     children: [
-      ["Ecommerce", "Static Website", "Gated Website", "Portfolio Website"],
-      ["Business Website", "WordPress Website"]
+      [
+        { label: "Ecommerce", to: `${ROUTES.OUR_WORK}/ecommerce` },
+        { label: "Static Website", to: `${ROUTES.OUR_WORK}/static-website` },
+        { label: "Gated Website", to: `${ROUTES.OUR_WORK}/gated-website` },
+        { label: "Portfolio Website", to: `${ROUTES.OUR_WORK}/portfolio-website` }
+      ],
+      [
+        { label: "Business Website", to: `${ROUTES.OUR_WORK}/business-website` },
+        { label: "WordPress Website", to: `${ROUTES.OUR_WORK}/wordpress-website` }
+      ]
     ]
   },
   { key: ROUTES.BLOG, label: "Blog" },
@@ -28,15 +41,28 @@ const navItems = [
 const mobileNavItems = [
   { key: ROUTES.HOME, label: "Home" },
   { key: ROUTES.SERVICES, label: "Services" },
-  { key: ROUTES.PRODUCTS, label: "Products" },
+  {
+    key: ROUTES.PRODUCTS,
+    label: "Products",
+    activePaths: [ROUTES.PRODUCTS, ROUTES.MCP_PRODUCTS, ROUTES.AUTH_DOMAIN_MCP],
+    children: [[{ label: "MCP", to: ROUTES.MCP_PRODUCTS }]]
+  },
   { key: ROUTES.QUADRA_ILEARN, label: "QuadraiLearn" },
   {
     key: ROUTES.OUR_WORK,
     label: "Our Work",
     activePaths: [ROUTES.OUR_WORK, ROUTES.PORTFOLIO],
     children: [
-      ["Ecommerce", "Static Website", "Gated Website", "Portfolio Website"],
-      ["Business Website", "WordPress Website"]
+      [
+        { label: "Ecommerce", to: `${ROUTES.OUR_WORK}/ecommerce` },
+        { label: "Static Website", to: `${ROUTES.OUR_WORK}/static-website` },
+        { label: "Gated Website", to: `${ROUTES.OUR_WORK}/gated-website` },
+        { label: "Portfolio Website", to: `${ROUTES.OUR_WORK}/portfolio-website` }
+      ],
+      [
+        { label: "Business Website", to: `${ROUTES.OUR_WORK}/business-website` },
+        { label: "WordPress Website", to: `${ROUTES.OUR_WORK}/wordpress-website` }
+      ]
     ]
   },
   { key: ROUTES.BLOG, label: "Blog" },
@@ -70,10 +96,6 @@ function SiteHeader({ isAdmin = false }) {
   function isNavItemActive(item) {
     const activePaths = item.activePaths || [item.key];
     return activePaths.some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`));
-  }
-
-  function getSubmenuHref(label) {
-    return `${ROUTES.OUR_WORK}/${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`;
   }
 
   return (
@@ -114,13 +136,13 @@ function SiteHeader({ isAdmin = false }) {
                       <div className="site-nav-submenu-grid">
                         {item.children.map((group, groupIndex) => (
                           <div key={`${item.key}-group-${groupIndex}`} className="site-nav-submenu-column">
-                            {group.map((childLabel) => (
+                            {group.map((child) => (
                               <Link
-                                key={childLabel}
-                                to={getSubmenuHref(childLabel)}
+                                key={child.label}
+                                to={child.to}
                                 className="site-nav-submenu-link"
                               >
-                                {childLabel}
+                                {child.label}
                               </Link>
                             ))}
                           </div>
@@ -191,14 +213,14 @@ function SiteHeader({ isAdmin = false }) {
                     <span>{item.label}</span>
                   </Link>
                   <div className="site-mobile-sublinks">
-                    {item.children.flat().map((childLabel) => (
+                    {item.children.flat().map((child) => (
                       <Link
-                        key={childLabel}
-                        to={getSubmenuHref(childLabel)}
+                        key={child.label}
+                        to={child.to}
                         className="site-mobile-sublink"
                         onClick={() => setOpen(false)}
                       >
-                        {childLabel}
+                        {child.label}
                       </Link>
                     ))}
                   </div>

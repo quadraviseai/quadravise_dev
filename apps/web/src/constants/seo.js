@@ -54,6 +54,12 @@ export const pageSeo = {
       "Explore Quadravise products, AI-powered platforms, and scalable software solutions built for startups and growing businesses.",
     canonical: `${siteUrl}/products`
   },
+  mcpProducts: {
+    title: "MCP Products | Quadravise",
+    description:
+      "Browse the Quadravise MCP catalog with searchable MCP product cards, access actions, and product-level details.",
+    canonical: `${siteUrl}/products/mcp`
+  },
   authDomainMcp: {
     title: "Auth Domain MCP | Quadravise",
     description:
@@ -145,6 +151,12 @@ export const seoKeywords = {
     "SaaS products",
     "startup software solutions",
     "SaaS product development company"
+  ]),
+  mcpProducts: joinKeywords(coreKeywords, [
+    "MCP products",
+    "MCP server catalog",
+    "authentication MCP",
+    "operations MCP"
   ]),
   authDomainMcp: joinKeywords(coreKeywords, [
     "Auth Domain MCP",

@@ -7,7 +7,7 @@ const ClientLayout = lazy(() => import("../layouts/ClientLayout"));
 const HomePage = lazy(() => import("../pages/HomePage"));
 const ServicesPage = lazy(() => import("../pages/ServicesPage"));
 const ServiceDetailPage = lazy(() => import("../pages/ServiceDetailPage"));
-const ProductsPage = lazy(() => import("../pages/ProductsPage"));
+const McpProductsPage = lazy(() => import("../pages/McpProductsPage"));
 const AuthDomainMcpPage = lazy(() => import("../pages/AuthDomainMcpPage"));
 const AuthDomainMcpAccountPage = lazy(() => import("../pages/AuthDomainMcpAccountPage"));
 const QuadraILearnPage = lazy(() => import("../pages/QuadraILearnPage"));
@@ -52,7 +52,8 @@ function AppRoutes() {
           <Route path={ROUTES.HOME} element={<HomePage />} />
           <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
           <Route path="/services/:slug" element={<ServiceDetailPage />} />
-          <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
+          <Route path={ROUTES.PRODUCTS} element={<Navigate to={ROUTES.MCP_PRODUCTS} replace />} />
+          <Route path={ROUTES.MCP_PRODUCTS} element={<McpProductsPage />} />
           <Route path={ROUTES.AUTH_DOMAIN_MCP} element={<AuthDomainMcpPage />} />
           <Route path={ROUTES.AUTH_DOMAIN_MCP_ACCOUNT} element={<AuthDomainMcpAccountPage />} />
           <Route path={ROUTES.QUADRA_ILEARN} element={<QuadraILearnPage />} />

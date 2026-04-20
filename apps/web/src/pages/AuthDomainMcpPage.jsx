@@ -3,20 +3,17 @@ import {
   CheckCircleFilled,
   CodeOutlined,
   FileProtectOutlined,
-  SafetyCertificateOutlined,
-  CopyOutlined
+  SafetyCertificateOutlined
 } from "@ant-design/icons";
-import { Alert, Button, Card, Col, Form, Input, Modal, Row, Space, Statistic, Tag, Typography, message } from "antd";
+import { Button, Card, Col, Row, Space, Statistic, Tag, Typography } from "antd";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+import McpAccessModal from "../components/products/McpAccessModal";
 import SEOHead from "../components/seo/SEOHead";
 import { ROUTES } from "../constants/routes";
 import { pageSeo, seoKeywords } from "../constants/seo";
-
-const AUTH_BACKEND_URL = "https://auth-backend.quadravise.com";
-const AUTH_MCP_TOKEN_KEY = "auth_domain_mcp_token";
-const AUTH_MCP_SESSION_KEY = "auth_domain_mcp_session";
+import { mcpCatalog } from "../data/mcpCatalog";
 
 const heroMetrics = [
   { label: "Core auth workflow areas", value: "10+" },
@@ -136,134 +133,18 @@ function Checklist({ items }) {
 }
 
 function AuthDomainMcpPage() {
-  const navigate = useNavigate();
-  const [api, contextHolder] = message.useMessage();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState("register");
-  const [submittingAuth, setSubmittingAuth] = useState(false);
-  const [authResponse, setAuthResponse] = useState(null);
-  const [authError, setAuthError] = useState("");
-  const [authForm] = Form.useForm();
+
+  const authDomainMcp = mcpCatalog.find((item) => item.key === "auth-domain-mcp");
 
   function openAuthModal(mode) {
     setAuthModalMode(mode);
     setAuthModalOpen(true);
-    setAuthError("");
-    setAuthResponse(null);
-  }
-
-  function closeAuthModal() {
-    setAuthModalOpen(false);
-    setSubmittingAuth(false);
-    setAuthError("");
-    setAuthResponse(null);
-    authForm.resetFields();
-  }
-
-  async function copyResponse() {
-    if (!authResponse?.apiToken) return;
-
-    try {
-      await navigator.clipboard.writeText(authResponse.apiToken);
-      api.success("API token copied.");
-    } catch {
-      api.error("Unable to copy API token.");
-    }
-  }
-
-  async function handleRegister(values) {
-    setSubmittingAuth(true);
-    setAuthError("");
-    setAuthResponse(null);
-
-    try {
-      const registerResponse = await fetch(`${AUTH_BACKEND_URL}/api/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password
-        })
-      });
-
-      const registerData = await registerResponse.json().catch(() => ({}));
-
-      if (!registerResponse.ok) {
-        throw new Error(registerData?.message || "Registration failed.");
-      }
-
-      setAuthResponse({
-        registeredUser: values.email,
-        apiToken: registerData?.token || "",
-        session: registerData?.session || null
-      });
-      api.success("Registration completed. You can log in now.");
-      authForm.setFieldsValue({
-        email: values.email,
-        password: values.password
-      });
-      setAuthModalMode("login");
-    } catch (error) {
-      setAuthError(error.message || "Unable to complete registration.");
-    } finally {
-      setSubmittingAuth(false);
-    }
-  }
-
-  async function handleLogin(values) {
-    setSubmittingAuth(true);
-    setAuthError("");
-    setAuthResponse(null);
-
-    try {
-      const loginResponse = await fetch(`${AUTH_BACKEND_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password
-        })
-      });
-
-      const loginData = await loginResponse.json().catch(() => ({}));
-
-      if (!loginResponse.ok) {
-        throw new Error(loginData?.message || "Login failed.");
-      }
-
-      const apiToken = loginData?.token || "";
-      const session = loginData?.session || null;
-
-      if (!apiToken) {
-        throw new Error("Token not returned by login API.");
-      }
-
-      localStorage.setItem(AUTH_MCP_TOKEN_KEY, apiToken);
-      localStorage.setItem(AUTH_MCP_SESSION_KEY, JSON.stringify(session || {}));
-
-      setAuthResponse({
-        registeredUser: values.email,
-        apiToken,
-        session
-      });
-      api.success("Login completed.");
-      setAuthModalOpen(false);
-      navigate(ROUTES.AUTH_DOMAIN_MCP_ACCOUNT);
-    } catch (error) {
-      setAuthError(error.message || "Unable to login.");
-    } finally {
-      setSubmittingAuth(false);
-    }
   }
 
   return (
     <>
-      {contextHolder}
       <SEOHead
         title={pageSeo.authDomainMcp.title}
         description={pageSeo.authDomainMcp.description}
@@ -440,129 +321,12 @@ function AuthDomainMcpPage() {
         </div>
       </section>
 
-      <Modal
-        title={authModalMode === "register" ? "Register for Auth Domain MCP Access" : "Login to Auth Domain MCP"}
+      <McpAccessModal
         open={authModalOpen}
-        onCancel={closeAuthModal}
-        footer={null}
-        width={760}
-        destroyOnHidden
-      >
-        <div className="auth-mcp-modal-shell">
-          <div className="auth-mcp-modal-mode-toggle">
-            <Button
-              type={authModalMode === "register" ? "primary" : "default"}
-              className={authModalMode === "register" ? "hero-btn hero-btn-primary" : ""}
-              onClick={() => {
-                setAuthModalMode("register");
-                setAuthError("");
-                setAuthResponse(null);
-                authForm.resetFields();
-              }}
-            >
-              Register
-            </Button>
-            <Button
-              type={authModalMode === "login" ? "primary" : "default"}
-              className={authModalMode === "login" ? "hero-btn hero-btn-primary" : ""}
-              onClick={() => {
-                setAuthModalMode("login");
-                setAuthError("");
-                setAuthResponse(null);
-                authForm.resetFields();
-              }}
-            >
-              Login
-            </Button>
-          </div>
-
-          <Typography.Paragraph className="auth-mcp-paragraph">
-            {authModalMode === "register"
-              ? "Create your account with the production auth backend. After registration, switch directly into login with the same modal."
-              : "Log in with your existing account. After successful login you will be redirected to your account page with your details."}
-          </Typography.Paragraph>
-
-          <Form layout="vertical" form={authForm} onFinish={authModalMode === "register" ? handleRegister : handleLogin}>
-            <Row gutter={16}>
-              {authModalMode === "register" ? (
-                <Col xs={24}>
-                  <Form.Item
-                    name="name"
-                    label="Name"
-                    rules={[{ required: true, message: "Enter your name." }]}
-                  >
-                    <Input placeholder="Test User" autoComplete="name" />
-                  </Form.Item>
-                </Col>
-              ) : null}
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="email"
-                  label="Email"
-                  rules={[
-                    { required: true, message: "Enter your email." },
-                    { type: "email", message: "Enter a valid email." }
-                  ]}
-                >
-                  <Input placeholder="you@example.com" autoComplete="email" />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="password"
-                  label="Password"
-                  rules={[
-                    { required: true, message: "Enter your password." },
-                    { min: 8, message: "Use at least 8 characters." }
-                  ]}
-                >
-                  <Input.Password placeholder="Create a strong password" autoComplete="new-password" />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Space size={12} wrap>
-              <Button type="primary" htmlType="submit" loading={submittingAuth} className="hero-btn hero-btn-primary">
-                {authModalMode === "register" ? "Register" : "Login"}
-              </Button>
-              <Button onClick={closeAuthModal}>Cancel</Button>
-            </Space>
-          </Form>
-
-          {authError ? <Alert className="auth-mcp-modal-alert" type="error" message={authError} showIcon /> : null}
-
-          {authResponse ? (
-            <Card className="auth-mcp-modal-response-card">
-              <div className="auth-mcp-modal-response-header">
-                <div>
-                  <Typography.Title level={4}>{authModalMode === "register" ? "Registration Response" : "Your API Token"}</Typography.Title>
-                  <Typography.Paragraph className="auth-mcp-paragraph">
-                    {authModalMode === "register"
-                      ? <>Registration completed for <strong>{authResponse.registeredUser}</strong>.</>
-                      : <>Login completed for <strong>{authResponse.registeredUser}</strong>.</>}
-                  </Typography.Paragraph>
-                </div>
-                <Button icon={<CopyOutlined />} onClick={copyResponse}>
-                  {authResponse.apiToken ? "Copy Token" : "Copy Response"}
-                </Button>
-              </div>
-              <pre className="auth-mcp-code-block auth-mcp-modal-code-block">
-                {authResponse.apiToken || JSON.stringify(authResponse.session || authResponse, null, 2)}
-              </pre>
-              {authResponse.session ? (
-                <div className="auth-mcp-token-meta">
-                  <span>
-                    <strong>Role:</strong> {authResponse.session.role || "customer"}
-                  </span>
-                  <span>
-                    <strong>Expires:</strong> {authResponse.session.expiresAt || "N/A"}
-                  </span>
-                </div>
-              ) : null}
-            </Card>
-          ) : null}
-        </div>
-      </Modal>
+        onClose={() => setAuthModalOpen(false)}
+        mcp={authDomainMcp}
+        initialMode={authModalMode}
+      />
     </>
   );
 }
