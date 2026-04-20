@@ -1,4 +1,13 @@
-import { CopyOutlined, MailOutlined, SafetyCertificateOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  ArrowRightOutlined,
+  CodeOutlined,
+  CopyOutlined,
+  DeploymentUnitOutlined,
+  LaptopOutlined,
+  MailOutlined,
+  SafetyCertificateOutlined,
+  UserOutlined
+} from "@ant-design/icons";
 import { Button, Card, Col, Row, Space, Typography, message, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,6 +19,36 @@ import { pageSeo, seoKeywords } from "../constants/seo";
 const AUTH_BACKEND_URL = "https://auth-backend.quadravise.com";
 const AUTH_MCP_TOKEN_KEY = "auth_domain_mcp_token";
 const AUTH_MCP_SESSION_KEY = "auth_domain_mcp_session";
+
+const userGuideSteps = [
+  {
+    key: "editor",
+    step: "01",
+    title: "Open VS Code",
+    description: "Open your working project in Visual Studio Code so you can inspect files, review changes, and work from the same repository structure as the MCP outputs.",
+    icon: <LaptopOutlined />,
+    actionLabel: "Open VS Code",
+    href: "https://code.visualstudio.com/"
+  },
+  {
+    key: "cli",
+    step: "02",
+    title: "Install Codex CLI",
+    description: "Set up Codex CLI in your terminal so you can run guided edits, inspect the codebase, and use agent-driven workflows from the same project folder.",
+    icon: <DeploymentUnitOutlined />,
+    actionLabel: "View Codex CLI Guide",
+    href: "https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started"
+  },
+  {
+    key: "catalog",
+    step: "03",
+    title: "Return to the MCP Catalog",
+    description: "Go back to the catalog, open the product you want, and use the same registered account to continue your workflow without repeating registration.",
+    icon: <CodeOutlined />,
+    actionLabel: "Open MCP Catalog",
+    href: ROUTES.MCP_PRODUCTS
+  }
+];
 
 function formatDateTime(value) {
   if (!value) return "-";
@@ -231,6 +270,48 @@ function AuthDomainMcpAccountPage() {
                   </Card>
                 </Col>
               </Row>
+
+              <section className="auth-mcp-guide-section">
+                <div className="auth-mcp-guide-header">
+                  <Typography.Title level={2}>User Guide</Typography.Title>
+                  <Typography.Paragraph className="auth-mcp-paragraph">
+                    Follow these steps after login to start working with the MCP flow in a clean, predictable order.
+                  </Typography.Paragraph>
+                </div>
+
+                <div className="auth-mcp-guide-list">
+                  {userGuideSteps.map((step, index) => (
+                    <Card key={step.key} className="auth-mcp-guide-card">
+                      <div className="auth-mcp-guide-step">
+                        <div className="auth-mcp-guide-rail">
+                          <span className="auth-mcp-guide-step-number">{step.step}</span>
+                          {index < userGuideSteps.length - 1 ? <span className="auth-mcp-guide-step-line" /> : null}
+                        </div>
+                        <div className="auth-mcp-guide-content">
+                          <div className="auth-mcp-guide-content-top">
+                            <span className="auth-mcp-guide-icon">{step.icon}</span>
+                            <div>
+                              <Typography.Title level={4}>{step.title}</Typography.Title>
+                              <Typography.Paragraph>{step.description}</Typography.Paragraph>
+                            </div>
+                          </div>
+
+                          {String(step.href).startsWith("http") ? (
+                            <a href={step.href} target="_blank" rel="noreferrer" className="auth-mcp-guide-link">
+                              {step.actionLabel}
+                              <ArrowRightOutlined />
+                            </a>
+                          ) : (
+                            <Button type="primary" className="hero-btn hero-btn-primary">
+                              <Link to={step.href}>{step.actionLabel}</Link>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </section>
             </>
           )}
         </div>

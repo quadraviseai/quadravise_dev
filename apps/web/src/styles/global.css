@@ -2488,66 +2488,121 @@ p {
   font-weight: 600;
 }
 
-.mcp-guide-section {
-  padding-top: 0;
+.auth-mcp-account-grid {
+  margin-top: 4px;
 }
 
-.mcp-guide-card {
-  height: 100%;
-  border-radius: 22px;
-  border: 1px solid rgba(21, 74, 132, 0.1);
-  box-shadow: 0 16px 34px rgba(17, 55, 100, 0.08);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 252, 0.98));
+.auth-mcp-guide-section {
+  margin-top: 28px;
 }
 
-.mcp-guide-card .ant-card-body {
+.auth-mcp-guide-header {
+  max-width: 720px;
+  margin-bottom: 18px;
+}
+
+.auth-mcp-guide-header h2 {
+  margin-bottom: 10px !important;
+}
+
+.auth-mcp-guide-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  min-height: 100%;
+  gap: 16px;
 }
 
-.mcp-guide-step-number {
-  display: inline-flex;
-  align-self: flex-start;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(21, 74, 132, 0.06);
-  color: #154a84;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+.auth-mcp-guide-card {
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(21, 74, 132, 0.1);
+  box-shadow: 0 18px 42px rgba(17, 55, 100, 0.08);
+  background:
+    radial-gradient(circle at top right, rgba(91, 145, 226, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.98));
 }
 
-.mcp-guide-icon {
+.auth-mcp-guide-card .ant-card-body {
+  padding: 24px 26px;
+}
+
+.auth-mcp-guide-step {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.auth-mcp-guide-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-mcp-guide-step-number {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #154a84;
-  font-size: 28px;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #154a84 0%, #3f82d6 100%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 16px 30px rgba(21, 74, 132, 0.18);
 }
 
-.mcp-guide-card h4 {
-  margin: 0 !important;
+.auth-mcp-guide-step-line {
+  flex: 1;
+  width: 2px;
+  min-height: 52px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(21, 74, 132, 0.28), rgba(21, 74, 132, 0.04));
+}
+
+.auth-mcp-guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-mcp-guide-content-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.auth-mcp-guide-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: rgba(21, 74, 132, 0.07);
+  color: #154a84;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.auth-mcp-guide-content h4 {
+  margin: 0 0 8px !important;
   color: #163f6d !important;
 }
 
-.mcp-guide-card p {
+.auth-mcp-guide-content p {
   margin: 0 !important;
   color: #4e6a84;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
-.mcp-guide-link {
+.auth-mcp-guide-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: #154a84;
-  font-weight: 600;
-}
-
-.auth-mcp-account-grid {
-  margin-top: 4px;
+  font-weight: 700;
 }
 
 .auth-mcp-summary-card {
@@ -2730,8 +2785,23 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .mcp-guide-card {
-    min-height: 0;
+  .auth-mcp-guide-step {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .auth-mcp-guide-rail {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .auth-mcp-guide-step-line {
+    width: 100%;
+    min-height: 2px;
+  }
+
+  .auth-mcp-guide-content-top {
+    flex-direction: column;
   }
 
   .mcp-access-modal-overview-grid {
