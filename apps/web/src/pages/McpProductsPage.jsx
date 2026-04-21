@@ -11,7 +11,6 @@ import {
 } from "@ant-design/icons";
 import { Button, Card, Col, Empty, Input, Row, Select, Space, Tag, Typography } from "antd";
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 
 import SectionHeader from "../components/common/SectionHeader";
 import McpAccessModal from "../components/products/McpAccessModal";
@@ -24,51 +23,6 @@ const cardIcons = {
   automation: <AppstoreOutlined />,
   saas: <RocketOutlined />
 };
-
-const userGuideSteps = [
-  {
-    number: "01",
-    title: "Open Quadravise",
-    description:
-      "Start at quadravise.com and sign in with your account so you can reach the QUADRAUTH MCP flow."
-  },
-  {
-    number: "02",
-    title: "Create or log in",
-    description:
-      "Register first if you are new. Existing users should log in with the same email and password they already use."
-  },
-  {
-    number: "03",
-    title: "Create your MCP token",
-    description:
-      "After login, create the live token from your account page. Session tokens are for the account API; live tokens are for Codex."
-  },
-  {
-    number: "04",
-    title: "Add the MCP in Codex",
-    description:
-      "Use the token in Codex CLI or VS Code. On Windows, pick the shell that matches your terminal.",
-    codeVariants: [
-      {
-        label: "PowerShell",
-        code: `$env:AUTH_DOMAIN_MCP_TOKEN="paste-your-admcp_live-token-here"
-codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`
-      },
-      {
-        label: "Command Prompt",
-        code: `set AUTH_DOMAIN_MCP_TOKEN=paste-your-admcp_live-token-here
-codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`
-      }
-    ]
-  },
-  {
-    number: "05",
-    title: "Restart and verify",
-    description:
-      "Restart Codex or VS Code, then run /mcp and confirm that auth-domain appears in the active server list."
-  }
-];
 
 function McpProductsPage() {
   const [searchValue, setSearchValue] = useState("");
@@ -203,22 +157,20 @@ function McpProductsPage() {
                         ))}
                       </div>
                       <div className="mcp-catalog-card-footer">
-                        <Button type="text" className="mcp-catalog-card-action" onClick={(event) => {
-                          event.stopPropagation();
-                          openMcpModal(item);
-                        }}>
-                          <span>Get Api Key</span>
-                          <ArrowRightOutlined />
-                        </Button>
-                        {item.route ? (
-                          <Link
-                            to={item.route}
-                            className="mcp-catalog-card-link"
+                        {item.actionLinks?.map((action) => (
+                          <Button
+                            key={action.label}
+                            type="text"
+                            className="mcp-catalog-card-action"
+                            href={action.href}
+                            target="_blank"
+                            rel="noreferrer"
                             onClick={(event) => event.stopPropagation()}
                           >
-                            Product Page
-                          </Link>
-                        ) : null}
+                            <span>{action.label}</span>
+                            <ArrowRightOutlined />
+                          </Button>
+                        ))}
                       </div>
                     </div>
                   </Card>

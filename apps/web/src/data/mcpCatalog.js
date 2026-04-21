@@ -1,4 +1,3 @@
-import { ROUTES } from "../constants/routes";
 import quadraMcpThumbnail from "../assets/img/quadramcp.png";
 
 export const mcpCatalog = [
@@ -9,7 +8,6 @@ export const mcpCatalog = [
     category: "Security",
     iconKey: "security",
     thumbnail: quadraMcpThumbnail,
-    route: ROUTES.AUTH_DOMAIN_MCP,
     shortDescription: "Authentication-focused MCP server for generation, audits, updates, and safer auth delivery workflows.",
     description:
       "QUADRAUTH MCP helps teams generate, audit, update, refactor, and safely write authentication system code across login, signup, passkeys, session management, RBAC, and audit workflows.",
@@ -24,6 +22,20 @@ export const mcpCatalog = [
       "Turns technical auth work into a repeatable product workflow instead of one-off implementation effort."
     ],
     tags: ["Authentication", "MCP Server", "Code Generation", "Audit"],
-    audience: ["SaaS founders", "Agencies", "Platform teams"]
+    audience: ["SaaS founders", "Agencies", "Platform teams"],
+    actionLinks: [
+      {
+        label: "User Guide",
+        href: "https://mcptools.quadravise.com/docs/quadrauth/user-guide"
+      },
+      {
+        label: "DOCS",
+        href: "https://mcptools.quadravise.com/docs/quadrauth#overview"
+      },
+      {
+        label: "Get MCP",
+        href: "https://mcptools.quadravise.com/auth"
+      }
+    ]
   }
 ];
