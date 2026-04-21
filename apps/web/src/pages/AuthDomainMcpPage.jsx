@@ -3,40 +3,30 @@ import {
   CheckCircleFilled,
   CodeOutlined,
   FileProtectOutlined,
-  SafetyCertificateOutlined
+  SafetyCertificateOutlined,
+  ToolOutlined
 } from "@ant-design/icons";
-import { Button, Card, Col, Row, Space, Statistic, Tag, Typography } from "antd";
+import { Button, Card, Col, Row, Space, Tag, Typography } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 import McpAccessModal from "../components/products/McpAccessModal";
 import SEOHead from "../components/seo/SEOHead";
-import { ROUTES } from "../constants/routes";
 import { pageSeo, seoKeywords } from "../constants/seo";
 import { mcpCatalog } from "../data/mcpCatalog";
 
-const heroMetrics = [
-  { label: "Core auth workflow areas", value: "10+" },
-  { label: "Production API groups", value: "2" },
-  { label: "Maintenance and reporting layers", value: "5+" }
+const sectionLinks = [
+  { id: "overview", label: "Overview" },
+  { id: "coverage", label: "Coverage" },
+  { id: "modules", label: "Modules" },
+  { id: "maintenance", label: "Maintenance" },
+  { id: "tooling", label: "Tooling" },
+  { id: "access", label: "Access" }
 ];
 
-const positioningCards = [
-  {
-    icon: <CodeOutlined />,
-    title: "Generate Faster",
-    description: "Generate backend auth modules, frontend auth screens, schemas, migrations, RBAC assets, and tests."
-  },
-  {
-    icon: <AuditOutlined />,
-    title: "Audit Existing Systems",
-    description: "Compare against live projects, detect drift, identify missing pieces, and prepare update or refactor plans."
-  },
-  {
-    icon: <FileProtectOutlined />,
-    title: "Write Safely",
-    description: "Use preview-before-write, safe apply modes, path protections, and management-ready reporting."
-  }
+const coreHighlights = [
+  "Generate backend auth modules, frontend auth flows, schema, migrations, RBAC assets, and tests.",
+  "Audit existing authentication systems, compare against live codebases, and detect drift.",
+  "Preview file changes before writing and apply updates with safer path controls."
 ];
 
 const whatItDoes = [
@@ -52,81 +42,72 @@ const whatItDoes = [
   "database schema and SQL migrations"
 ];
 
-const whoItsFor = [
-  "founders building SaaS products",
-  "agencies delivering client portals",
-  "CTOs and engineering managers",
-  "backend developers",
-  "frontend developers",
-  "DevOps and platform teams",
-  "security-conscious product teams",
-  "management teams that need business-friendly audit reports"
-];
-
 const moduleGroups = [
   {
-    title: "Generation Stack",
+    title: "Generation",
+    icon: <CodeOutlined />,
     items: [
       "Backend Generator",
       "Frontend Generator",
       "PostgreSQL Schema Generator",
       "SQL Migration Generator",
       "RBAC Generator",
-      "Session and Token Generator",
-      "Security and Risk Generator",
-      "Audit Generator",
-      "Test Generator"
+      "Session and Token Generator"
     ]
   },
   {
-    title: "Maintenance Workflow",
+    title: "Security",
+    icon: <SafetyCertificateOutlined />,
+    items: ["Security and Risk Generator", "Audit Generator", "Test Generator"]
+  },
+  {
+    title: "Maintenance",
+    icon: <AuditOutlined />,
     items: ["Diff Against Existing Project", "Audit Existing Project", "Update Planning", "Refactor Planning"]
   },
   {
-    title: "Safe Apply and Reporting",
-    items: ["Preview Before Write", "Safe Apply to Disk", "Path Safety Protection", "Execution Reports", "Audit Reports for Management"]
+    title: "Safe Apply",
+    icon: <FileProtectOutlined />,
+    items: ["Preview Before Write", "Safe Apply to Disk", "Path Safety Protection", "Execution Reports"]
   }
 ];
 
-const developerTooling = [
+const toolingItems = [
   "inspect registered tools",
   "validate input schemas",
   "run tool calls interactively",
   "verify stdio connectivity before integration",
   "npm run inspect launches MCP Inspector UI",
-  "npm run inspect:cli runs the Inspector in CLI mode",
-  "Inspector package requires Node 22.7.5 or newer",
-  "the MCP server can still run independently with npm start"
+  "npm run inspect:cli runs the Inspector in CLI mode"
 ];
 
-const businessValue = [
-  "launch a new auth system faster",
-  "add Passkeys to an existing password stack",
-  "standardize auth setup across projects",
-  "reduce engineering time spent on boilerplate",
-  "audit client systems regularly",
-  "update older auth implementations",
-  "deliver recurring modernization reviews",
-  "produce management-ready audit reports"
+const maintenanceItems = [
+  "Compare generated bundles with files already on disk.",
+  "Return findings, drift information, and recommended next actions.",
+  "Prepare update bundles for missing or changed files.",
+  "Support refactor planning without replacing everything blindly."
 ];
 
 const productionChecks = [
-  "admin login works",
   "customer register works",
-  "customer token creation works",
-  "customer token listing works",
-  "MCP service still healthy",
-  "secure bearer auth still enforced on /mcp"
+  "customer login works",
+  "API token creation works",
+  "token listing works",
+  "secure bearer auth remains enforced on /mcp"
 ];
 
-function Checklist({ items }) {
+const setupCommand = `# PowerShell
+$env:AUTH_DOMAIN_MCP_TOKEN="paste-your-admcp_live-token-here"
+codex.cmd mcp add auth-domain --url https://auth-backend.quadravise.com/mcp --bearer-token-env-var AUTH_DOMAIN_MCP_TOKEN`;
+
+function Checklist({ items, columns = 1 }) {
   return (
-    <div className="auth-mcp-checklist">
+    <div className={columns === 2 ? "auth-mcp-docs-checklist auth-mcp-docs-checklist-two" : "auth-mcp-docs-checklist"}>
       {items.map((item) => (
-        <span key={item}>
+        <div key={item} className="auth-mcp-docs-check-item">
           <CheckCircleFilled />
-          {item}
-        </span>
+          <span>{item}</span>
+        </div>
       ))}
     </div>
   );
@@ -136,7 +117,7 @@ function AuthDomainMcpPage() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState("register");
 
-  const authDomainMcp = mcpCatalog.find((item) => item.key === "auth-domain-mcp");
+  const authDomainMcp = mcpCatalog.find((item) => item.key === "quadrauth-mcp");
 
   function openAuthModal(mode) {
     setAuthModalMode(mode);
@@ -152,172 +133,148 @@ function AuthDomainMcpPage() {
         canonical={pageSeo.authDomainMcp.canonical}
       />
 
-      <section className="section auth-mcp-hero-section">
-        <div className="section-inner auth-mcp-shell">
-          <div className="auth-mcp-hero-grid">
-            <div className="auth-mcp-hero-copy-wrap">
-              <Tag className="auth-mcp-eyebrow">Live MCP Product</Tag>
-              <Typography.Title className="auth-mcp-hero-title">Auth Domain MCP</Typography.Title>
-              <Typography.Paragraph className="auth-mcp-hero-copy">
-                Auth Domain MCP is a specialized MCP server that helps teams generate, audit, update, refactor, and
-                safely write authentication system code.
-              </Typography.Paragraph>
-              <Typography.Paragraph className="auth-mcp-hero-copy">
-                It turns authentication work into a repeatable product workflow instead of forcing teams to rebuild the
-                same auth system from scratch for every new project.
-              </Typography.Paragraph>
-              <Space size={14} wrap>
-                <Button type="primary" className="hero-btn hero-btn-primary" onClick={() => openAuthModal("register")}>
-                  Register
-                </Button>
-                <Button className="hero-btn hero-btn-secondary" onClick={() => openAuthModal("login")}>
-                  Login
-                </Button>
+      <section className="section auth-mcp-docs-page">
+        <div className="section-inner auth-mcp-docs-shell">
+          <div className="auth-mcp-docs-header">
+            <div className="auth-mcp-docs-header-main">
+              <Space size={8} wrap className="auth-mcp-docs-header-tags">
+                <Tag>Authentication</Tag>
+                <Tag>Security</Tag>
+                <Tag>MCP Server</Tag>
               </Space>
+              <Typography.Title className="auth-mcp-docs-title">QUADRAUTH MCP</Typography.Title>
+              <Typography.Paragraph className="auth-mcp-docs-summary">
+                Authentication product reference and access workspace for generation, audits, updates, refactors, and
+                safer auth delivery workflows.
+              </Typography.Paragraph>
             </div>
-
-            <Card className="auth-mcp-hero-panel">
-              <div className="auth-mcp-summary-top">
-                <SafetyCertificateOutlined />
-                <strong>Production-Ready Auth Product</strong>
-              </div>
-              <div className="auth-mcp-metric-grid">
-                {heroMetrics.map((metric) => (
-                  <div key={metric.label} className="auth-mcp-metric-card">
-                    <Statistic value={metric.value} />
-                    <span>{metric.label}</span>
-                  </div>
-                ))}
-              </div>
-              <Checklist items={["supports generation, maintenance, and reporting", "works for both one-time setup and recurring auth modernization"]} />
-            </Card>
           </div>
-        </div>
-      </section>
 
-      <section className="section auth-mcp-section auth-mcp-positioning-section">
-        <div className="section-inner auth-mcp-shell">
-          <Row gutter={[20, 20]}>
-            {positioningCards.map((item) => (
-              <Col key={item.title} xs={24} md={8}>
-                <Card className="auth-mcp-feature-card">
-                  <span className="auth-mcp-feature-icon">{item.icon}</span>
-                  <Typography.Title level={3}>{item.title}</Typography.Title>
-                  <Typography.Paragraph>{item.description}</Typography.Paragraph>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </div>
-      </section>
-
-      <section className="section auth-mcp-section">
-        <div className="section-inner auth-mcp-shell">
-          <Row gutter={[20, 20]}>
-            <Col xs={24} lg={12}>
-              <Card className="auth-mcp-card">
-                <Typography.Title level={2}>What This Product Covers</Typography.Title>
-                <Typography.Paragraph className="auth-mcp-paragraph">
-                  The product is designed for teams working on the full authentication surface, not only simple login
-                  screens.
-                </Typography.Paragraph>
-                <Checklist items={whatItDoes} />
-              </Card>
-            </Col>
-            <Col xs={24} lg={12}>
-              <Card className="auth-mcp-card">
-                <Typography.Title level={2}>Who This Is For</Typography.Title>
-                <Typography.Paragraph className="auth-mcp-paragraph">
-                  The product fits both technical teams and decision-makers who need more visibility into auth quality,
-                  risk, and delivery status.
-                </Typography.Paragraph>
-                <Checklist items={whoItsFor} />
-              </Card>
-            </Col>
-          </Row>
-        </div>
-      </section>
-
-      <section className="section auth-mcp-section auth-mcp-section-soft">
-        <div className="section-inner auth-mcp-shell">
-          <Card className="auth-mcp-card auth-mcp-wide-card">
-            <div className="auth-mcp-section-heading">
-              <span className="auth-mcp-section-kicker">Core Value</span>
-              <Typography.Title level={2}>Repeatable authentication delivery, not one-off auth work</Typography.Title>
-            </div>
-            <Typography.Paragraph className="auth-mcp-paragraph">
-              Auth Domain MCP lets teams choose only the capabilities they need, generate missing auth layers, compare
-              output with a live codebase, audit what is outdated, and safely apply approved changes. It also supports
-              mixed auth strategies, so teams can keep password-based login, add Passkeys and WebAuthn, or run both
-              together.
-            </Typography.Paragraph>
-            <Checklist items={businessValue} />
-          </Card>
-        </div>
-      </section>
-
-      <section className="section auth-mcp-section">
-        <div className="section-inner auth-mcp-shell">
-          <div className="auth-mcp-section-heading">
-            <span className="auth-mcp-section-kicker">Modules</span>
-            <Typography.Title level={2}>Product modules that map to real auth implementation work</Typography.Title>
-          </div>
-          <Row gutter={[20, 20]}>
-            {moduleGroups.map((group) => (
-              <Col key={group.title} xs={24} lg={8}>
-                <Card className="auth-mcp-card">
-                  <Typography.Title level={3}>{group.title}</Typography.Title>
-                  <Checklist items={group.items} />
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </div>
-      </section>
-
-      <section className="section auth-mcp-section auth-mcp-section-soft">
-        <div className="section-inner auth-mcp-shell">
-          <Row gutter={[20, 20]}>
-            <Col xs={24} lg={12}>
-              <Card className="auth-mcp-card">
-                <Typography.Title level={3}>Developer Tooling</Typography.Title>
-                <Checklist items={developerTooling} />
-              </Card>
-            </Col>
-            <Col xs={24} lg={12}>
-              <Card className="auth-mcp-card">
-                <Typography.Title level={3}>Production Checks Completed</Typography.Title>
-                <Checklist items={productionChecks} />
-                
-              </Card>
-            </Col>
-          </Row>
-        </div>
-      </section>
-
-      <section className="section auth-mcp-cta-section">
-        <div className="section-inner auth-mcp-shell">
-          <Card className="auth-mcp-cta-card">
-            <Row gutter={[24, 24]} align="middle">
-              <Col xs={24} lg={16}>
-                <Typography.Title level={2}>Ready to productize authentication work?</Typography.Title>
+          <div className="auth-mcp-docs-layout">
+            <aside className="auth-mcp-docs-sidebar">
+              <div className="auth-mcp-docs-sidebar-head">
+                <Typography.Text strong>Documentation</Typography.Text>
                 <Typography.Paragraph>
-                  Use Auth Domain MCP as the first live product in the broader Quadravise MCP suite, or work with us to
-                  deploy it into your current delivery workflow.
+                  Product reference modeled as a developer docs page rather than a marketing landing page.
                 </Typography.Paragraph>
-              </Col>
-              <Col xs={24} lg={8}>
-                <Space direction="vertical" size={12} className="auth-mcp-cta-actions">
-                  <Button type="primary" className="hero-btn hero-btn-primary" block onClick={() => openAuthModal("register")}>
+              </div>
+              <nav className="auth-mcp-docs-nav">
+                {sectionLinks.map((item) => (
+                  <a key={item.id} href={`#${item.id}`} className="auth-mcp-docs-nav-link">
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+            </aside>
+
+            <main className="auth-mcp-docs-main">
+              <section id="overview" className="auth-mcp-docs-section">
+                <Typography.Title level={2}>Overview</Typography.Title>
+                <Typography.Paragraph>
+                  QUADRAUTH MCP is a specialized MCP server that helps teams generate, audit, update, refactor, and
+                  safely write authentication system code. It turns authentication delivery into a repeatable workflow
+                  instead of forcing teams to rebuild the same auth stack for every project.
+                </Typography.Paragraph>
+                <Checklist items={coreHighlights} />
+              </section>
+
+              <section id="coverage" className="auth-mcp-docs-section">
+                <Typography.Title level={2}>Coverage</Typography.Title>
+                <Typography.Paragraph>
+                  The product is designed for teams working across the full authentication surface, not only simple
+                  login screens.
+                </Typography.Paragraph>
+                <Checklist items={whatItDoes} columns={2} />
+              </section>
+
+              <section id="modules" className="auth-mcp-docs-section">
+                <Typography.Title level={2}>Product Modules</Typography.Title>
+                <Row gutter={[16, 16]}>
+                  {moduleGroups.map((group) => (
+                    <Col key={group.title} xs={24} md={12}>
+                      <Card className="auth-mcp-docs-module-card">
+                        <div className="auth-mcp-docs-module-head">
+                          <span>{group.icon}</span>
+                          <Typography.Title level={4}>{group.title}</Typography.Title>
+                        </div>
+                        <Checklist items={group.items} />
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </section>
+
+              <section id="maintenance" className="auth-mcp-docs-section">
+                <Typography.Title level={2}>Maintenance Workflow</Typography.Title>
+                <Typography.Paragraph>
+                  This MCP is not only a one-time generator. It supports recurring audits, update planning, drift
+                  checks, and safer refactor workflows for existing authentication systems.
+                </Typography.Paragraph>
+                <Checklist items={maintenanceItems} />
+              </section>
+
+              <section id="tooling" className="auth-mcp-docs-section">
+                <Typography.Title level={2}>Developer Tooling</Typography.Title>
+                <Typography.Paragraph>
+                  MCP Inspector support is included for local testing and debugging, alongside the hosted MCP access
+                  flow.
+                </Typography.Paragraph>
+                <Checklist items={toolingItems} />
+                <div className="auth-mcp-docs-inline-note">
+                  <ToolOutlined />
+                  <span>The bundled Inspector package requires Node 22.7.5 or newer. The MCP server can still run independently with npm start.</span>
+                </div>
+              </section>
+
+              <section id="access" className="auth-mcp-docs-section">
+                <Typography.Title level={2}>Access and Connection</Typography.Title>
+                <Typography.Paragraph>
+                  Hosted usage is built around customer login, token creation, and bearer-authenticated MCP access.
+                </Typography.Paragraph>
+                <Card className="auth-mcp-docs-command-card">
+                  <div className="auth-mcp-docs-command-head">
+                    <Typography.Title level={4}>Quick Start Command</Typography.Title>
+                    <Tag>PowerShell</Tag>
+                  </div>
+                  <pre className="auth-mcp-docs-code">{setupCommand}</pre>
+                </Card>
+              </section>
+            </main>
+
+            <aside className="auth-mcp-docs-rail">
+              <Card className="auth-mcp-docs-rail-card auth-mcp-docs-rail-card-primary">
+                <Typography.Text strong>Access Workspace</Typography.Text>
+                <Typography.Paragraph>
+                  Register or sign in to create your live MCP token and open the account workspace.
+                </Typography.Paragraph>
+                <Space direction="vertical" size={12} className="auth-mcp-docs-rail-actions">
+                  <Button type="primary" className="auth-mcp-docs-primary-action" block onClick={() => openAuthModal("register")}>
                     Register
                   </Button>
-                  <Button className="hero-btn hero-btn-secondary" onClick={() => openAuthModal("login")} block>
+                  <Button className="auth-mcp-docs-secondary-action" block onClick={() => openAuthModal("login")}>
                     Login
                   </Button>
                 </Space>
-              </Col>
-            </Row>
-          </Card>
+              </Card>
+
+              <Card className="auth-mcp-docs-rail-card">
+                <Typography.Text strong>Connection Details</Typography.Text>
+                <div className="auth-mcp-docs-keyvals">
+                  <span>Server</span>
+                  <strong>auth-domain</strong>
+                  <span>Endpoint</span>
+                  <strong>https://auth-backend.quadravise.com/mcp</strong>
+                  <span>Token Env</span>
+                  <strong>AUTH_DOMAIN_MCP_TOKEN</strong>
+                </div>
+              </Card>
+
+              <Card className="auth-mcp-docs-rail-card">
+                <Typography.Text strong>Production Checks</Typography.Text>
+                <Checklist items={productionChecks} />
+              </Card>
+            </aside>
+          </div>
         </div>
       </section>
 

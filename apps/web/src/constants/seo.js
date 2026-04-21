@@ -61,10 +61,10 @@ export const pageSeo = {
     canonical: `${siteUrl}/products/mcp`
   },
   authDomainMcp: {
-    title: "Auth Domain MCP | Quadravise",
+    title: "QUADRAUTH MCP | Quadravise",
     description:
-      "Explore Auth Domain MCP, the authentication-focused MCP server from Quadravise for auth code generation, audits, updates, and safe file writing.",
-    canonical: `${siteUrl}/products/auth-domain-mcp`
+      "Explore QUADRAUTH MCP, the authentication-focused MCP server from Quadravise for auth code generation, audits, updates, and safe file writing.",
+    canonical: `${siteUrl}/products/quadrauth-mcp`
   },
   quadraILearn: {
     title: "QuadraiLearn | AI Learning Platform",
@@ -159,7 +159,7 @@ export const seoKeywords = {
     "operations MCP"
   ]),
   authDomainMcp: joinKeywords(coreKeywords, [
-    "Auth Domain MCP",
+    "QUADRAUTH MCP",
     "authentication MCP",
     "MCP server",
     "auth code generator",

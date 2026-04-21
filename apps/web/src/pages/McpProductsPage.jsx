@@ -1,9 +1,12 @@
 import {
   AppstoreOutlined,
+  ArrowRightOutlined,
+  CheckCircleFilled,
   FilterOutlined,
   LockOutlined,
   RocketOutlined,
   SearchOutlined,
+  ThunderboltOutlined,
   SafetyCertificateOutlined
 } from "@ant-design/icons";
 import { Button, Card, Col, Empty, Input, Row, Select, Space, Tag, Typography } from "antd";
@@ -27,7 +30,7 @@ const userGuideSteps = [
     number: "01",
     title: "Open Quadravise",
     description:
-      "Start at quadravise.com and sign in with your account so you can reach the Auth Domain MCP flow."
+      "Start at quadravise.com and sign in with your account so you can reach the QUADRAUTH MCP flow."
   },
   {
     number: "02",
@@ -124,40 +127,7 @@ function McpProductsPage() {
             </div>
           </div>
 
-          <div className="auth-mcp-guide-section">
-            <div className="auth-mcp-guide-header">
-              <Typography.Title level={2}>User Guide</Typography.Title>
-              <Typography.Paragraph className="auth-mcp-guide-note">
-                Follow these steps to connect Auth Domain MCP inside Codex. The setup works from both PowerShell and
-                Command Prompt on Windows.
-              </Typography.Paragraph>
-            </div>
-
-            <Card className="auth-mcp-guide-simple-card">
-              <div className="auth-mcp-guide-simple-list">
-                {userGuideSteps.map((step) => (
-                  <div key={step.number} className="auth-mcp-guide-simple-item">
-                    <div className="auth-mcp-guide-simple-number">{step.number}</div>
-                    <div className="auth-mcp-guide-simple-content">
-                      <Typography.Title level={4}>{step.title}</Typography.Title>
-                      <Typography.Paragraph>{step.description}</Typography.Paragraph>
-
-                      {step.codeVariants ? (
-                        <div className="auth-mcp-guide-code-variants">
-                          {step.codeVariants.map((variant) => (
-                            <div key={variant.label} className="auth-mcp-guide-code-variant">
-                              <Typography.Text strong>{variant.label}</Typography.Text>
-                              <pre className="auth-mcp-guide-code-block">{variant.code}</pre>
-                            </div>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
+          
 
           <Card className="mcp-catalog-toolbar-card">
             <div className="mcp-catalog-toolbar">
@@ -199,42 +169,57 @@ function McpProductsPage() {
           {filteredMcps.length ? (
             <Row gutter={[20, 20]}>
               {filteredMcps.map((item) => (
-                <Col key={item.key} xs={24} md={12} lg={8}>
+                <Col key={item.key} xs={24} md={12} lg={12}>
                   <Card className="mcp-catalog-card" hoverable onClick={() => openMcpModal(item)}>
-                    <div className="mcp-catalog-card-top">
-                      <span className={`mcp-catalog-card-icon mcp-catalog-card-icon-${item.iconKey}`}>
-                        {cardIcons[item.iconKey] || <LockOutlined />}
-                      </span>
+                    <div className="mcp-catalog-card-media">
+                      {item.thumbnail ? (
+                        <img src={item.thumbnail} alt={`${item.title} thumbnail`} className="mcp-catalog-card-thumbnail" />
+                      ) : (
+                        <span className={`mcp-catalog-card-icon mcp-catalog-card-icon-${item.iconKey}`}>
+                          {cardIcons[item.iconKey] || <LockOutlined />}
+                        </span>
+                      )}
                       <div className="mcp-catalog-card-tags">
-                        <Tag className={`mcp-catalog-status-tag mcp-catalog-status-tag-${item.status.toLowerCase()}`}>
-                          {item.status}
+                        <Tag
+                          className={`mcp-catalog-status-tag mcp-catalog-status-tag-${item.status.toLowerCase()}`}
+                          aria-label={item.status}
+                        >
+                          <ThunderboltOutlined />
                         </Tag>
-                        <Tag>{item.category}</Tag>
+                        <Tag className="mcp-catalog-category-tag" aria-label={item.category}>
+                          <SafetyCertificateOutlined />
+                        </Tag>
                       </div>
                     </div>
-                    <Typography.Title level={4}>{item.title}</Typography.Title>
-                    <Typography.Paragraph>{item.shortDescription}</Typography.Paragraph>
-                    <div className="mcp-catalog-card-chip-row">
-                      {item.tags.map((tag) => (
-                        <span key={tag}>{tag}</span>
-                      ))}
-                    </div>
-                    <div className="mcp-catalog-card-footer">
-                      <Button type="primary" className="hero-btn hero-btn-primary" onClick={(event) => {
-                        event.stopPropagation();
-                        openMcpModal(item);
-                      }}>
-                        View Access
-                      </Button>
-                      {item.route ? (
-                        <Link
-                          to={item.route}
-                          className="mcp-catalog-card-link"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          Product Page
-                        </Link>
-                      ) : null}
+                    <div className="mcp-catalog-card-content">
+                      <Typography.Title level={4}>{item.title}</Typography.Title>
+                      <Typography.Paragraph>{item.shortDescription}</Typography.Paragraph>
+                      <div className="mcp-catalog-card-chip-row">
+                        {item.tags.map((tag) => (
+                          <span key={tag}>
+                            <CheckCircleFilled />
+                            <span>{tag}</span>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mcp-catalog-card-footer">
+                        <Button type="text" className="mcp-catalog-card-action" onClick={(event) => {
+                          event.stopPropagation();
+                          openMcpModal(item);
+                        }}>
+                          <span>Get Api Key</span>
+                          <ArrowRightOutlined />
+                        </Button>
+                        {item.route ? (
+                          <Link
+                            to={item.route}
+                            className="mcp-catalog-card-link"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            Product Page
+                          </Link>
+                        ) : null}
+                      </div>
                     </div>
                   </Card>
                 </Col>

@@ -1,6 +1,6 @@
 import {
   AppstoreOutlined,
-  ArrowLeftOutlined,
+  ArrowRightOutlined,
   CopyOutlined,
   LockOutlined,
   LoginOutlined,
@@ -20,6 +20,8 @@ const modalIcons = {
   automation: <AppstoreOutlined />,
   saas: <RocketOutlined />
 };
+
+const highlightedCapabilityText = "login, signup, passkeys, session management, RBAC, and audit workflows.";
 
 function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
   const navigate = useNavigate();
@@ -178,6 +180,13 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
         ? `Login to ${mcp?.title || "MCP"}`
         : mcp?.title || "MCP Access";
 
+  const descriptionText = mcp?.description || "";
+  const highlightedCapabilityIndex = descriptionText.indexOf(highlightedCapabilityText);
+  const descriptionPrefix =
+    highlightedCapabilityIndex >= 0 ? descriptionText.slice(0, highlightedCapabilityIndex) : descriptionText;
+  const descriptionHighlight =
+    highlightedCapabilityIndex >= 0 ? descriptionText.slice(highlightedCapabilityIndex) : "";
+
   return (
     <>
       {contextHolder}
@@ -186,7 +195,7 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
         open={open}
         onCancel={handleClose}
         footer={null}
-        width="min(920px, calc(100vw - 24px))"
+        width="min(1160px, calc(100vw - 24px))"
         destroyOnHidden
       >
         {mcp ? (
@@ -199,7 +208,8 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
                   <Tag>{mcp.category}</Tag>
                 </Space>
                 <Typography.Paragraph className="auth-mcp-paragraph mcp-access-modal-description">
-                  {mcp.description}
+                  {descriptionPrefix}
+                  {descriptionHighlight ? <strong>{descriptionHighlight}</strong> : null}
                 </Typography.Paragraph>
               </div>
             </div>
@@ -235,32 +245,21 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
                       </div>
                     </div>
                   ) : null}
-                  {mcp.usp?.length ? (
-                    <div className="mcp-access-modal-info-block">
-                      <Typography.Text strong>USP</Typography.Text>
-                      <div className="mcp-access-modal-info-list">
-                        {mcp.usp.map((item) => (
-                          <div key={item} className="mcp-access-modal-info-item">
-                            <span className="mcp-access-modal-info-dot" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
+                 
                 </div>
                 <div className="mcp-access-modal-actions">
                   <Button
-                    type="primary"
                     icon={<UserAddOutlined />}
-                    className="hero-btn hero-btn-primary mcp-access-modal-button"
+                    type="text"
+                    className="mcp-access-modal-link-button"
                     onClick={() => changeMode("register")}
                   >
                     Register
                   </Button>
                   <Button
                     icon={<LoginOutlined />}
-                    className="hero-btn hero-btn-secondary mcp-access-modal-button"
+                    type="text"
+                    className="mcp-access-modal-link-button"
                     onClick={() => changeMode("login")}
                   >
                     Login
@@ -270,22 +269,26 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
             ) : (
               <>
                 <div className="auth-mcp-modal-mode-toggle">
-                  <Button
-                    type={mode === "register" ? "primary" : "default"}
-                    icon={<UserAddOutlined />}
-                    className={mode === "register" ? "hero-btn hero-btn-primary mcp-access-modal-button" : "mcp-access-modal-button"}
-                    onClick={() => changeMode("register")}
-                  >
-                    Register
-                  </Button>
-                  <Button
-                    type={mode === "login" ? "primary" : "default"}
-                    icon={<LoginOutlined />}
-                    className={mode === "login" ? "hero-btn hero-btn-primary mcp-access-modal-button" : "mcp-access-modal-button"}
-                    onClick={() => changeMode("login")}
-                  >
-                    Login
-                  </Button>
+                  {mode !== "register" ? (
+                    <Button
+                      type="text"
+                      icon={<UserAddOutlined />}
+                      className="mcp-access-modal-link-button"
+                      onClick={() => changeMode("register")}
+                    >
+                      Register
+                    </Button>
+                  ) : null}
+                  {mode !== "login" ? (
+                    <Button
+                      type="text"
+                      icon={<LoginOutlined />}
+                      className="mcp-access-modal-link-button"
+                      onClick={() => changeMode("login")}
+                    >
+                      Login
+                    </Button>
+                  ) : null}
                 </div>
 
                 <Form layout="vertical" form={authForm} onFinish={mode === "register" ? handleRegister : handleLogin}>
@@ -322,18 +325,15 @@ function McpAccessModal({ open, onClose, mcp, initialMode = "overview" }) {
                     />
                   </Form.Item>
 
-                  <Space size={12} wrap>
+                  <Space size={12} wrap className="mcp-access-modal-form-actions">
                     <Button
-                      type="primary"
+                      type="text"
                       htmlType="submit"
                       loading={submitting}
-                      icon={mode === "register" ? <UserAddOutlined /> : <LoginOutlined />}
-                      className="hero-btn hero-btn-primary mcp-access-modal-button"
+                      icon={mode === "register" ? <ArrowRightOutlined /> : <ArrowRightOutlined />}
+                      className="mcp-access-modal-link-button"
                     >
                       {mode === "register" ? "Register" : "Login"}
-                    </Button>
-                    <Button icon={<ArrowLeftOutlined />} className="mcp-access-modal-button" onClick={() => changeMode("overview")}>
-                      Back
                     </Button>
                   </Space>
                 </Form>

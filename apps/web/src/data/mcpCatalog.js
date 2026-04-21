@@ -1,16 +1,18 @@
 import { ROUTES } from "../constants/routes";
+import quadraMcpThumbnail from "../assets/img/quadramcp.png";
 
 export const mcpCatalog = [
   {
-    key: "auth-domain-mcp",
-    title: "Auth Domain MCP",
+    key: "quadrauth-mcp",
+    title: "QUADRAUTH MCP",
     status: "Live",
     category: "Security",
     iconKey: "security",
+    thumbnail: quadraMcpThumbnail,
     route: ROUTES.AUTH_DOMAIN_MCP,
     shortDescription: "Authentication-focused MCP server for generation, audits, updates, and safer auth delivery workflows.",
     description:
-      "Auth Domain MCP helps teams generate, audit, update, refactor, and safely write authentication system code across login, signup, passkeys, session management, RBAC, and audit workflows.",
+      "QUADRAUTH MCP helps teams generate, audit, update, refactor, and safely write authentication system code across login, signup, passkeys, session management, RBAC, and audit workflows.",
     whyRequired: [
       "Authentication work is repeated across projects and usually wastes time on the same boilerplate decisions.",
       "Teams need a safer way to audit existing auth implementations before making risky production updates.",
