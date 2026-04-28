@@ -1,14 +1,27 @@
-import { ArrowRightOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Space, Typography } from "antd";
 import { Link } from "react-router-dom";
 
+import irfLogo from "../../assets/img/irf-logo.png";
+import nexabRustLogo from "../../assets/img/nexabrust-logo.png";
+import phoenixInnerBalanceLogo from "../../assets/img/phoenixinnerbalance-logo.png";
+import protactorLogo from "../../assets/img/protactor-logo.png";
+import vtrustLogo from "../../assets/img/vtrust-logo.png";
 import { useSiteSettings } from "../../hooks/useSiteSettings";
 import { ROUTES } from "../../constants/routes";
 
+const clientLogos = [
+  { name: "IRF Geometry", logo: irfLogo },
+  { name: "NexaBurst", logo: nexabRustLogo, className: "hero-client-logo-item-nexaburst" },
+  { name: "Phoenix Inner Balance", logo: phoenixInnerBalanceLogo },
+  { name: "Protactor", logo: protactorLogo },
+  { name: "VTrustCarz", logo: vtrustLogo }
+];
+
 function HeroSection() {
-  const trustItems = ["React + Node.js + PostgreSQL", "Startup MVPs", "SEO-Ready Architecture", "VPS Deployment"];
   const { data } = useSiteSettings();
   const settings = data?.data || {};
+  const marqueeLogos = [...clientLogos, ...clientLogos, ...clientLogos];
 
   return (
     <section className="section hero-section">
@@ -47,8 +60,8 @@ function HeroSection() {
                 <h3>Delivery Snapshot</h3>
                 <div className="hero-metric-grid">
                   <div>
-                    <strong>{settings.projectsDelivered || "50+"}</strong>
-                    <span>Projects Delivered</span>
+                    <strong>{settings.projectsDelivered || "24/7"}</strong>
+                    <span>Support</span>
                   </div>
                   <div>
                     <strong>{settings.mvpKickoffSpeed || "7 Days"}</strong>
@@ -68,7 +81,7 @@ function HeroSection() {
                 <span>Websites</span>
                 <span>Mobile Apps</span>
                 <span>SaaS Platforms</span>
-                <span>MVP Delivery</span>
+                <span>MCP Solutions</span>
                 <Link to={ROUTES.SERVICES}>
                   Explore Capabilities <ArrowRightOutlined />
                 </Link>
@@ -76,17 +89,22 @@ function HeroSection() {
             </div>
           </Col>
         </Row>
-        <div className="hero-trust-strip">
-          <div className="hero-trust-head">Trusted for Scalable Digital Builds</div>
-          <div className="hero-trust-row">
-            {trustItems.map((item) => (
-              <span key={item} className="hero-trust-chip">
-                <CheckCircleFilled />
-                {item}
-              </span>
-            ))}
+        <div className="hero-clients-strip">
+          <div className="hero-clients-head">Our Happy Clients</div>
+          <div className="hero-clients-marquee">
+            <div className="hero-clients-track">
+              {marqueeLogos.map((client, index) => (
+                <div
+                  key={`${client.name}-${index}`}
+                  className={`hero-client-logo-item ${client.className || ""}`.trim()}
+                  aria-hidden={index >= clientLogos.length}
+                >
+                  <img src={client.logo} alt={`${client.name} logo`} className="hero-client-logo" />
+                  <span className="hero-client-name">{client.name}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="hero-trust-badge">Startup-Friendly Build Process</div>
         </div>
       </div>
     </section>

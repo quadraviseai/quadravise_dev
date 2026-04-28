@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircleFilled } from "@ant-design/icons";
-import { Button, Col, Input, Row, Space, Spin, Tabs, Typography } from "antd";
+import { Button, Col, Row, Space, Spin, Tabs, Typography } from "antd";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 
@@ -14,6 +14,9 @@ import { pageSeo, seoKeywords } from "../constants/seo";
 
 function BlogPage() {
   const [category, setCategory] = useState("All");
+  const heroSectionRef = useRef(null);
+  const articlesIntroRef = useRef(null);
+  const snapLockRef = useRef(false);
   const { data, isLoading, isError, refetch } = useBlogs();
   const blogs = data?.data || [];
   const categories = useMemo(() => [...new Set(blogs.map((blog) => blog.category).filter(Boolean))], [blogs]);
@@ -30,6 +33,38 @@ function BlogPage() {
     "Practical Startup Guides"
   ];
 
+  useEffect(() => {
+    const heroElement = heroSectionRef.current;
+    const nextSection = articlesIntroRef.current;
+
+    if (!heroElement || !nextSection) return undefined;
+
+    const handleWheel = (event) => {
+      if (event.deltaY <= 0 || snapLockRef.current) return;
+
+      const rect = heroElement.getBoundingClientRect();
+      const heroStillActive = rect.top <= 120 && rect.bottom > window.innerHeight * 0.45;
+
+      if (!heroStillActive) return;
+
+      event.preventDefault();
+      snapLockRef.current = true;
+      const headerOffset = 96;
+      const targetTop = nextSection.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top: targetTop, behavior: "smooth" });
+
+      window.setTimeout(() => {
+        snapLockRef.current = false;
+      }, 900);
+    };
+
+    heroElement.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      heroElement.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   return (
     <>
       <SEOHead
@@ -38,7 +73,7 @@ function BlogPage() {
         keywords={seoKeywords.blog}
         canonical={pageSeo.blog.canonical}
       />
-      <section className="section blog-page-hero-section">
+      <section ref={heroSectionRef} className="section blog-page-hero-section">
         <div className="section-inner">
           <Row gutter={[32, 32]} align="middle" className="page-hero-layout">
             <Col xs={24} lg={13}>
@@ -114,6 +149,7 @@ function BlogPage() {
       <section className="section blog-page-grid-section">
         <div className="section-inner">
           <motion.div
+            ref={articlesIntroRef}
             className="blog-page-tools"
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -144,21 +180,6 @@ function BlogPage() {
                 </Col>
               ))}
             </Row>
-          </section>
-
-          <section className="blog-page-newsletter-section">
-            <div className="blog-page-newsletter-card">
-              <Typography.Title level={3}>Get Product Engineering Insights</Typography.Title>
-              <Typography.Paragraph>
-                Join founders and developers learning how to build scalable products.
-              </Typography.Paragraph>
-              <Space.Compact block>
-                <Input placeholder="Enter your email" className="blog-page-newsletter-input" />
-                <Button type="primary" className="hero-btn hero-btn-primary">
-                  Subscribe
-                </Button>
-              </Space.Compact>
-            </div>
           </section>
         </div>
       </section>

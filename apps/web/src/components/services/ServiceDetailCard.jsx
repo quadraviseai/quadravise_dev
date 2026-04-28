@@ -17,7 +17,7 @@ function ServiceDetailCard({
         <div className="service-card-top">
           {Icon ? <Icon className="service-card-icon" /> : null}
         </div>
-        <Typography.Title level={4} style={{ margin: 0 }}>
+        <Typography.Title level={4} className="service-card-title">
           {title}
         </Typography.Title>
         <Typography.Paragraph className="service-card-description">{description}</Typography.Paragraph>

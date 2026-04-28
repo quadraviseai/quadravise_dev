@@ -56,20 +56,7 @@ function ServicesHeroSection() {
                 <Link to={ROUTES.PORTFOLIO}>View Portfolio</Link>
               </Button>
             </Space>
-            <div className="services-hero-metric-row">
-              <span>
-                <strong>{settings.projectsDelivered || "50+"}</strong>
-                Projects
-              </span>
-              <span>
-                <strong>{settings.industriesServed || "6"}</strong>
-                Industries
-              </span>
-              <span>
-                <strong>{settings.reliabilityFocus || "99.9%"}</strong>
-                Reliability
-              </span>
-            </div>
+            
           </Col>
           <Col xs={24} lg={11}>
             <motion.div
@@ -82,8 +69,8 @@ function ServicesHeroSection() {
                 <h3>Delivery Snapshot</h3>
                 <div className="services-hero-metrics">
                   <div>
-                    <strong>{settings.projectsDelivered || "50+"}</strong>
-                    <span>Projects Delivered</span>
+                    <strong>{settings.projectsDelivered || "24/7"}</strong>
+                    <span>Support</span>
                   </div>
                   <div>
                     <strong>{settings.mvpKickoffSpeed || "7 Days"}</strong>
@@ -103,7 +90,7 @@ function ServicesHeroSection() {
                 <span>Websites</span>
                 <span>Mobile Apps</span>
                 <span>SaaS Platforms</span>
-                <span>MVP Delivery</span>
+                <span>MCP Solutions</span>
                 <Link to={ROUTES.CONTACT}>
                   Explore Capabilities <ArrowRightOutlined />
                 </Link>

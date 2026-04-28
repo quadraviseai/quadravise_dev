@@ -26,11 +26,21 @@ function getRenderedBlogContent(blog) {
   );
 }
 
+function formatPublishedDate(value) {
+  if (!value) return "New article";
+  return new Date(value).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
 function BlogDetailPage() {
   const { slug } = useParams();
   const { data, isLoading, isError, refetch } = useBlogBySlug(slug);
   const blog = data?.data;
   const canonical = blog?.canonicalUrl || (slug ? `${siteUrl}/blog/${slug}` : undefined);
+  const coverImage = blog?.coverImage || blog?.featuredImage;
 
   return (
     <>
@@ -45,10 +55,41 @@ function BlogDetailPage() {
       />
       <section className="section blog-detail-hero-section">
         <div className="section-inner">
-          <Typography.Title className="blog-detail-hero-title">{blog?.title || "Blog Detail"}</Typography.Title>
-          <Typography.Paragraph className="blog-detail-hero-description">
-            {blog?.excerpt || "Article details"}
-          </Typography.Paragraph>
+          <div className="blog-detail-hero-shell">
+            <div className="blog-detail-hero-copy">
+              <div className="blog-detail-meta-row">
+                {blog?.category ? <span className="blog-detail-meta-pill">{blog.category}</span> : null}
+                <span className="blog-detail-meta-text">{formatPublishedDate(blog?.publishedAt)}</span>
+                <span className="blog-detail-meta-separator">&bull;</span>
+                <span className="blog-detail-meta-text">{blog?.readingTime || "5 min read"}</span>
+              </div>
+              <Typography.Title className="blog-detail-hero-title">{blog?.title || "Blog Detail"}</Typography.Title>
+              <Typography.Paragraph className="blog-detail-hero-description">
+                {blog?.excerpt || "Article details"}
+              </Typography.Paragraph>
+            </div>
+            <div className="blog-detail-hero-panel">
+              <div className="blog-detail-hero-panel-label">Article Focus</div>
+              <div className="blog-detail-hero-panel-grid">
+                <div>
+                  <strong>{blog?.category || "Insights"}</strong>
+                  <span>Primary Topic</span>
+                </div>
+                <div>
+                  <strong>{blog?.readingTime || "5 min"}</strong>
+                  <span>Reading Time</span>
+                </div>
+                <div>
+                  <strong>Practical</strong>
+                  <span>Execution Style</span>
+                </div>
+                <div>
+                  <strong>Structured</strong>
+                  <span>Context Flow</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       <section className="section blog-detail-content-section">
@@ -56,20 +97,20 @@ function BlogDetailPage() {
           {isLoading ? <Spin /> : null}
           {isError ? <ErrorState onRetry={refetch} /> : null}
           {blog ? (
-            <Card className="blog-detail-card">
-              {blog.coverImage || blog.featuredImage ? (
-                <img
-                  src={blog.coverImage || blog.featuredImage}
-                  alt={blog.title}
-                  style={{ width: "100%", maxHeight: 380, objectFit: "cover", borderRadius: 16, marginBottom: 20 }}
+            <div className="blog-detail-layout">
+              <Card className="blog-detail-card">
+                {coverImage ? (
+                  <div className="blog-detail-cover-wrap">
+                    <img src={coverImage} alt={blog.title} className="blog-detail-cover-image" />
+                  </div>
+                ) : null}
+                <div
+                  className="blog-detail-rich-content prose"
+                  dangerouslySetInnerHTML={{ __html: getRenderedBlogContent(blog) }}
                 />
-              ) : null}
-              <div
-                className="blog-detail-rich-content prose"
-                dangerouslySetInnerHTML={{ __html: getRenderedBlogContent(blog) }}
-              />
-              <BlogArticleCTA />
-            </Card>
+                <BlogArticleCTA />
+              </Card>
+            </div>
           ) : null}
         </div>
       </section>

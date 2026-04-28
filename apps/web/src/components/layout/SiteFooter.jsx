@@ -1,3 +1,4 @@
+import { FacebookFilled, InstagramOutlined, LinkedinFilled, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 import { ROUTES } from "../../constants/routes";
@@ -31,22 +32,22 @@ function SiteFooter() {
             <div className="footer-socials">
               {showLinkedin ? (
                 <a className="footer-social-link" href={linkedinUrl} target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  in
+                  <LinkedinFilled />
                 </a>
               ) : null}
               {showEmail ? (
                 <a className="footer-social-link" href={`mailto:${email}`} aria-label="Email">
-                  @
+                  <MailOutlined />
                 </a>
               ) : null}
               {showInstagram ? (
                 <a className="footer-social-link" href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram">
-                  ig
+                  <InstagramOutlined />
                 </a>
               ) : null}
               {showFacebook ? (
                 <a className="footer-social-link" href={facebookUrl} target="_blank" rel="noreferrer" aria-label="Facebook">
-                  f
+                  <FacebookFilled />
                 </a>
               ) : null}
             </div>

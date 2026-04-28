@@ -7,7 +7,6 @@ import ServicesHeroSection from "../components/services/ServicesHeroSection";
 import ServiceDetailCard from "../components/services/ServiceDetailCard";
 import ServicesCTASection from "../components/services/ServicesCTASection";
 import ServicesPortfolioTeaserSection from "../components/services/ServicesPortfolioTeaserSection";
-import ServicesSeoContentSection from "../components/services/ServicesSeoContentSection";
 import SEOHead from "../components/seo/SEOHead";
 import { pageSeo, seoKeywords } from "../constants/seo";
 import { servicesData } from "../constants/services";
@@ -40,7 +39,6 @@ function ServicesPage() {
       <ServicesPortfolioTeaserSection />
       <WhyChooseUsSection />
       <ProcessSection />
-      <ServicesSeoContentSection />
       <ServicesCTASection />
     </>
   );

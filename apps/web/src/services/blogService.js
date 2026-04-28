@@ -1,16 +1,23 @@
-import { apiClient } from "./apiClient";
+import { staticBlogs } from "../constants/blogs";
+
+function cloneBlog(blog) {
+  return blog ? { ...blog } : null;
+}
 
 export const blogService = {
   async getBlogs() {
-    const { data } = await apiClient.get("/api/blogs");
-    return data;
+    return {
+      data: staticBlogs.map((blog) => cloneBlog(blog))
+    };
   },
   async getFeaturedBlogs() {
-    const { data } = await apiClient.get("/api/blogs/featured");
-    return data;
+    return {
+      data: staticBlogs.filter((blog) => blog.featured).map((blog) => cloneBlog(blog))
+    };
   },
   async getBlogBySlug(slug) {
-    const { data } = await apiClient.get(`/api/blogs/${slug}`);
-    return data;
+    return {
+      data: cloneBlog(staticBlogs.find((blog) => blog.slug === slug) || null)
+    };
   }
 };
